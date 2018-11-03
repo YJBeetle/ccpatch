@@ -73,3 +73,14 @@ fi
 sudo perl -pi -e 's|\x0F\xB6\x30\x48\x83\xFE\x20\x77\x1B|\x90\x90\x90\x48\x83\xFE\x20\x77\x1B|g' "$LRCC19"
 sudo perl -pi -e 's|\x73\x15\x48\xFF\xC0\x48\x89\x83\x88\x00\x00\x00\x48\x39\xC1\x75\xE2|\x73\x15\x48\xFF\xC0\x48\x89\x83\x88\x00\x00\x00\x48\x39\xC1\x90\x90|g' "$LRCC19"
 echo 'Patch complete'
+
+echo 'Patch BR CC 19'
+BRCC19='/Applications/Adobe Bridge CC 2019/Adobe Bridge CC 2019.app/Contents/MacOS/Adobe Bridge CC 2019'
+if [ ! -f "$BRCC19.bak" ]; then
+    sudo mv "$BRCC19" "$BRCC19.bak"
+    sudo cp "$BRCC19.bak" "$BRCC19"
+    echo "Backup file: $BRCC19.bak"
+fi
+sudo perl -pi -e 's|\x0F\xB6\x31\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$BRCC19"
+sudo perl -pi -e 's|\x48\x39\xC8\x75\xE2|\x48\x39\xC8\x90\x90|g' "$BRCC19"
+echo 'Patch complete'
