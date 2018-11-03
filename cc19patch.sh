@@ -106,3 +106,14 @@ fi
 sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$CHCC19"
 sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$CHCC19"
 echo 'Patch complete'
+
+echo 'Patch AN CC 19'
+ANCC19='/Applications/Adobe Animate CC 2019/Adobe Animate CC 2019.app/Contents/MacOS/Adobe Animate CC 2019'
+if [ ! -f "$ANCC19.bak" ]; then
+    sudo mv "$ANCC19" "$ANCC19.bak"
+    sudo cp "$ANCC19.bak" "$ANCC19"
+    echo "Backup file: $ANCC19.bak"
+fi
+sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$ANCC19"
+sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$ANCC19"
+echo 'Patch complete'
