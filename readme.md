@@ -8,6 +8,7 @@
 * Mac AE 19
 * Mac AU 19
 * Mac ME 19
+* Mac LR 19 (Classic)
 
 ## run
 ```

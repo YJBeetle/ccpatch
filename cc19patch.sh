@@ -62,3 +62,14 @@ fi
 sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$MECC19"
 sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$MECC19"
 echo 'Patch complete'
+
+echo 'Patch LR CC 19'
+LRCC19='/Applications/Adobe Lightroom Classic CC/Adobe Lightroom Classic CC.app/Contents/MacOS/Adobe Lightroom Classic'
+if [ ! -f "$LRCC19.bak" ]; then
+    sudo mv "$LRCC19" "$LRCC19.bak"
+    sudo cp "$LRCC19.bak" "$LRCC19"
+    echo "Backup file: $LRCC19.bak"
+fi
+sudo perl -pi -e 's|\x0F\xB6\x30\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$LRCC19"
+sudo perl -pi -e 's|\x48\x39\xC1\x75\xE2|\x48\x39\xC1\x90\x90|g' "$LRCC19"
+echo 'Patch complete'
