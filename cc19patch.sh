@@ -20,3 +20,14 @@ fi
 sudo perl -pi -e 's|\x0F\xB6\x10\x48\x83\xFA\x20|\x90\x90\x90\x48\x83\xFA\x20|g' "$AICC19"
 sudo perl -pi -e 's|\x48\x39\xC3\x75\xE1|\x48\x39\xC3\x90\x90|g' "$AICC19"
 echo 'Patch complete'
+
+echo 'Patch PR CC 19'
+PRCC19='/Applications/Adobe Premiere Pro CC 2019/Adobe Premiere Pro CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration'
+if [ ! -f "$PRCC19.bak" ]; then
+    sudo mv "$PRCC19" "$PRCC19.bak"
+    sudo cp "$PRCC19.bak" "$PRCC19"
+    echo "Backup file: $PRCC19.bak"
+fi
+sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$PRCC19"
+sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$PRCC19"
+echo 'Patch complete'
