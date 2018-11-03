@@ -41,3 +41,14 @@ fi
 sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$AECC19"
 sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$AECC19"
 echo 'Patch complete'
+
+echo 'Patch AU CC 19'
+AUCC19='/Applications/Adobe Audition CC 2019/Adobe Audition CC 2019.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI'
+if [ ! -f "$AUCC19.bak" ]; then
+    sudo mv "$AUCC19" "$AUCC19.bak"
+    sudo cp "$AUCC19.bak" "$AUCC19"
+    echo "Backup file: $AUCC19.bak"
+fi
+sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$AUCC19"
+sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$AUCC19"
+echo 'Patch complete'
