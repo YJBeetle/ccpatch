@@ -84,3 +84,14 @@ fi
 sudo perl -pi -e 's|\x0F\xB6\x31\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$BRCC19"
 sudo perl -pi -e 's|\x48\x39\xC8\x75\xE2|\x48\x39\xC8\x90\x90|g' "$BRCC19"
 echo 'Patch complete'
+
+echo 'Patch DW CC 19'
+DWCC19='/Applications/Adobe Dreamweaver CC 2019/Adobe Dreamweaver CC 2019.app/Contents/MacOS/Dreamweaver'
+if [ ! -f "$DWCC19.bak" ]; then
+    sudo mv "$DWCC19" "$DWCC19.bak"
+    sudo cp "$DWCC19.bak" "$DWCC19"
+    echo "Backup file: $DWCC19.bak"
+fi
+sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$DWCC19"
+sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$DWCC19"
+echo 'Patch complete'
