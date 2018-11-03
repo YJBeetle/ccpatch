@@ -95,3 +95,14 @@ fi
 sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$DWCC19"
 sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$DWCC19"
 echo 'Patch complete'
+
+echo 'Patch CH CC 19'
+CHCC19='/Applications/Adobe Character Animator CC 2019/Adobe Character Animator CC 2019.app/Contents/MacOS/Character Animator'
+if [ ! -f "$CHCC19.bak" ]; then
+    sudo mv "$CHCC19" "$CHCC19.bak"
+    sudo cp "$CHCC19.bak" "$CHCC19"
+    echo "Backup file: $CHCC19.bak"
+fi
+sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$CHCC19"
+sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$CHCC19"
+echo 'Patch complete'

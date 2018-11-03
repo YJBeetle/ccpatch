@@ -11,6 +11,7 @@
 * Mac LR CC 19 (Classic)
 * Mac BR CC 19
 * Mac DW CC 19
+* Mac CH CC 19
 
 ## run
 ```
