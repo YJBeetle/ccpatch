@@ -117,3 +117,14 @@ fi
 sudo perl -pi -e 's|\x0F\xB6\x32\x48\x83\xFE\x20|\x90\x90\x90\x48\x83\xFE\x20|g' "$ANCC19"
 sudo perl -pi -e 's|\x48\x39\xD0\x75\xE2|\x48\x39\xD0\x90\x90|g' "$ANCC19"
 echo 'Patch complete'
+
+echo 'Patch DN CC 19'
+DNCC19='/Applications/Adobe Dimension CC/Adobe Dimension CC.app/Contents/Frameworks/amtlib.framework/Versions/A/amtlib'
+if [ ! -f "$DNCC19.bak" ]; then
+    sudo mv "$DNCC19" "$DNCC19.bak"
+    sudo cp "$DNCC19.bak" "$DNCC19"
+    echo "Backup file: $DNCC19.bak"
+fi
+sudo perl -pi -e 's|\x0F\xB6\x16\x48\x83\xFA\x20|\x90\x90\x90\x48\x83\xFA\x20|g' "$DNCC19"
+sudo perl -pi -e 's|\x48\x39\xF0\x75\xE2|\x48\x39\xF0\x90\x90|g' "$DNCC19"
+echo 'Patch complete'
