@@ -55,7 +55,7 @@ Mac 20.0.5
 Win 20.0.5
 
 1.	0x147F78F19 (0x7F78319): 84 C0 -> B0 01
-	0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 # AU
 
@@ -65,3 +65,31 @@ Win 20.0.5
 	Win: C:\Program Files\Adobe\Adobe Audition CC 2019\AuUI.dll
 
 ## Feature
+
+1. 
+	* Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue"
+	* Find first instruction looks like
+		```
+		TEST	xx, xx
+		JZ	xxx
+		```
+	* Change to
+		```
+		MOV	xx, 0x1
+		JZ	xxx
+		```
+
+## Version
+
+Mac 12.1.1
+
+1.	0xD5CF92: 84 DB -> B3 01
+	or find: 49 89 D7 49 89 F6 49 89 FD 66 41 8B 5D 08 **84 DB** 74 09 80 FB 07 -> 49 89 D7 49 89 F6 49 89 FD 66 41 8B 5D 08 **B3 01** 74 09 80 FB 07
+
+Win 12.1.1
+
+1.	0x180AB658D (0xAB598D): 84 C0 -> B0 01
+	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 0F 85 F2 01 00 00 -> 0F B6 41 08 **B0 01** 74 0A 3C 07 0F 85 F2 01 00 00
+
+
+
