@@ -99,3 +99,24 @@ Win 12.1.1
 	Win: C:\Program Files\Adobe\Adobe Premiere Pro CC 2019\Registration.dll
 
 ## Feature
+
+1. 
+	* Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue"
+	* Find first instruction looks like
+		```
+		TEST	xx, xx
+		JZ	xxx
+		```
+	* Change to
+		```
+		MOV	xx, 0x1
+		JZ	xxx
+		```
+
+## Version
+
+Win 13.1.2
+
+1.	0x1800B983D (0xB8C3D): 84 C0 -> B0 01
+	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
+
