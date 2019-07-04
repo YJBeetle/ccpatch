@@ -1,10 +1,7 @@
-# AI
-
-## Feature
+# Way
 
 1. 
-	* Find SUBROUTINE has "aInJsonValueRes"
-	  ("in Json::Value::resolveReference(key, end): requires objectValue")
+	* Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue" (maybe "aInJsonValueRes")
 	* Find first instruction looks like
 		```
 		TEST	xx, xx
@@ -15,6 +12,10 @@
 		MOV	xx, 0x1
 		JZ	xxx
 		```
+
+---
+
+# AI
 
 ## Version
 
@@ -29,21 +30,6 @@
 	or find: 66 41 8B 5E 08 **84 DB** 74 09 80 FB 07 -> 66 41 8B 5E 08 **B3 01** 74 09 80 FB 07
 
 # PS
-
-## Feature
-
-1. 
-	* Find SUBROUTINE has "aInJsonValueRes" ("in Json::Value::resolveReference(key, end): requires objectValue")
-	* Find first instruction looks like
-		```
-		TEST	xx, xx
-		JZ	xxx
-		```
-	* Change to
-		```
-		MOV	xx, 0x1
-		JZ	xxx
-		```
 
 ## Version
 
@@ -64,21 +50,6 @@ Win 20.0.5
 	Mac: /Applications/Adobe Audition CC 2019/Adobe Audition CC 2019.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI
 	Win: C:\Program Files\Adobe\Adobe Audition CC 2019\AuUI.dll
 
-## Feature
-
-1. 
-	* Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue"
-	* Find first instruction looks like
-		```
-		TEST	xx, xx
-		JZ	xxx
-		```
-	* Change to
-		```
-		MOV	xx, 0x1
-		JZ	xxx
-		```
-
 ## Version
 
 Mac 12.1.1
@@ -98,21 +69,6 @@ Win 12.1.1
 	Mac: /Applications/Adobe Premiere Pro CC 2019/Adobe Premiere Pro CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
 	Win: C:\Program Files\Adobe\Adobe Premiere Pro CC 2019\Registration.dll
 
-## Feature
-
-1. 
-	* Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue"
-	* Find first instruction looks like
-		```
-		TEST	xx, xx
-		JZ	xxx
-		```
-	* Change to
-		```
-		MOV	xx, 0x1
-		JZ	xxx
-		```
-
 ## Version
 
 Mac 12.1.1
@@ -124,5 +80,3 @@ Win 13.1.2
 
 1.	0x1800B983D (0xB8C3D): 84 C0 -> B0 01
 	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
-
-
