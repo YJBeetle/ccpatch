@@ -56,3 +56,12 @@ Win 20.0.5
 
 1.	0x147F78F19 (0x7F78319): 84 C0 -> B0 01
 	0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+
+# AU
+
+## File
+	AuUI
+	Mac: /Applications/Adobe Audition CC 2019/Adobe Audition CC 2019.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI
+	Win: C:\Program Files\Adobe\Adobe Audition CC 2019\AuUI.dll
+
+## Feature
