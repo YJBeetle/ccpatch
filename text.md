@@ -91,4 +91,11 @@ Win 12.1.1
 1.	0x180AB658D (0xAB598D): 84 C0 -> B0 01
 	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
 
+# PR
 
+## File
+	AuUI
+	Mac: /Applications/Adobe Premiere Pro CC 2019/Adobe Premiere Pro CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
+	Win: C:\Program Files\Adobe\Adobe Premiere Pro CC 2019\Registration.dll
+
+## Feature
