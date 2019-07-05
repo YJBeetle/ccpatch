@@ -46,7 +46,6 @@ Win 20.0.5
 # AU
 
 ## File
-	AuUI
 	Mac: /Applications/Adobe Audition CC 2019/Adobe Audition CC 2019.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI
 	Win: C:\Program Files\Adobe\Adobe Audition CC 2019\AuUI.dll
 
@@ -65,7 +64,6 @@ Win 12.1.1
 # PR
 
 ## File
-	AuUI
 	Mac: /Applications/Adobe Premiere Pro CC 2019/Adobe Premiere Pro CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
 	Win: C:\Program Files\Adobe\Adobe Premiere Pro CC 2019\Registration.dll
 
@@ -84,7 +82,6 @@ Win 13.1.2
 # AE
 
 ## File
-	AfterFXLib
 	Mac: /Applications/Adobe After Effects CC 2019/Adobe After Effects CC 2019.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib
 	Win: C:\Program Files\Adobe\Adobe After Effects CC 2019\Support Files\AfterFXLib.dll
 
@@ -114,4 +111,38 @@ Win 8.3.1
 *	*	0x1401A954C (0x1A894C): 84 C0 -> B0 01
 	*	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
 
+# ID
 
+## File
+	Mac: /Applications/Adobe InDesign CC 2019/Adobe InDesign CC 2019.app/Contents/MacOS/PublicLib.dylib
+	Win: C:\Program Files\Adobe\Adobe InDesign CC 2019\Public.dll
+
+## Version
+
+Mac 14.0.2
+
+*	*	0x318672: 84 DB -> B3 01
+	*	or find: 41 0F B6 47 08 **84 C0** 74 08 3C 07 -> 41 0F B6 47 08 **B3 01** 74 08 3C 07
+
+Win 14.0.2
+
+*	*	0x1803D6E2C (0x3D6228): 84 C0 -> B0 01
+	*	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+
+# IC
+
+## File
+	Mac: /Applications/Adobe InCopy CC 2019/Adobe InCopy CC 2019.app/Contents/MacOS/PublicLib.dylib
+	Win: C:\Program Files\Adobe\Adobe InCopy CC 2019\Public.dll
+
+## Version
+
+Mac 14.0.2
+
+*	*	0x318672: 84 DB -> B3 01
+	*	or find: 41 0F B6 47 08 **84 C0** 74 08 3C 07 -> 41 0F B6 47 08 **B3 01** 74 08 3C 07
+
+Win 14.0.2
+
+*	*	0x1803D6E2C (0x3D6228): 84 C0 -> B0 01
+	*	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
