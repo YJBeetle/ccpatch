@@ -79,6 +79,24 @@ Win 13.1.2
 *	*	0x1800B983D (0xB8C3D): 84 C0 -> B0 01
 	*	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
 
+# PL
+
+## File
+	Mac: /Applications/Adobe Prelude CC 2019/Adobe Prelude CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
+	Win: C:\Program Files\Adobe\Adobe Prelude CC 2019\Registration.dll
+
+## Version
+
+Mac 12.1.1
+
+*	*	0xDB0E2: 84 DB -> B3 01
+	*	or find: 49 89 D7 49 89 F6 49 89 FD 66 41 8B 5D 08 **84 DB** 74 09 80 FB 07 -> 49 89 D7 49 89 F6 49 89 FD 66 41 8B 5D 08 **B3 01** 74 09 80 FB 07
+
+Win 13.1.2
+
+*	*	0x1800B983D (0xB8C3D): 84 C0 -> B0 01
+	*	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
+
 # AE
 
 ## File
