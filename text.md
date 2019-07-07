@@ -199,6 +199,22 @@
 		*	0x14012498D (0x123D8D): 84 C0 -> B0 01
 		*	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
 
+# Br
+
+## File
+
+	Mac: /Applications/Adobe Bridge CC 2019/Adobe Bridge CC 2019.app/Contents/MacOS/Adobe Bridge CC 2019
+
+## Version
+
+*	9.1.0
+	*	Mac
+		*	0x5B2002: 84 DB -> B3 01
+		*	or find: 66 41 8B 5E 08 **84 DB** 0F 84 0F 01 00 00 80 FB 07 -> 66 41 8B 5E 08 **B3 01** 0F 84 0F 01 00 00 80 FB 07
+	*	Win
+		*	0x1409CEE73 (0x9CE273): 84 C0 -> B0 01
+		*	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+
 # An
 
 ## File
@@ -215,22 +231,6 @@
 	*	Win
 		*	0x140525A13 (0x524E13): 84 C0 -> B0 01
 		*	or find: 0F B6 41 08 **84 C0** 0F 84 9C 00 00 00 3C 07 -> 0F B6 41 08 **B0 01** 0F 84 9C 00 00 00 3C 07
-
-# Br
-
-## File
-
-	Mac: /Applications/Adobe Bridge CC 2019/Adobe Bridge CC 2019.app/Contents/MacOS/Adobe Bridge CC 2019
-
-## Version
-
-*	9.1.0
-	*	Mac
-		*	0x5B2002: 84 DB -> B3 01
-		*	or find: 66 41 8B 5E 08 **84 DB** 0F 84 0F 01 00 00 80 FB 07 -> 66 41 8B 5E 08 **B3 01** 0F 84 0F 01 00 00 80 FB 07
-	*	Win
-		*	0x1409CEE73 (0x9CE273): 84 C0 -> B0 01
-		*	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 # Dw
 
