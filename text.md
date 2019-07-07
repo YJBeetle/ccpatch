@@ -17,6 +17,10 @@
 
 # Ps
 
+## File
+
+	Mac: /Applications/Adobe Photoshop CC 2019/Adobe Photoshop CC 2019.app/Contents/MacOS/Adobe Photoshop CC 2019
+
 ## Version
 
 *	20.0.5
@@ -29,6 +33,10 @@
 
 # Lr
 
+## File
+
+	Mac: /Applications/Adobe Lightroom Classic CC/Adobe Lightroom Classic CC.app/Contents/MacOS/Adobe Lightroom Classic
+
 ## Version
 
 *	8.3.1
@@ -40,6 +48,10 @@
 		*	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 # Ai
+
+## File
+
+	Mac: /Applications/Adobe Illustrator CC 2019/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator
 
 ## Version
 
@@ -56,6 +68,7 @@
 # Id
 
 ## File
+
 	Mac: /Applications/Adobe InDesign CC 2019/Adobe InDesign CC 2019.app/Contents/MacOS/PublicLib.dylib
 	Win: C:\Program Files\Adobe\Adobe InDesign CC 2019\Public.dll
 
@@ -72,6 +85,7 @@
 # Ic
 
 ## File
+
 	Mac: /Applications/Adobe InCopy CC 2019/Adobe InCopy CC 2019.app/Contents/MacOS/PublicLib.dylib
 	Win: C:\Program Files\Adobe\Adobe InCopy CC 2019\Public.dll
 
@@ -88,6 +102,7 @@
 # Au
 
 ## File
+
 	Mac: /Applications/Adobe Audition CC 2019/Adobe Audition CC 2019.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI
 	Win: C:\Program Files\Adobe\Adobe Audition CC 2019\AuUI.dll
 
@@ -104,6 +119,7 @@
 # Pr
 
 ## File
+
 	Mac: /Applications/Adobe Premiere Pro CC 2019/Adobe Premiere Pro CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
 	Win: C:\Program Files\Adobe\Adobe Premiere Pro CC 2019\Registration.dll
 
@@ -120,6 +136,7 @@
 # Pl
 
 ## File
+
 	Mac: /Applications/Adobe Prelude CC 2019/Adobe Prelude CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
 	Win: C:\Program Files\Adobe\Adobe Prelude CC 2019\Registration.dll
 
@@ -133,21 +150,26 @@
 		*	0x1800B983D (0xB8C3D): 84 C0 -> B0 01
 		*	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
 
-# Me
+# Ch
+
+## File
+
+	Mac: /Applications/Adobe Character Animator CC 2019/Adobe Character Animator CC 2019.app/Contents/MacOS/Character Animator
 
 ## Version
 
-*	13.1.0
+*	2.1.1
 	*	Mac
-		*	0x12BCF2: 84 DB -> B3 01
-		*	or find: 66 41 8B 5D 08 **84 DB** 74 09 80 FB 07 -> 66 41 8B 5D 08 **B3 01** 74 09 80 FB 07
+		*	0x988592: 84 DB -> B3 01
+		*	or find: 49 89 D7 49 89 F6 49 89 FD 66 41 8B 5D 08 **84 DB** 74 09 80 FB 07 -> 49 89 D7 49 89 F6 49 89 FD 66 41 8B 5D 08 **B3 01** 74 09 80 FB 07
 	*	Win
-		*	0x14012498D (0x123D8D): 84 C0 -> B0 01
+		*	0x1411F3C7D (0x11F307D): 84 C0 -> B0 01
 		*	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 # Ae
 
 ## File
+
 	Mac: /Applications/Adobe After Effects CC 2019/Adobe After Effects CC 2019.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib
 	Win: C:\Program Files\Adobe\Adobe After Effects CC 2019\Support Files\AfterFXLib.dll
 
@@ -161,19 +183,28 @@
 		*	0x182330D7D (0x233017D): 84 C0 -> B0 01
 		*	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
 
-# Ch
+# Me
+
+## File
+
+	Mac: /Applications/Adobe Media Encoder CC 2019/Adobe Media Encoder CC 2019.app/Contents/MacOS/Adobe Media Encoder CC 2019
 
 ## Version
 
-*	2.1.1
+*	13.1.0
 	*	Mac
-		*	0x988592: 84 DB -> B3 01
-		*	or find: 49 89 D7 49 89 F6 49 89 FD 66 41 8B 5D 08 **84 DB** 74 09 80 FB 07 -> 49 89 D7 49 89 F6 49 89 FD 66 41 8B 5D 08 **B3 01** 74 09 80 FB 07
+		*	0x12BCF2: 84 DB -> B3 01
+		*	or find: 66 41 8B 5D 08 **84 DB** 74 09 80 FB 07 -> 66 41 8B 5D 08 **B3 01** 74 09 80 FB 07
 	*	Win
-		*	0x1411F3C7D (0x11F307D): 84 C0 -> B0 01
+		*	0x14012498D (0x123D8D): 84 C0 -> B0 01
 		*	or find: 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 # An
+
+## File
+
+	Mac: /Applications/Adobe Animate CC 2019/Adobe Animate CC 2019.app/Contents/MacOS/Adobe Animate CC 2019
+
 
 ## Version
 
@@ -187,6 +218,10 @@
 
 # Br
 
+## File
+
+	Mac: /Applications/Adobe Bridge CC 2019/Adobe Bridge CC 2019.app/Contents/MacOS/Adobe Bridge CC 2019
+
 ## Version
 
 *	9.1.0
@@ -198,6 +233,10 @@
 		*	or find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 # Dw
+
+## File
+
+	Mac: /Applications/Adobe Dreamweaver CC 2019/Adobe Dreamweaver CC 2019.app/Contents/MacOS/Dreamweaver
 
 ## Version
 
