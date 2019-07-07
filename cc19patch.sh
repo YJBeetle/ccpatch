@@ -143,7 +143,7 @@ function Ae()
 function Me()
 {
     run \
-        'Patch Ch ...' \
+        'Patch Me ...' \
         '/Applications/Adobe Media Encoder CC 2019/Adobe Media Encoder CC 2019.app/Contents/MacOS/Adobe Media Encoder CC 2019' \
         "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -195,51 +195,71 @@ if [ $UID -ne 0 ]; then
     exit
 fi
 
-if [ "$1" == "" ]; then
-    echo "All."
-    Ps
-    Lr
-    Ai
-    Id
-    Ic
-    Au
-    Pr
-    Pl
-    Ch
-    Ae
-    Me
-    Br
-    An
-    Dw
-    # Dn
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "PS" ]; then
-    Ps
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "LR" ]; then
-    Lr
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "AI" ]; then
-    Ai
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "ID" ]; then
-    Id
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "IC" ]; then
-    Ic
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "AU" ]; then
-    Au
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "PR" ]; then
-    Pr
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "PL" ]; then
-    Pl
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "CH" ]; then
-    Ch
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "AE" ]; then
-    Ae
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "ME" ]; then
-    Me
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "BR" ]; then
-    Br
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "AN" ]; then
-    An
-elif [ $(echo "$1" | tr [a-z] [A-Z]) == "DW" ]; then
-    Dw
-# elif [ $(echo "$1" | tr [a-z] [A-Z]) == "DN" ]; then
-#     Dn
-fi
+case $(echo "$1" | tr [a-z] [A-Z]) in
+    "")
+        echo "All."
+        Ps
+        Lr
+        Ai
+        Id
+        Ic
+        Au
+        Pr
+        Pl
+        Ch
+        Ae
+        Me
+        Br
+        An
+        Dw
+        # Dn
+        ;;
+    "PS")
+        Ps
+        ;;
+    "LR")
+        Lr
+        ;;
+    "AI")
+        Ai
+        ;;
+    "ID")
+        Id
+        ;;
+    "IC")
+        Ic
+        ;;
+    "AU")
+        Au
+        ;;
+    "PR")
+        Pr
+        ;;
+    "PL")
+        Pl
+        ;;
+    "CH")
+        Ch
+        ;;
+    "AE")
+        Ae
+        ;;
+    "ME")
+        Me
+        ;;
+    "BR")
+        Br
+        ;;
+    "AN")
+        An
+        ;;
+    "DW")
+        Dw
+        ;;
+    # "DN")
+    #     Dn
+    #     ;;
+    *)
+        echo "Unknow."
+        ;;
+esac
