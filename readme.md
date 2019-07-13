@@ -22,9 +22,11 @@
 ### Mac
 
 *	Via curl
+
 	```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/cc19patch/master/cc19patch.sh)"```
 
 *	Via wget
+
 	```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/cc19patch/master/cc19patch.sh -O -)"```
 
 ### Win

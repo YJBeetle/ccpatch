@@ -35,7 +35,7 @@
 
 ## File
 
-	Mac: /Applications/Adobe Lightroom Classic CC/Adobe Lightroom Classic CC.app/Contents/MacOS/Adobe Lightroom Classic
+	Mac: /Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app/Contents/MacOS/Adobe Lightroom Classic
 
 ## Version
 

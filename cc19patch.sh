@@ -63,7 +63,7 @@ function Lr()
 {
     run \
         'Patch Lr ...' \
-        '/Applications/Adobe Lightroom Classic CC/Adobe Lightroom Classic CC.app/Contents/MacOS/Adobe Lightroom Classic' \
+        '/Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app/Contents/MacOS/Adobe Lightroom Classic' \
         "\x49\x89\xD4\x49\x89\xF7\x49\x89\xFE\x66\x41\x8B\x5E\x08\x84\xDB\x0F\x84\xF7\x00\x00\x00\x80\xFB\x07" \
         "\x49\x89\xD4\x49\x89\xF7\x49\x89\xFE\x66\x41\x8B\x5E\x08\xB3\x01\x0F\x84\xF7\x00\x00\x00\x80\xFB\x07"
 }
