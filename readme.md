@@ -31,4 +31,6 @@
 
 ### Win
 
+see [text.md](./text.md).
+
 	自己动手 丰衣足食
