@@ -1,31 +1,5 @@
 #!/bin/sh
 
-function back_rel()
-{
-    __file=$1
-    cp "$__file" "$__file.bak"
-    echo "Backup finished."
-}
-
-function back()
-{
-    __file=$1
-    
-    if [ ! -f "$__file.bak" ]; then
-        back_rel "$__file"
-        return 0
-    elif [ ! -f "$__file.patched.crc32" ]; then
-        back_rel "$__file"
-        return 0
-    elif [ $(cat "$__file.patched.crc32") != $(crc32 "$__file") ]; then
-        back_rel "$__file"
-        return 0
-    else
-        echo "Already patched."
-        return 1
-    fi
-}
-
 function patch()
 {
     __file=$1
@@ -34,7 +8,7 @@ function patch()
 
     perl -pi -e "s|$__find|$__to|g" "$__file"
     crc32 "$__file" > "$__file.patched.crc32"
-    echo "Patch finished."
+    echo "Patch succeeded."
 }
 
 function run()
@@ -45,15 +19,21 @@ function run()
     __to=$4
 
     if [ -f "$__file" ]; then
-        echo "$__tab"
-        back "$__file" && patch "$__file" "$__find" "$__to"
+        echo "Found and patching $__tab ..."
+        if [ ! -f "$__file.bak" ] || [ ! -f "$__file.patched.crc32" ] || [ $(cat "$__file.patched.crc32") != $(crc32 "$__file") ]; then
+            cp "$__file" "$__file.bak"
+            echo "Backup finished."
+            patch "$__file" "$__find" "$__to"
+        else
+            echo "Already patched, skipped."
+        fi
     fi
 }
 
 function Ps()
 {
     run \
-        'Patch Ps ...' \
+        'Ps' \
         '/Applications/Adobe Photoshop CC 2019/Adobe Photoshop CC 2019.app/Contents/MacOS/Adobe Photoshop CC 2019' \
         "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -62,7 +42,7 @@ function Ps()
 function Lr()
 {
     run \
-        'Patch Lr ...' \
+        'Lr' \
         '/Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app/Contents/MacOS/Adobe Lightroom Classic' \
         "\x49\x89\xD4\x49\x89\xF7\x49\x89\xFE\x66\x41\x8B\x5E\x08\x84\xDB\x0F\x84\xF7\x00\x00\x00\x80\xFB\x07" \
         "\x49\x89\xD4\x49\x89\xF7\x49\x89\xFE\x66\x41\x8B\x5E\x08\xB3\x01\x0F\x84\xF7\x00\x00\x00\x80\xFB\x07"
@@ -71,7 +51,7 @@ function Lr()
 function Ai()
 {
     run \
-        'Patch Ai ...' \
+        'Ai' \
         '/Applications/Adobe Illustrator CC 2019/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator' \
         "\x66\x41\x8B\x5E\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x66\x41\x8B\x5E\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -80,7 +60,7 @@ function Ai()
 function Id()
 {
     run \
-        'Patch Id ...' \
+        'Id' \
         '/Applications/Adobe InDesign CC 2019/Adobe InDesign CC 2019.app/Contents/MacOS/PublicLib.dylib' \
         "\x41\x0F\xB6\x47\x08\x84\xC0\x74\x08\x3C\x07" \
         "\x41\x0F\xB6\x47\x08\xB0\x01\x74\x08\x3C\x07"
@@ -89,7 +69,7 @@ function Id()
 function Ic()
 {
     run \
-        'Patch Ic ...' \
+        'Ic' \
         '/Applications/Adobe InCopy CC 2019/Adobe InCopy CC 2019.app/Contents/MacOS/PublicLib.dylib' \
         "\x41\x0F\xB6\x47\x08\x84\xC0\x74\x08\x3C\x07" \
         "\x41\x0F\xB6\x47\x08\xB0\x01\x74\x08\x3C\x07"
@@ -98,7 +78,7 @@ function Ic()
 function Au()
 {
     run \
-        'Patch Au ...' \
+        'Au' \
         '/Applications/Adobe Audition CC 2019/Adobe Audition CC 2019.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI' \
         "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -107,7 +87,7 @@ function Au()
 function Pr()
 {
     run \
-        'Patch Pr ...' \
+        'Pr' \
         '/Applications/Adobe Premiere Pro CC 2019/Adobe Premiere Pro CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration' \
         "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -116,7 +96,7 @@ function Pr()
 function Pl()
 {
     run \
-        'Patch Pl ...' \
+        'Pl' \
         '/Applications/Adobe Prelude CC 2019/Adobe Prelude CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration' \
         "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -125,7 +105,7 @@ function Pl()
 function Ch()
 {
     run \
-        'Patch Ch ...' \
+        'Ch' \
         '/Applications/Adobe Character Animator CC 2019/Adobe Character Animator CC 2019.app/Contents/MacOS/Character Animator' \
         "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -134,7 +114,7 @@ function Ch()
 function Ae()
 {
     run \
-        'Patch Ae ...' \
+        'Ae' \
         '/Applications/Adobe After Effects CC 2019/Adobe After Effects CC 2019.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib' \
         "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -143,7 +123,7 @@ function Ae()
 function Me()
 {
     run \
-        'Patch Me ...' \
+        'Me' \
         '/Applications/Adobe Media Encoder CC 2019/Adobe Media Encoder CC 2019.app/Contents/MacOS/Adobe Media Encoder CC 2019' \
         "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
@@ -152,7 +132,7 @@ function Me()
 function Br()
 {
     run \
-        'Patch Br ...' \
+        'Br' \
         '/Applications/Adobe Bridge CC 2019/Adobe Bridge CC 2019.app/Contents/MacOS/Adobe Bridge CC 2019' \
         "\x66\x41\x8B\x5E\x08\x84\xDB\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07" \
         "\x66\x41\x8B\x5E\x08\xB3\x01\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07"
@@ -161,7 +141,7 @@ function Br()
 function An()
 {
     run \
-        'Patch An ...' \
+        'An' \
         '/Applications/Adobe Animate CC 2019/Adobe Animate CC 2019.app/Contents/MacOS/Adobe Animate CC 2019' \
         "\x66\x89\xD8\x66\x25\xFF\x00\x0F\x84\x71\x01\x00\x00\x0F\xB7\xC0\x83\xF8\x07" \
         "\x66\x89\xD8\x90\x90\xB0\x01\x0F\x84\x71\x01\x00\x00\x0F\xB7\xC0\x83\xF8\x07"
@@ -170,7 +150,7 @@ function An()
 function Dw()
 {
     run \
-        'Patch Dw ...' \
+        'Dw' \
         '/Applications/Adobe Dreamweaver CC 2019/Adobe Dreamweaver CC 2019.app/Contents/MacOS/Dreamweaver' \
         "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
