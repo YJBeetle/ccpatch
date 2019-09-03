@@ -8,10 +8,25 @@ function patch($__file, $__find, $__to)
 	# $to = [Byte[]](0x0F,0xB6,0x41,0x08,0xb0,0x01,0x74,0x0A,0x3C,0x07)
 
 	[Byte[]] $file = [System.Io.File]::ReadAllBytes( $__file )
-	$fileHexStr = [System.BitConverter]::ToString($file) -replace "-"
-	$findHexStr = [System.BitConverter]::ToString($find) -replace "-"
-	$position = ($fileHexStr.IndexOf($findHexStr) / 2)
-	if ( $position -gt 0 )
+
+	$position = 0
+	for ($i = 0; $i -lt $file.length; $i++)
+	{
+		for ($ii = 0; $ii -lt $find.length; $ii++)
+		{
+			if($file[$i+$ii] -ne $find[$ii])
+			{
+				break
+			}
+		}
+		if ($ii -eq $find.length)
+		{
+			$position = $i
+			break
+		}
+	}
+
+	if ( $position -ne 0 )
 	{
 		$fileStream = [System.IO.File]::Open($__file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
 		$binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
