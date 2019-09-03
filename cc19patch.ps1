@@ -45,7 +45,7 @@ function run($__tab, $__file, $__find, $__to)
 	}
 }
 
-function Ps()
+function _Ps()
 {
     run `
         'Ps' `
@@ -54,7 +54,7 @@ function Ps()
 		"0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Lr()
+function _Lr()
 {
 	run `
 		'Lr' `
@@ -63,7 +63,7 @@ function Lr()
 		"0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Ai()
+function _Ai()
 {
     run `
         'Ai' `
@@ -72,7 +72,7 @@ function Ai()
 		"0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Id()
+function _Id()
 {
     run `
         'Id' `
@@ -81,7 +81,7 @@ function Id()
 		"0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Ic()
+function _Ic()
 {
     run `
         'Ic' `
@@ -90,7 +90,7 @@ function Ic()
 		"0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Au()
+function _Au()
 {
     run `
         'Au' `
@@ -99,7 +99,7 @@ function Au()
         "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Pr()
+function _Pr()
 {
     run `
         'Pr' `
@@ -108,7 +108,7 @@ function Pr()
         "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Pl()
+function _Pl()
 {
     run `
         'Pl' `
@@ -117,7 +117,7 @@ function Pl()
         "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Ch()
+function _Ch()
 {
     run `
         'Ch' `
@@ -126,7 +126,7 @@ function Ch()
         "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Ae()
+function _Ae()
 {
     run `
         'Ae' `
@@ -135,7 +135,7 @@ function Ae()
         "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Me()
+function _Me()
 {
     run `
         'Me' `
@@ -144,7 +144,7 @@ function Me()
         "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function Br()
+function _Br()
 {
     run `
         'Br' `
@@ -153,7 +153,7 @@ function Br()
         "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
-function An()
+function _An()
 {
     run `
         'An' `
@@ -162,7 +162,7 @@ function An()
         "0F B6 41 08 B0 01 0F 84 9C 00 00 00 3C 07"
 }
 
-function Dw()
+function _Dw()
 {
     run `
         'Dw' `
@@ -171,17 +171,17 @@ function Dw()
         "0F B6 41 08 B0 01 0F 84 AB 00 00 00 3C 07"
 }
 
-Ps
-Lr
-Ai
-Id
-Ic
-Au
-Pr
-Pl
-Ch
-Ae
-Me
-Br
-An
-Dw
+_Ps
+_Lr
+_Ai
+_Id
+_Ic
+_Au
+_Pr
+_Pl
+_Ch
+_Ae
+_Me
+_Br
+_An
+_Dw
