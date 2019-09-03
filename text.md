@@ -20,6 +20,7 @@
 ## File
 
 	Mac: /Applications/Adobe Photoshop CC 2019/Adobe Photoshop CC 2019.app/Contents/MacOS/Adobe Photoshop CC 2019
+	Win: C:\Program Files\Adobe\Adobe Photoshop CC 2019\Photoshop.exe
 
 ## Version
 
@@ -36,6 +37,7 @@
 ## File
 
 	Mac: /Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app/Contents/MacOS/Adobe Lightroom Classic
+	Win: C:\Program Files\Adobe\Adobe Lightroom Classic\Lightroom.exe
 
 ## Version
 
@@ -52,6 +54,7 @@
 ## File
 
 	Mac: /Applications/Adobe Illustrator CC 2019/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator
+	Win: C:\Program Files\Adobe\Adobe Illustrator CC 2019\Support Files\Contents\Windows\Illustrator.exe
 
 ## Version
 
@@ -155,6 +158,7 @@
 ## File
 
 	Mac: /Applications/Adobe Character Animator CC 2019/Adobe Character Animator CC 2019.app/Contents/MacOS/Character Animator
+	Win: C:\Program Files\Adobe\Adobe Character Animator CC 2019\Support Files\Character Animator.exe
 
 ## Version
 
@@ -188,6 +192,7 @@
 ## File
 
 	Mac: /Applications/Adobe Media Encoder CC 2019/Adobe Media Encoder CC 2019.app/Contents/MacOS/Adobe Media Encoder CC 2019
+	Win: C:\Program Files\Adobe\Adobe Media Encoder CC 2019\Adobe Media Encoder.exe
 
 ## Version
 
@@ -204,6 +209,7 @@
 ## File
 
 	Mac: /Applications/Adobe Bridge CC 2019/Adobe Bridge CC 2019.app/Contents/MacOS/Adobe Bridge CC 2019
+	Win: C:\Program Files\Adobe\Adobe Bridge CC 2019\Bridge.exe
 
 ## Version
 
@@ -220,7 +226,7 @@
 ## File
 
 	Mac: /Applications/Adobe Animate CC 2019/Adobe Animate CC 2019.app/Contents/MacOS/Adobe Animate CC 2019
-
+	Win: C:\Program Files\Adobe\Adobe Animate CC 2019\Animate.exe
 
 ## Version
 
@@ -237,6 +243,7 @@
 ## File
 
 	Mac: /Applications/Adobe Dreamweaver CC 2019/Adobe Dreamweaver CC 2019.app/Contents/MacOS/Dreamweaver
+	Win: C:\Program Files\Adobe\Adobe Dreamweaver CC 2019\Dreamweaver.exe
 
 ## Version
 
