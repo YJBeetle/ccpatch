@@ -45,8 +45,143 @@ function run($__tab, $__file, $__find, $__to)
 	}
 }
 
-run `
-	'Lr' `
-	"C:\Program Files\Adobe\Adobe Lightroom Classic\Lightroom.exe" `
-	"0F B6 41 08 84 C0 74 0A 3C 07" `
-	"0F B6 41 08 B0 01 74 0A 3C 07"
+function Ps()
+{
+    run `
+        'Ps' `
+		"C:\Program Files\Adobe\Adobe Photoshop CC 2019\Photoshop.exe" `
+		"0F B6 41 08 84 C0 74 0A 3C 07" `
+		"0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Lr()
+{
+	run `
+		'Lr' `
+		"C:\Program Files\Adobe\Adobe Lightroom Classic\Lightroom.exe" `
+		"0F B6 41 08 84 C0 74 0A 3C 07" `
+		"0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Ai()
+{
+    run `
+        'Ai' `
+        'C:\Program Files\Adobe\Adobe Illustrator CC 2019\Support Files\Contents\Windows\Illustrator.exe' `
+		"0F B6 41 08 84 C0 74 0A 3C 07" `
+		"0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Id()
+{
+    run `
+        'Id' `
+        'C:\Program Files\Adobe\Adobe InDesign CC 2019\Public.dll' `
+		"0F B6 41 08 84 C0 74 0A 3C 07" `
+		"0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Ic()
+{
+    run `
+        'Ic' `
+        'C:\Program Files\Adobe\Adobe InCopy CC 2019\Public.dll' `
+		"0F B6 41 08 84 C0 74 0A 3C 07" `
+		"0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Au()
+{
+    run `
+        'Au' `
+        'C:\Program Files\Adobe\Adobe Audition CC 2019\AuUI.dll' `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 84 C0 74 0A 3C 07" `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Pr()
+{
+    run `
+        'Pr' `
+        'C:\Program Files\Adobe\Adobe Premiere Pro CC 2019\Registration.dll' `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 84 C0 74 0A 3C 07" `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Pl()
+{
+    run `
+        'Pl' `
+        'C:\Program Files\Adobe\Adobe Prelude CC 2019\Registration.dll' `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 84 C0 74 0A 3C 07" `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Ch()
+{
+    run `
+        'Ch' `
+        'C:\Program Files\Adobe\Adobe Character Animator CC 2019\Support Files\Character Animator.exe' `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 84 C0 74 0A 3C 07" `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Ae()
+{
+    run `
+        'Ae' `
+        'C:\Program Files\Adobe\Adobe After Effects CC 2019\Support Files\AfterFXLib.dll' `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 84 C0 74 0A 3C 07" `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Me()
+{
+    run `
+        'Me' `
+        'C:\Program Files\Adobe\Adobe Media Encoder CC 2019\Adobe Media Encoder.exe' `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 84 C0 74 0A 3C 07" `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function Br()
+{
+    run `
+        'Br' `
+        'C:\Program Files\Adobe\Adobe Bridge CC 2019\Bridge.exe' `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 84 C0 74 0A 3C 07" `
+        "4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
+}
+
+function An()
+{
+    run `
+        'An' `
+        'C:\Program Files\Adobe\Adobe Animate CC 2019\Animate.exe' `
+        "0F B6 41 08 84 C0 0F 84 9C 00 00 00 3C 07" `
+        "0F B6 41 08 B0 01 0F 84 9C 00 00 00 3C 07"
+}
+
+function Dw()
+{
+    run `
+        'Dw' `
+        'C:\Program Files\Adobe\Adobe Dreamweaver CC 2019\Dreamweaver.exe' `
+        "0F B6 41 08 84 C0 0F 84 AB 00 00 00 3C 07" `
+        "0F B6 41 08 B0 01 0F 84 AB 00 00 00 3C 07"
+}
+
+Ps
+Lr
+Ai
+Id
+Ic
+Au
+Pr
+Pl
+Ch
+Ae
+Me
+Br
+An
+Dw
