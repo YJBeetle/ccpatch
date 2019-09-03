@@ -31,6 +31,6 @@
 
 ### Win
 
-see [text.md](./text.md).
+*	Via PowerShell
 
-	自己动手 丰衣足食
+	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/cc19patch/master/cc19patch.ps1')"```
