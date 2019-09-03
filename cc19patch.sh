@@ -8,7 +8,7 @@ function patch()
 
     perl -pi -e "s|$__find|$__to|g" "$__file"
     if diff "$__file" "$__file.bak" 2>/dev/null 1>/dev/null; then
-	    echo "Patch faild."
+        echo "Patch faild."
     else
         crc32 "$__file" > "$__file.patched.crc32"
         echo "Patch succeeded."
