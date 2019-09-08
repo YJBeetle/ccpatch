@@ -31,6 +31,6 @@
 
 ### Win
 
-*	Via PowerShell
+*	Via PowerShell (administrateur)
 
 	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/cc19patch/master/cc19patch.ps1')"```
