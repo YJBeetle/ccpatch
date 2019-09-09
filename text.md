@@ -1,7 +1,7 @@
 # Way
 
 *
-	1.	Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue" (maybe "aInJsonValueRes")
+	1.	Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue" (maybe "aInJsonValueRes")(in "adobe::ngl::internal::Json::Value::resolveReference(char const*, char const*)" or "Json::Value::resolveReference(char const*, char const*)")
 	2.	Find first instruction looks like
 		```
 		TEST	xx, xx
@@ -254,3 +254,16 @@
 	*	Win
 		*	0xA5F8A3 (0x25ECA3): 84 C0 -> B0 01
 		*	or find: 0F B6 41 08 **84 C0** 0F 84 AB 00 00 00 3C 07 -> 0F B6 41 08 **B0 01** 0F 84 AB 00 00 00 3C 07
+
+# Dn
+
+## File
+
+	Mac: /Applications/Adobe Dimension CC/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper
+
+## Version
+
+*	2.3.1
+	*	Mac
+		*	0x3BE8E72: 84 DB -> B3 01
+		*	or find: 66 41 8B 5E 08 **84 DB** 0F 84 0F 01 00 00 80 FB 07 -> 66 41 8B 5E 08 **B3 01** 0F 84 0F 01 00 00 80 FB 07
