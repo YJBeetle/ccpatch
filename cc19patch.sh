@@ -160,19 +160,14 @@ function Dw()
         "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
 }
 
-# function Dn()
-# {
-#     echo 'Patch DN CC 19'
-#     DNCC19='/Applications/Adobe Dimension CC/Adobe Dimension CC.app/Contents/Frameworks/amtlib.framework/Versions/A/amtlib'
-#     if [ ! -f "$DNCC19.bak" ]; then
-#         sudo mv "$DNCC19" "$DNCC19.bak"
-#         sudo cp "$DNCC19.bak" "$DNCC19"
-#         echo "Backup file: $DNCC19.bak"
-#     fi
-#     sudo perl -pi -e 's|\x0F\xB6\x16\x48\x83\xFA\x20|\x90\x90\x90\x48\x83\xFA\x20|g' "$DNCC19"
-#     sudo perl -pi -e 's|\x48\x39\xF0\x75\xE2|\x48\x39\xF0\x90\x90|g' "$DNCC19"
-#     echo 'Patch complete'
-# }
+function Dn()
+{
+    run \
+        'Dw' \
+        '/Applications/Adobe Dimension CC/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper' \
+        "\x66\x41\x8B\x5E\x08\x84\xDB\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07" \
+        "\x66\x41\x8B\x5E\x08\xB3\x01\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07"
+}
 
 if [ $UID -ne 0 ]; then
     sudo $0 $@
@@ -196,7 +191,7 @@ case $(echo "$1" | tr [a-z] [A-Z]) in
         Br
         An
         Dw
-        # Dn
+        Dn
         ;;
     "PS")
         Ps
@@ -240,9 +235,9 @@ case $(echo "$1" | tr [a-z] [A-Z]) in
     "DW")
         Dw
         ;;
-    # "DN")
-    #     Dn
-    #     ;;
+    "DN")
+        Dn
+        ;;
     *)
         echo "Unknow."
         ;;
