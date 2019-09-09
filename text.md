@@ -260,6 +260,7 @@
 ## File
 
 	Mac: /Applications/Adobe Dimension CC/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper
+	Win: C:\Program Files\Adobe\Adobe Dimension CC\euclid-core-plugin.pepper
 
 ## Version
 
@@ -267,3 +268,6 @@
 	*	Mac
 		*	0x3BE8E72: 84 DB -> B3 01
 		*	or find: 66 41 8B 5E 08 **84 DB** 0F 84 0F 01 00 00 80 FB 07 -> 66 41 8B 5E 08 **B3 01** 0F 84 0F 01 00 00 80 FB 07
+	*	Win
+		*	0x (0x): 84 C0 -> B0 01
+		*	or find: 8B 05 02 74 E0 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 8B 05 02 74 E0 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
