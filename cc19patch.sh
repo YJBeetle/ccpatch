@@ -163,7 +163,7 @@ function Dw()
 function Dn()
 {
     run \
-        'Dw' \
+        'Dn' \
         '/Applications/Adobe Dimension CC/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper' \
         "\x66\x41\x8B\x5E\x08\x84\xDB\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07" \
         "\x66\x41\x8B\x5E\x08\xB3\x01\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07"
