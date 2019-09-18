@@ -169,6 +169,15 @@ function Dn()
         "\x66\x41\x8B\x5E\x08\xB3\x01\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07"
 }
 
+function Acrobat()
+{
+    run \
+        'Acrobat' \
+        '/Applications/Adobe Acrobat DC/Adobe Acrobat.app/Contents/Frameworks/Acrobat.framework/Versions/A/Acrobat' \
+        "\x66\x41\x8B\x5E\x08\x84\xDB\x74\x09\x80\xFB\x07" \
+        "\x66\x41\x8B\x5E\x08\xB3\x01\x74\x09\x80\xFB\x07"
+}
+
 if [ $UID -ne 0 ]; then
     sudo $0 $@
     exit
@@ -192,6 +201,7 @@ case $(echo "$1" | tr [a-z] [A-Z]) in
         An
         Dw
         Dn
+        Acrobat
         ;;
     "PS")
         Ps
@@ -237,6 +247,9 @@ case $(echo "$1" | tr [a-z] [A-Z]) in
         ;;
     "DN")
         Dn
+        ;;
+    "ACROBAT")
+        Acrobat
         ;;
     *)
         echo "Unknow."
