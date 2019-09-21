@@ -277,7 +277,7 @@
 ## File
 
 	Mac: /Applications/Adobe Acrobat DC/Adobe Acrobat.app/Contents/Frameworks/Acrobat.framework/Versions/A/Acrobat
-	Win: Acrobat.dll
+	Win: C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.dll
 
 ## Version
 
