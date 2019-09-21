@@ -195,6 +195,15 @@ function _Dn()
         "8B 05 02 74 E0 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
 }
 
+function _Acrobat()
+{
+    run `
+        'Acrobat' `
+        'C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.dll' `
+        "8A 43 08 84 C0 74 0A 3C 07" `
+        "8A 43 08 B0 01 74 0A 3C 07"
+}
+
 _Ps
 _Lr
 _Ai
@@ -210,3 +219,4 @@ _Br
 _An
 _Dw
 _Dn
+_Acrobat
