@@ -3,7 +3,7 @@
 ## Work
 
 *	Ps CC 19
-*	Lr CC 19
+*	Lr CC 19 (only run)
 *	Ai CC 19
 *	Id CC 19
 *	Ic CC 19
