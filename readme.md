@@ -24,14 +24,14 @@
 
 *	Via curl
 
-	```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/cc19patch/master/run.sh)"```
+	```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/cc19patch/2019/run.sh)"```
 
 *	Via wget
 
-	```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/cc19patch/master/run.sh -O -)"```
+	```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/cc19patch/2019/run.sh -O -)"```
 
 ### Win
 
 *	Via PowerShell (administrateur)
 
-	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/cc19patch/master/run.ps1')"```
+	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/cc19patch/2019/run.ps1')"```
