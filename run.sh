@@ -38,9 +38,9 @@ function Ps()
 {
     run \
         'Ps' \
-        '/Applications/Adobe Photoshop CC 2019/Adobe Photoshop CC 2019.app/Contents/MacOS/Adobe Photoshop CC 2019' \
-        "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
-        "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
+        '/Applications/Adobe Photoshop 2020/Adobe Photoshop 2020.app/Contents/MacOS/Adobe Photoshop 2020' \
+        "\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07" \
+        "\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07"
 }
 
 function Lr()
@@ -56,16 +56,16 @@ function Ai()
 {
     run \
         'Ai' \
-        '/Applications/Adobe Illustrator CC 2019/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator' \
-        "\x66\x41\x8B\x5E\x08\x84\xDB\x74\x09\x80\xFB\x07" \
-        "\x66\x41\x8B\x5E\x08\xB3\x01\x74\x09\x80\xFB\x07"
+        '/Applications/Adobe Illustrator 2020/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator' \
+        "\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xC2\x00\x00\x00\x80\xFB\x07" \
+        "\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xC2\x00\x00\x00\x80\xFB\x07"
 }
 
 function Id()
 {
     run \
         'Id' \
-        '/Applications/Adobe InDesign CC 2019/Adobe InDesign CC 2019.app/Contents/MacOS/PublicLib.dylib' \
+        '/Applications/Adobe InDesign 2020/Adobe InDesign 2020.app/Contents/MacOS/PublicLib.dylib' \
         "\x41\x0F\xB6\x47\x08\x84\xC0\x74\x08\x3C\x07" \
         "\x41\x0F\xB6\x47\x08\xB0\x01\x74\x08\x3C\x07"
 }
@@ -74,7 +74,7 @@ function Ic()
 {
     run \
         'Ic' \
-        '/Applications/Adobe InCopy CC 2019/Adobe InCopy CC 2019.app/Contents/MacOS/PublicLib.dylib' \
+        '/Applications/Adobe InCopy 2020/Adobe InCopy 2020.app/Contents/MacOS/PublicLib.dylib' \
         "\x41\x0F\xB6\x47\x08\x84\xC0\x74\x08\x3C\x07" \
         "\x41\x0F\xB6\x47\x08\xB0\x01\x74\x08\x3C\x07"
 }
@@ -83,79 +83,79 @@ function Au()
 {
     run \
         'Au' \
-        '/Applications/Adobe Audition CC 2019/Adobe Audition CC 2019.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI' \
-        "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
-        "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
+        '/Applications/Adobe Audition 2020/Adobe Audition 2020.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI' \
+        "\x49\x89\xF4\x49\x89\xFD\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07" \
+        "\x49\x89\xF4\x49\x89\xFD\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07"
 }
 
 function Pr()
 {
     run \
         'Pr' \
-        '/Applications/Adobe Premiere Pro CC 2019/Adobe Premiere Pro CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration' \
-        "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
-        "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
+        '/Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration' \
+        "\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07" \
+        "\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07"
 }
 
 function Pl()
 {
     run \
         'Pl' \
-        '/Applications/Adobe Prelude CC 2019/Adobe Prelude CC 2019.app/Contents/Frameworks/Registration.framework/Versions/A/Registration' \
-        "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
-        "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
+        '/Applications/Adobe Prelude 2020/Adobe Prelude 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration' \
+        "\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07" \
+        "\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07"
 }
 
 function Ch()
 {
     run \
         'Ch' \
-        '/Applications/Adobe Character Animator CC 2019/Adobe Character Animator CC 2019.app/Contents/MacOS/Character Animator' \
-        "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
-        "\x49\x89\xD7\x49\x89\xF6\x49\x89\xFD\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
+        '/Applications/Adobe Character Animator 2020/Adobe Character Animator 2020.app/Contents/MacOS/Character Animator' \
+        "\x49\x89\xF4\x49\x89\xFD\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07" \
+        "\x49\x89\xF4\x49\x89\xFD\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07"
 }
 
 function Ae()
 {
     run \
         'Ae' \
-        '/Applications/Adobe After Effects CC 2019/Adobe After Effects CC 2019.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib' \
-        "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
-        "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
+        '/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib' \
+        "\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07" \
+        "\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07"
 }
 
 function Me()
 {
     run \
         'Me' \
-        '/Applications/Adobe Media Encoder CC 2019/Adobe Media Encoder CC 2019.app/Contents/MacOS/Adobe Media Encoder CC 2019' \
-        "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
-        "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
+        '/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder 2020' \
+        "\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07" \
+        "\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07"
 }
 
 function Br()
 {
     run \
         'Br' \
-        '/Applications/Adobe Bridge CC 2019/Adobe Bridge CC 2019.app/Contents/MacOS/Adobe Bridge CC 2019' \
-        "\x66\x41\x8B\x5E\x08\x84\xDB\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07" \
-        "\x66\x41\x8B\x5E\x08\xB3\x01\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07"
+        '/Applications/Adobe Bridge 2020/Adobe Bridge 2020.app/Contents/MacOS/Adobe Bridge 2020' \
+        "\x0F\xB7\x5F\x08\x84\xDB\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07" \
+        "\x0F\xB7\x5F\x08\xB3\x01\x0F\x84\xEE\x00\x00\x00\x80\xFB\x07"
 }
 
 function An()
 {
     run \
         'An' \
-        '/Applications/Adobe Animate CC 2019/Adobe Animate CC 2019.app/Contents/MacOS/Adobe Animate CC 2019' \
-        "\x66\x89\xD8\x66\x25\xFF\x00\x0F\x84\x71\x01\x00\x00\x0F\xB7\xC0\x83\xF8\x07" \
-        "\x66\x89\xD8\x90\x90\xB0\x01\x0F\x84\x71\x01\x00\x00\x0F\xB7\xC0\x83\xF8\x07"
+        '/Applications/Adobe Animate 2020/Adobe Animate 2020.app/Contents/MacOS/Adobe Animate 2020' \
+        "\x41\x0F\xB7\x5E\x08\x84\xDB\x0F\x84\xF0\x00\x00\x00\x80\xFB\x07" \
+        "\x41\x0F\xB7\x5E\x08\xB3\x01\x0F\x84\xF0\x00\x00\x00\x80\xFB\x07"
 }
 
 function Dw()
 {
     run \
         'Dw' \
-        '/Applications/Adobe Dreamweaver CC 2019/Adobe Dreamweaver CC 2019.app/Contents/MacOS/Dreamweaver' \
+        '/Applications/Adobe Dreamweaver 2020/Adobe Dreamweaver 2020.app/Contents/MacOS/Dreamweaver' \
         "\x66\x41\x8B\x5D\x08\x84\xDB\x74\x09\x80\xFB\x07" \
         "\x66\x41\x8B\x5D\x08\xB3\x01\x74\x09\x80\xFB\x07"
 }
@@ -164,7 +164,7 @@ function Dn()
 {
     run \
         'Dn' \
-        '/Applications/Adobe Dimension CC/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper' \
+        '/Applications/Adobe Dimension/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper' \
         "\x66\x41\x8B\x5E\x08\x84\xDB\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07" \
         "\x66\x41\x8B\x5E\x08\xB3\x01\x0F\x84\x0F\x01\x00\x00\x80\xFB\x07"
 }
@@ -194,7 +194,7 @@ case $(echo "$1" | tr [a-z] [A-Z]) in
         Au
         Pr
         Pl
-        Ch
+        # Ch  # not work
         Ae
         Me
         Br

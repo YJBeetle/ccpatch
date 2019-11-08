@@ -2,21 +2,21 @@
 
 ## Work
 
-*	Ps CC 19
-*	Lr CC 19 (only run)
-*	Ai CC 19
-*	Id CC 19
-*	Ic CC 19
-*	Au CC 19
-*	Pr CC 19
-*	Pl CC 19
-*	Ch CC 19
-*	Ae CC 19
-*	Me CC 19
-*	Br CC 19
-*	An CC 19
-*	Dw CC 19
-*	Dn CC 19
+*	Ps CC 20
+*	Lr CC 20 (only run)
+*	Ai CC 20
+*	Id CC 20
+*	Ic CC 20
+*	Au CC 20
+*	Pr CC 20
+*	Pl CC 20
+*	Ch CC 20 (mac not work)
+*	Ae CC 20
+*	Me CC 20
+*	Br CC 20
+*	An CC 20
+*	Dw CC 20
+*	Dn CC 20
 
 ## Run
 
