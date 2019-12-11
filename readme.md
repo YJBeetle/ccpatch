@@ -35,3 +35,21 @@
 *	Via PowerShell (administrateur)
 
 	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/run.ps1')"```
+
+## Revoke
+
+### Mac
+
+*	Via curl
+
+	```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/revoke.sh)"```
+
+*	Via wget
+
+	```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/revoke.sh -O -)"```
+
+### Win
+
+*	Via PowerShell (administrateur)
+
+	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/revoke.ps1')"```
