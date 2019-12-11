@@ -1,16 +1,41 @@
 # Way
 
 *
-	1.	Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue" (maybe "aInJsonValueRes")(in "adobe::ngl::internal::Json::Value::resolveReference(char const*, char const*)" or "Json::Value::resolveReference(char const*, char const*)")
-	2.	Find first instruction looks like
+	1.	Find SUBROUTINE has "FREEMIUM" (maybe "aFreemium")
+	2.	In mac, find instruction looks like
 		```
-		TEST	xx, xx
-		JZ	xxx
+		cmp	[rbp+var_178], rdx
+		setz	cl
+		cmp	[rbp+var_180], eax
+		setz	al
+		and	al, cl
+		mov	cs:byte_????????, al
+		```
+		In win, find instruction looks like
+		```
+		mov	rcx, [rax+8]
+		mov	rax, [rsp+14F0h+var_1490]
+		cmp	[rax+8], rcx
+		jnz	short label_1
+		mov	eax, dword ptr [rsp+14F0h+var_14A8]
+		cmp	[rsp+14F0h+var_1498], eax
+		jnz	short label_1
+		mov	al, 1
+		jmp	short label_2
+		label_1:
+		xor	al, al
+		label_2:
+		mov	cs:byte_????????, al
+		```
+		Pseudocode:
+		```
+		v78 = v138 == v80 && v137 == v79;
+		byte_???????? = v78
 		```
 	3.	Change to
 		```
-		MOV	xx, 0x1
-		JZ	xxx
+		mov	al, 1
+		mov	cs:byte_????????, al
 		```
 
 ---
