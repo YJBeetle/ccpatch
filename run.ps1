@@ -22,17 +22,17 @@ function patch($__file, $__find, $__to)
         if ($ii -eq $find.length)
         {
             $position = $i
-            break
+            
+            $fileStream = [System.IO.File]::Open($__file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
+            $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
+            $binaryWriter.BaseStream.Position = $position;
+            $binaryWriter.Write($to)
+            $fileStream.Close()
         }
     }
 
     if ( $position -ne 0 )
     {
-        $fileStream = [System.IO.File]::Open($__file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
-        $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
-        $binaryWriter.BaseStream.Position = $position;
-        $binaryWriter.Write($to)
-        $fileStream.Close()
         ( Get-FileHash "$__file" -Algorithm MD5 ).Hash > "$__file.patched.md5"
         echo "Patch succeeded."
     }
