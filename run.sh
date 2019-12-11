@@ -25,7 +25,8 @@ function run()
     if [ -f "$__file" ]; then
         echo "Found and patching $__tab ..."
         if [ ! -f "$__file.bak" ] || [ ! -f "$__file.patched.crc32" ] || [ $(cat "$__file.patched.crc32") != $(crc32 "$__file") ]; then
-            cp "$__file" "$__file.bak"
+            mv "$__file" "$__file.bak"
+            cp "$__file.bak" "$__file"
             echo "Backup succeeded."
             patch "$__file" "$__find" "$__to"
         else
