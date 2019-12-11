@@ -10,7 +10,7 @@ function revoke()
         if [ -f "$__file.bak" ]; then
             rm "$__file"
             mv "$__file.bak" "$__file"
-            rm "$__file.patched.crc32"
+            rm "$__file.patched.md5"
             echo "Revoke succeeded."
         else
             echo "The backup file does not exist, skipped."
