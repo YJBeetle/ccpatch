@@ -8,7 +8,7 @@ function revoke($__tab, $__file)
         {
             rm "$__file"
             mv "$__file.bak" "$__file"
-            rm "$__file.patched.crc32"
+            rm "$__file.patched.md5"
             echo "Revoke succeeded."
         }
         else
