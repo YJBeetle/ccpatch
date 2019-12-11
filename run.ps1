@@ -147,8 +147,8 @@ function _Ae()
     run `
         'Ae' `
         'C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Me()
