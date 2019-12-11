@@ -111,8 +111,8 @@ function _Au()
     run `
         'Au' `
         'C:\Program Files\Adobe\Adobe Audition 2020\AuUI.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Pr()
@@ -120,8 +120,8 @@ function _Pr()
     run `
         'Pr' `
         'C:\Program Files\Adobe\Adobe Premiere Pro 2020\Registration.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Pl()
@@ -129,8 +129,8 @@ function _Pl()
     run `
         'Pl' `
         'C:\Program Files\Adobe\Adobe Prelude 2020\Registration.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Ch()
@@ -138,8 +138,8 @@ function _Ch()
     run `
         'Ch' `
         'C:\Program Files\Adobe\Adobe Character Animator 2020\Support Files\Character Animator.exe' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Ae()
@@ -156,8 +156,8 @@ function _Me()
     run `
         'Me' `
         'C:\Program Files\Adobe\Adobe Media Encoder 2020\Adobe Media Encoder.exe' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Br()
