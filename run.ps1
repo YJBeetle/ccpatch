@@ -10,7 +10,7 @@ function patch($__file, $__find, $__to)
     [Byte[]] $file = [System.Io.File]::ReadAllBytes( $__file )
 
     $position = 0
-    for ($i = 0; $i -lt $file.length; $i++)
+    for ($i = 0; $i -lt ($file.length - $find.length); $i++)
     {
         for ($ii = 0; $ii -lt $find.length; $ii++)
         {
