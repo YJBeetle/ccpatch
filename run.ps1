@@ -10,7 +10,7 @@ function patch($__file, $__find, $__to)
     [Byte[]] $file = [System.Io.File]::ReadAllBytes( $__file )
 
     $position = 0
-    for ($i = 0; $i -lt $file.length; $i++)
+    for ($i = 0; $i -lt ($file.length - $find.length); $i++)
     {
         for ($ii = 0; $ii -lt $find.length; $ii++)
         {
@@ -22,17 +22,17 @@ function patch($__file, $__find, $__to)
         if ($ii -eq $find.length)
         {
             $position = $i
-            break
+            
+            $fileStream = [System.IO.File]::Open($__file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
+            $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
+            $binaryWriter.BaseStream.Position = $position;
+            $binaryWriter.Write($to)
+            $fileStream.Close()
         }
     }
 
     if ( $position -ne 0 )
     {
-        $fileStream = [System.IO.File]::Open($__file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
-        $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
-        $binaryWriter.BaseStream.Position = $position;
-        $binaryWriter.Write($to)
-        $fileStream.Close()
         ( Get-FileHash "$__file" -Algorithm MD5 ).Hash > "$__file.patched.md5"
         echo "Patch succeeded."
     }
@@ -111,8 +111,8 @@ function _Au()
     run `
         'Au' `
         'C:\Program Files\Adobe\Adobe Audition 2020\AuUI.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Pr()
@@ -120,8 +120,8 @@ function _Pr()
     run `
         'Pr' `
         'C:\Program Files\Adobe\Adobe Premiere Pro 2020\Registration.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Pl()
@@ -129,8 +129,8 @@ function _Pl()
     run `
         'Pl' `
         'C:\Program Files\Adobe\Adobe Prelude 2020\Registration.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Ch()
@@ -138,8 +138,8 @@ function _Ch()
     run `
         'Ch' `
         'C:\Program Files\Adobe\Adobe Character Animator 2020\Support Files\Character Animator.exe' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Ae()
@@ -147,8 +147,8 @@ function _Ae()
     run `
         'Ae' `
         'C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Me()
@@ -156,8 +156,8 @@ function _Me()
     run `
         'Me' `
         'C:\Program Files\Adobe\Adobe Media Encoder 2020\Adobe Media Encoder.exe' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
+        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
 }
 
 function _Br()

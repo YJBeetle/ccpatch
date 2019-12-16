@@ -10,7 +10,7 @@
 *	Au CC 20
 *	Pr CC 20
 *	Pl CC 20
-*	Ch CC 20 (mac not work)
+*	Ch CC 20
 *	Ae CC 20
 *	Me CC 20
 *	Br CC 20

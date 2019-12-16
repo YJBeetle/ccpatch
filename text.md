@@ -1,4 +1,4 @@
-# Way
+# Way A
 
 *
 	1.	Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue" (maybe "aInJsonValueRes")(in "adobe::ngl::internal::Json::Value::resolveReference(char const*, char const*)" or "Json::Value::resolveReference(char const*, char const*)")
@@ -11,6 +11,46 @@
 		```
 		MOV	xx, 0x1
 		JZ	xxx
+		```
+
+# Way B
+
+*
+	1.	Find SUBROUTINE has "FREEMIUM" (maybe "aFreemium")
+	2.	In mac, find instruction looks like
+		```
+		cmp	[rbp+var_178], rdx
+		setz	cl
+		cmp	[rbp+var_180], eax
+		setz	al
+		and	al, cl
+		mov	cs:byte_????????, al
+		```
+		In win, find instruction looks like
+		```
+		mov	rcx, [rax+8]
+		mov	rax, [rsp+14F0h+var_1490]
+		cmp	[rax+8], rcx
+		jnz	short label_1
+		mov	eax, dword ptr [rsp+14F0h+var_14A8]
+		cmp	[rsp+14F0h+var_1498], eax
+		jnz	short label_1
+		mov	al, 1
+		jmp	short label_2
+		label_1:
+		xor	al, al
+		label_2:
+		mov	cs:byte_????????, al
+		```
+		Pseudocode:
+		```
+		v78 = v138 == v80 && v137 == v79;
+		byte_???????? = v78
+		```
+	3.	Change to
+		```
+		mov	al, 1
+		mov	cs:byte_????????, al
 		```
 
 ---
@@ -110,12 +150,15 @@
 ## Version
 
 *	13.0.0.519
+	* Use way B
 	*	Mac
-		*	0xDA5D41: 84 DB -> B3 01
-		*	find: 49 89 F4 49 89 FD 0F B7 5F 08 **84 DB** 0F 84 EE 00 00 00 80 FB 07 -> 49 89 F4 49 89 FD 0F B7 5F 08 **B3 01** 0F 84 EE 00 00 00 80 FB 07
+		*	0x?: ```20 C8``` -> ```B0 01```
+		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
+		*	repe:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **B0 01**
 	*	Win
-		*	0x1807880BD: 84 C0 -> B0 01
-		*	find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+		*	0x?: ```32 C0``` -> ```B0 01```
+		*	find:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
+		*	repe:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
 # Pr
 
@@ -127,12 +170,15 @@
 ## Version
 
 *	14.0
+	* Use way B
 	*	Mac
-		*	0xDEA51: 84 DB -> B3 01
-		*	find: 0F B7 5F 08 **84 DB** 0F 84 EE 00 00 00 80 FB 07 -> 0F B7 5F 08 **B3 01** 0F 84 EE 00 00 00 80 FB 07
+		*	0x?: ```20 C8``` -> ```B0 01```
+		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
+		*	repe:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **B0 01**
 	*	Win
-		*	0x18008FCDD: 84 C0 -> B0 01
-		*	find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+		*	0x?: ```32 C0``` -> ```B0 01```
+		*	find:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
+		*	repe:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
 # Pl
 
@@ -144,12 +190,15 @@
 ## Version
 
 *	9.0
+	* Use way B
 	*	Mac
-		*	0xDEA61: 84 DB -> B3 01
-		*	find: 0F B7 5F 08 **84 DB** 0F 84 EE 00 00 00 80 FB 07 -> 0F B7 5F 08 **B3 01** 0F 84 EE 00 00 00 80 FB 07
+		*	0x?: ```20 C8``` -> ```B0 01```
+		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
+		*	repe:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **B0 01**
 	*	Win
-		*	0x18008FCDD: 84 C0 -> B0 01
-		*	find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+		*	0x?: ```32 C0``` -> ```B0 01```
+		*	find:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
+		*	repe:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
 # Ch
 
@@ -161,12 +210,15 @@
 ## Version
 
 *	3.0
-	*	Mac (not work)
-		*	0x100D25FC1: 84 DB -> B3 01
-		*	find: 49 89 F4 49 89 FD 0F B7 5F 08 **84 DB** 0F 84 EE 00 00 00 80 FB 07 -> 49 89 F4 49 89 FD 0F B7 5F 08 **B3 01** 0F 84 EE 00 00 00 80 FB 07
+	* Use way B
+	*	Mac
+		*	0x?: ```20 C8``` -> ```B0 01```
+		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
+		*	repe:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **B0 01**
 	*	Win
-		*	0x1411C95CD: 84 C0 -> B0 01
-		*	find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+		*	0x?: ```32 C0``` -> ```B0 01```
+		*	find:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
+		*	repe:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
 # Ae
 
@@ -178,12 +230,15 @@
 ## Version
 
 *	17.0
+	* Use way B
 	*	Mac
-		*	0xC10BA1: 84 DB -> B3 01
-		*	find: 0F B7 5F 08 **84 DB** 0F 84 EE 00 00 00 80 FB 07 -> 0F B7 5F 08 **B3 01** 0F 84 EE 00 00 00 80 FB 07
+		*	0x4E97F: ```20 C8``` -> ```B0 01```
+		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
+		*	repe:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **B0 01**
 	*	Win
-		*	0x181AFA98D: 84 C0 -> B0 01
-		*	find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+		*	0x1815D3983: ```32 C0``` -> ```B0 01```
+		*	find:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
+		*	repe:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
 # Me
 
@@ -195,12 +250,15 @@
 ## Version
 
 *	14.0
+	* Use way B
 	*	Mac
-		*	0x100147DF1: 84 DB -> B3 01
-		*	find: 0F B7 5F 08 **84 DB** 0F 84 EE 00 00 00 80 FB 07 -> 0F B7 5F 08 **B3 01** 0F 84 EE 00 00 00 80 FB 07
+		*	0x?: ```20 C8``` -> ```B0 01```
+		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
+		*	repe:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **B0 01**
 	*	Win
-		*	0x1400CE4DD: 84 C0 -> B0 01
-		*	find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
+		*	0x?: ```32 C0``` -> ```B0 01```
+		*	find:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
+		*	repe:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
 # Br
 
