@@ -195,7 +195,7 @@ case $(echo "$1" | tr [a-z] [A-Z]) in
         Au
         Pr
         Pl
-        # Ch  # not work
+        Ch
         Ae
         Me
         Br
