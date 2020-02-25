@@ -1,3 +1,11 @@
+$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+if(!$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+{
+    echo "Privilege is not sufficient, elevating..."
+    $args = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
+    Start-Process -FilePath PowerShell.exe -Verb runas -ArgumentList $args
+    exit
+}
 
 function revoke($__tab, $__file)
 {
