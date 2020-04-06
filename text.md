@@ -53,6 +53,27 @@
 		mov	cs:byte_????????, al
 		```
 
+# Way C
+
+*
+	1.	Find SUBROUTINE has "%s: profile status %d, AMT status %d" (maybe "aSProfileStatus")
+	2.	find
+		```
+		cmp	DWORD PTR [edi+0x100],0x1
+		jne	0x30
+		```
+	3.	Change to
+		```
+		cmp	DWORD PTR [edi+0x100],0x99
+		jne	0x30
+		```
+	4.	Find SUBROUTINE has "PROFILE_EXPIRED" (maybe "aProfileExpired")
+	5.	Overwrite
+		```
+		xor	eax,eax
+		ret
+		```
+
 ---
 
 # Ps
@@ -98,10 +119,15 @@
 
 ## Version
 
-*	24.0.0
+*	24.0.1
 	*	Mac
-		*	0x100501015: 84 DB -> B3 01
-		*	find: 0F B7 5F 08 **84 DB** 0F 84 C2 00 00 00 80 FB 07 -> 0F B7 5F 08 **B3 01** 0F 84 C2 00 00 00 80 FB 07
+		*	0x100419F91: 83 BF 00 01 00 00 01 -> 83 BF 00 01 00 00 99
+		*	find: 83 BF 00 01 00 00 **01** 75 27 -> 83 BF 00 01 00 00 **99** 75 27
+		*	0x10041A117: 55 48 89 -> 33 C0 C3
+		*	find: 83 B8 00 01 00 00 **03** 75 10 -> 83 B8 00 01 00 00 **99** 75 10
+		*	0x1004920F8: 55 48 89 -> 33 C0 C3
+		*	find: **55 48 89** E5 53 50 48 89 FB 48 83 C3 30 -> **33 C0 C3** E5 53 50 48 89 FB 48 83 C3 30
+*	24.0.0
 	*	Win
 		*	0x1407BB89D: 84 C0 -> B0 01
 		*	find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
