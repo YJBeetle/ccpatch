@@ -36,7 +36,7 @@
 
 	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/run.ps1')"```
 
-## Revoke
+## Restore
 
 ### Mac
 
