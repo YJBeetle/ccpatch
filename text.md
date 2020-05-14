@@ -56,19 +56,61 @@
 # Way C
 
 *
-	1.	Find SUBROUTINE has "%s: profile status %d, AMT status %d" (maybe "aSProfileStatus")
-	2.	find
+	1.	Find `adobe::ngl::internal::SecureProfilePayload::GetProfileStatusCode(adobe::ngl::internal::SecureProfilePayload *this)`
+	
+		feature: 
+
+		`PROFILE_AVAILABLE`
+		
+		`aProfileAvailab`
+
+		eg. Lr Mac 9.2.1
 		```
-		cmp	DWORD PTR [edi+0x100],0x1
-		jne	0x30
+		#0  0x00000001000d2494 in adobe::ngl::internal::SecureProfilePayload::GetProfileStatusCode() const ()
+		#1  0x00000001000f304f in adobe::ngl::internal::NUSecureProfileFetcher::ValidateAndGetCachedSP() const ()
+		#2  0x00000001000d4c1f in adobe::ngl::internal::NUCachedSecureProfileHandler::Handle(std::__1::unique_ptr<adobe::ngl::WorkflowResult, std::__1::default_delete<adobe::ngl::WorkflowResult> >) ()
+		#3  0x00000001000d4bab in adobe::ngl::internal::NUCachedSecureProfileHandler::Handle() ()
+		#4  0x00000001001253ed in adobe::ngl::internal::SecureProfileManager::GetCachedSecureProfile() ()
+		#5  0x000000010012aed1 in adobe::ngl::NglAppLib::GetCachedNglProfile() ()
+		#6  0x000000010007e023 in NglService::RequestCachedProfile() ()
+		#7  0x000000010001163e in adobe::nglcontroller::NglController::GetCachedProfile() ()
+		#8  0x000000010003414b in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#9  0x00000001000340a0 in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#10 0x000000010003428f in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#11 0x00007fff6c114109 in ?? ()
+		#12 0x0000000000000000 in ?? ()
 		```
-	3.	Change to
 		```
-		cmp	DWORD PTR [edi+0x100],0x99
-		jne	0x30
+		#0  0x00000001000d2494 in adobe::ngl::internal::SecureProfilePayload::GetProfileStatusCode() const ()
+		#1  0x00000001000f500d in adobe::ngl::internal::NUSecureProfileFetcher::ValidateAndGetPrefetchedSP() const ()
+		#2  0x00000001000d4e3d in adobe::ngl::internal::NUCachedSecureProfileHandler::ValidateAndGetPrefetchedProfile() ()
+		#3  0x00000001001253cb in adobe::ngl::internal::SecureProfileManager::GetPrefetchedSecureProfile() ()
+		#4  0x000000010012a965 in adobe::ngl::NglAppLib::GetPrefetchedNglProfile() ()
+		#5  0x000000010007e047 in NglService::RequestPrefetchedProfile() ()
+		#6  0x000000010001164f in adobe::nglcontroller::NglController::GetCachedProfile() ()
+		#7  0x000000010003414b in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#8  0x00000001000340a0 in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#9  0x000000010003428f in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#10 0x00007fff6c114109 in ?? ()
+		#11 0x0000000000000000 in ?? ()
 		```
-	4.	Find SUBROUTINE has "PROFILE_EXPIRED" (maybe "aProfileExpired")
-	5.	Overwrite
+		```
+		#0  0x00000001000d2494 in adobe::ngl::internal::SecureProfilePayload::GetProfileStatusCode() const ()
+		#1  0x00000001000e8cd3 in adobe::ngl::internal::NUSecureProfileFetcher::ProcessAsnp(std::__1::unique_ptr<adobe::ngl::internal::RetrievedCOP, std::__1::default_delete<adobe::ngl::internal::RetrievedCOP> >, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, bool) const ()
+		#2  0x00000001000ee3a8 in adobe::ngl::internal::NUSecureProfileFetcher::GetDeviceTokenAndProfile(std::__1::unique_ptr<adobe::ngl::WorkflowResult, std::__1::default_delete<adobe::ngl::WorkflowResult> >, adobe::ngl::internal::GetLatestCallSequence const&) const ()
+		#3  0x000000010007ba83 in adobe::ngl::internal::NULatestSecureProfileHandler::Handle(std::__1::unique_ptr<adobe::ngl::WorkflowResult, std::__1::default_delete<adobe::ngl::WorkflowResult> >, adobe::ngl::internal::GetLatestCallSequence const&, adobe::ngl::internal::GetProfileType const&) ()
+		#4  0x000000010012541f in adobe::ngl::internal::SecureProfileManager::GetLatestSecureProfile(std::__1::unique_ptr<adobe::ngl::WorkflowResult, std::__1::default_delete<adobe::ngl::WorkflowResult> >, adobe::ngl::internal::GetLatestCallSequence const&, adobe::ngl::internal::GetProfileType const&) ()
+		#5  0x000000010012b41a in adobe::ngl::NglAppLib::GetLatestNglProfile(std::__1::unique_ptr<adobe::ngl::WorkflowResult, std::__1::default_delete<adobe::ngl::WorkflowResult> >, adobe::ngl::internal::GetLatestCallSequence const&, adobe::ngl::internal::GetProfileType const&) ()
+		#6  0x000000010007e094 in NglService::RequestProfile(std::__1::unique_ptr<adobe::ngl::WorkflowResult, std::__1::default_delete<adobe::ngl::WorkflowResult> >, adobe::ngl::internal::GetLatestCallSequence const&, adobe::ngl::internal::GetProfileType const&) ()
+		#7  0x00000001000367cc in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#8  0x0000000100034f1c in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#9  0x000000010003414b in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#10 0x00000001000340a0 in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#11 0x000000010003428f in adobe::nglcontroller::NglController::GetRegistrationInfo() ()
+		#12 0x00007fff6c114109 in ?? ()
+		#13 0x0000000000000000 in ?? ()
+		```
+	2.	Overwrite
 		```
 		xor	eax,eax
 		ret
@@ -84,11 +126,11 @@
 	Win: C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe
 
 ## Version
-
-*	21.0.0.37
+*	21.1.2
 	*	Mac
-		*	0x10079EBC1: 84 DB -> B3 01
-		*	find: 0F B7 5F 08 **84 DB** 0F 84 EE 00 00 00 80 FB 07 -> 0F B7 5F 08 **B3 01** 0F 84 EE 00 00 00 80 FB 07
+		*	0x?: 55 48 89 -> 33 C0 C3
+		*	find: **55 48 89** E5 53 50 48 89 FB 48 83 C3 30 -> **33 C0 C3** E5 53 50 48 89 FB 48 83 C3 30
+*	21.0.0.37
 	*	Win
 		*	0x147132CF9: 84 C0 -> B0 01
 		*	find: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
@@ -119,13 +161,9 @@
 
 ## Version
 
-*	24.0.1
+*	24.1.2
 	*	Mac
-		*	0x100419F91: 83 BF 00 01 00 00 01 -> 83 BF 00 01 00 00 99
-		*	find: 83 BF 00 01 00 00 **01** 75 27 -> 83 BF 00 01 00 00 **99** 75 27
-		*	0x10041A117: 55 48 89 -> 33 C0 C3
-		*	find: 83 B8 00 01 00 00 **03** 75 10 -> 83 B8 00 01 00 00 **99** 75 10
-		*	0x1004920F8: 55 48 89 -> 33 C0 C3
+		*	0x?: 55 48 89 -> 33 C0 C3
 		*	find: **55 48 89** E5 53 50 48 89 FB 48 83 C3 30 -> **33 C0 C3** E5 53 50 48 89 FB 48 83 C3 30
 *	24.0.0
 	*	Win
