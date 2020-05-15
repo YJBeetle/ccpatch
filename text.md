@@ -1,5 +1,7 @@
 # Way A
 
+Memory leak on 2020
+
 * 
 	1.	Find `adobe::ngl::internal::Json::Value::resolveReference(char const*, char const*)` or `Json::Value::resolveReference(char const*, char const*)`
 
@@ -20,7 +22,11 @@
 		JZ	xxx
 		```
 
-# Way B (Ae Pr and Pl is work)
+# Way B
+
+Only Ae Pr and Pl is work.
+
+This is the best way.
 
 * 
 	1.	Find function `licensingglue::ValidateLicense`
@@ -68,6 +74,8 @@
 		```
 
 # Way C
+
+Must be online
 
 * 
 	1.	Find `adobe::ngl::internal::SecureProfilePayload::GetProfileStatusCode(adobe::ngl::internal::SecureProfilePayload *this)`
@@ -130,7 +138,11 @@
 		ret
 		```
 
-# Way D (Bypass dialog)
+# Way D
+
+Bypass dialog
+
+May be killed by the watchdog
 
 * 
 	1.	Find `adobe::nglcontroller::NglController::GetAppLicenseMode()`
