@@ -1,7 +1,14 @@
 # Way A
 
-*
-	1.	Find SUBROUTINE has "in Json::Value::resolveReference(key, end): requires objectValue" (maybe "aInJsonValueRes")(in "adobe::ngl::internal::Json::Value::resolveReference(char const*, char const*)" or "Json::Value::resolveReference(char const*, char const*)")
+* 
+	1.	Find `adobe::ngl::internal::Json::Value::resolveReference(char const*, char const*)` or `Json::Value::resolveReference(char const*, char const*)`
+
+		Has string:
+
+		`in Json::Value::resolveReference(key, end): requires objectValue`
+
+		`aInJsonValueRes`
+
 	2.	Find first instruction looks like
 		```
 		TEST	xx, xx
@@ -15,8 +22,15 @@
 
 # Way B
 
-*
-	1.	Find SUBROUTINE has "FREEMIUM" (maybe "aFreemium")
+* Ae Pr ...
+	1.	Find function `licensingglue::ValidateLicense`
+
+		Has string:
+
+		`FREEMIUM`
+
+		`aFreemium`
+
 	2.	In mac, find instruction looks like
 		```
 		cmp	[rbp+var_178], rdx
@@ -55,13 +69,13 @@
 
 # Way C
 
-*
+* 
 	1.	Find `adobe::ngl::internal::SecureProfilePayload::GetProfileStatusCode(adobe::ngl::internal::SecureProfilePayload *this)`
 	
-		feature: 
+		Has string:
 
 		`PROFILE_AVAILABLE`
-		
+
 		`aProfileAvailab`
 
 		eg. Lr Mac 9.2.1
@@ -127,6 +141,7 @@
 
 ## Version
 *	21.1.2
+	*	Use way C
 	*	Mac
 		*	0x?: 55 48 89 -> 33 C0 C3
 		*	find: **55 48 89** E5 53 50 48 89 FB 48 83 C3 30 -> **33 C0 C3** E5 53 50 48 89 FB 48 83 C3 30
@@ -162,6 +177,7 @@
 ## Version
 
 *	24.1.2
+	*	Use way C
 	*	Mac
 		*	0x?: 55 48 89 -> 33 C0 C3
 		*	find: **55 48 89** E5 53 50 48 89 FB 48 83 C3 30 -> **33 C0 C3** E5 53 50 48 89 FB 48 83 C3 30
@@ -234,7 +250,7 @@
 ## Version
 
 *	14.0
-	* Use way B
+	*	Use way B
 	*	Mac
 		*	0x?: ```20 C8``` -> ```B0 01```
 		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
@@ -254,7 +270,7 @@
 ## Version
 
 *	9.0
-	* Use way B
+	*	Use way B
 	*	Mac
 		*	0x?: ```20 C8``` -> ```B0 01```
 		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
@@ -294,7 +310,7 @@
 ## Version
 
 *	17.0
-	* Use way B
+	*	Use way B
 	*	Mac
 		*	0x4E97F: ```20 C8``` -> ```B0 01```
 		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
