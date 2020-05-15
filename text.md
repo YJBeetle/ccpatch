@@ -20,9 +20,9 @@
 		JZ	xxx
 		```
 
-# Way B
+# Way B (Ae Pr and Pl is work)
 
-* Ae Pr ...
+* 
 	1.	Find function `licensingglue::ValidateLicense`
 
 		Has string:
@@ -130,6 +130,39 @@
 		ret
 		```
 
+# Way D (Bypass dialog)
+
+* 
+	1.	Find `adobe::nglcontroller::NglController::GetAppLicenseMode()`
+
+		Has string:
+
+		`FREEMIUM`
+		
+		`aFreemium`
+
+		eg. Lr Mac 9.2.1
+		```
+		#0  0x0000000100010f86 in adobe::nglcontroller::NglController::GetAppLicenseMode() ()
+		#1  0x0000000100013f65 in adobe::nglcontroller::NglController::CanApplicationRun() ()
+		#2  0x00000001000138d5 in adobe::nglcontroller::NglController::InitializeProfileUpdates(std::__1::function<void (unsigned long)>, std::__1::function<void (unsigned long)>, unsigned int) ()
+		#3  0x00000001001213d0 in AgNglController_new_L ()
+		#4  0x0000000100626fcb in ?? ()
+		#5  0x0000000002c20146 in ?? ()
+		#6  0x0000000000000000 in ?? ()
+		```
+	2.	Find parent function `adobe::nglcontroller::NglController::CanApplicationRun`
+	3.	Find first instruction looks like
+		```
+		CMP	eax, 0x1
+		JE	0x?
+		```
+	4.	Change to
+		```
+		CMP	eax, 0x1
+		NOP
+		JMP	0x?
+		```
 ---
 
 # Ps
@@ -159,6 +192,11 @@
 
 ## Version
 
+*	9.x (trying...)
+	*	Mac
+		*	0x13EBF: 0F 84 -> 90 E9
+		*	find: 41 B6 01 83 F8 01 **0F 84** -> 41 B6 01 83 F8 01 **90 E9**
+		*	...
 *	8.3.1
 	*	Mac
 		*	0x9A7A0: 84 DB -> B3 01

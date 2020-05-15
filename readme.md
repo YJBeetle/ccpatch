@@ -3,7 +3,7 @@
 ## Work
 
 *	Ps CC 20
-*	Lr CC 20 (only run)
+*	Lr CC 20 (only 8.x, and can't edit)
 *	Ai CC 20
 *	Id CC 20
 *	Ic CC 20
