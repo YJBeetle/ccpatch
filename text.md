@@ -302,8 +302,8 @@ May be killed by the watchdog
 	*	Use way B
 	*	Mac
 		*	0x?: ```20 C8``` -> ```B0 01```
-		*	find:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **20 C8**
-		*	repe:	48 39 95 88 FE FF FF 0F 94 C1 39 85 80 FE FF FF 0F 94 C0 **B0 01**
+		*	find:	FE FF FF 0F 94 C0 **20 C8**
+		*	repe:	FE FF FF 0F 94 C0 **B0 01**
 	*	Win
 		*	0x?: ```32 C0``` -> ```B0 01```
 		*	find:	48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
