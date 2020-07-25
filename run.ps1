@@ -57,6 +57,7 @@ function run($__tab, $__file, $__find, $__to)
         echo "Found and patching $__tab ..."
         if ( ( ! ( Test-Path "$__file.bak" -PathType Leaf ) ) -or ( ! ( Test-Path "$__file.patched.md5" -PathType Leaf ) ) -or ( ( cat "$__file.patched.md5" ) -ne ( Get-FileHash "$__file" -Algorithm MD5 ).Hash ) )
         {
+            rm "$__file.bak"
             mv "$__file" "$__file.bak"
             cp "$__file.bak" "$__file"
             echo "Backup succeeded."
