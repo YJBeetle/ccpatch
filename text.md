@@ -75,7 +75,7 @@ This is the best way.
 
 # Way C
 
-Must be online
+Must be online and login
 
 * 
 	1.	Find `adobe::ngl::internal::SecureProfilePayload::GetProfileStatusCode(adobe::ngl::internal::SecureProfilePayload *this)`
