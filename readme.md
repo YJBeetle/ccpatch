@@ -32,7 +32,7 @@
 
 ### Win
 
-*	Via PowerShell (administrateur)
+*	Via PowerShell (Administrator)
 
 	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/run.ps1')"```
 
@@ -50,6 +50,6 @@
 
 ### Win
 
-*	Via PowerShell (administrateur)
+*	Via PowerShell (Administrator)
 
 	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/revoke.ps1')"```
