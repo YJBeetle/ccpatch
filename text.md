@@ -435,7 +435,7 @@ May be killed by the watchdog
       * 0x18204481D: 84 C0 -> B0 01
       * find and replace: 8B 05 92 C9 C1 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 8B 05 92 C9 C1 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
 
-# Acrobat
+## Acrobat
 
 * File
 
