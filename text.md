@@ -27,6 +27,8 @@ Only Ae Pr and Pl is work.
 
 This is the best way.
 
+Not work on 2021
+
 1.
     Find function `licensingglue::ValidateLicense`
 
@@ -341,14 +343,12 @@ May be killed by the watchdog
         Win: C:\Program Files\Adobe\Adobe After Effects\Support Files\AfterFXLib.dll
 
 * Version
-  * 17.0  
-    Use way B
+  * 17.5  
+    Use way C
     * Mac
-      * 0x4E97F: ```20 C8``` -> ```B0 01```
-      * find:    FE FF FF 0F 94 C0 **20 C8**
-      * repe:    FE FF FF 0F 94 C0 **B0 01**
+      * find: **B9 98 01 00 00** B8 0A 00 00 00 0F 44 C1 48 83 C4 08 5B 5D C3 **B8 92 01 00 00** 48 83 C4 08 5B 5D C3 **B8 93 01 00 00** 48 83 C4 08 5B 5D C3 **B8 94 01 00 00** 48 83 C4 08 5B 5D C3 **B8 95 01 00 00** 48 83 C4 08 5B 5D C3 31 C0 48 83 C4 08 5B 5D C3 **B8 96 01 00 00** 48 83 C4 08 5B 5D C3 **B8 97 01 00 00** 48 83 C4 08 5B 5D C3
+      * repe: **B9 00 00 00 00** B8 0A 00 00 00 0F 44 C1 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 31 C0 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3
     * Win
-      * 0x1815D3983: ```32 C0``` -> ```B0 01```
       * find:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
       * repe:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
