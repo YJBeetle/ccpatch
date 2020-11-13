@@ -176,15 +176,14 @@ May be killed by the watchdog
 
 * File
 
-        Mac: /Applications/Adobe Photoshop/Adobe Photoshop.app/Contents/MacOS/Adobe Photoshop
+        Mac: /Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app/Contents/MacOS/Adobe Photoshop 2021
         Win: C:\Program Files\Adobe\Adobe Photoshop\Photoshop.exe
 
 * Version
   * 21.1.2  
     Use way C
-    * Mac
-      * 0x?: 55 48 89 -> 33 C0 C3
-      * find and replace: B9 98 01 00 00 B8 0A 00 00 00 **0F 44 C1** 48 83 C4 08 5B 5D C3 **B8 92 01 00 00** 48 83 C4 08 5B 5D C3 **B8 93 01 00 00** 48 83 C4 08 5B 5D C3 **B8 94 01 00 00** 48 83 C4 08 5B 5D C3 **B8 95 01 00 00** 48 83 C4 08 5B 5D C3 31 C0 48 83 C4 08 5B 5D C3 **B8 96 01 00 00** 48 83 C4 08 5B 5D C3 **B8 97 01 00 00** 48 83 C4 08 5B 5D C3 -> B9 98 01 00 00 B8 0A 00 00 00 **90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 31 C0 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3
+    * Mac  
+      Same as Ae
     * Win
       * 0x?: 84 C0 -> B0 01
       * find and replace: **48 89 5C** 24 10 48 89 74 24 18 48 89 7C 24 20 41 56 48 83 EC 20 48 8B 71 58 -> **33 C0 C3** 24 10 48 89 74 24 18 48 89 7C 24 20 41 56 48 83 EC 20 48 8B 71 58
@@ -339,8 +338,8 @@ May be killed by the watchdog
 
 * File
 
-        Mac: /Applications/Adobe After Effects/Adobe After Effects.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib
-        Win: C:\Program Files\Adobe\Adobe After Effects\Support Files\AfterFXLib.dll
+        Mac: /Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib
+        Win: C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll
 
 * Version
   * 17.5  
