@@ -95,7 +95,7 @@ function _Ai()
 {
     run `
         'Ai' `
-        'C:\Program Files\Adobe\Adobe Illustrator 2020\Support Files\Contents\Windows\Illustrator.exe' `
+        'C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe' `
         "0F B6 41 08 84 C0 74 0A 3C 07" `
         "0F B6 41 08 B0 01 74 0A 3C 07"
 }

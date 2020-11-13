@@ -5,18 +5,20 @@
 * Ps CC 21
 * Ai CC 21 mac
 * Ae CC 21
+* Pr CC 21 mac
+* Me CC 21 mac
 
-## Not work
+## Not work (or unknow)
 
 * Lr CC 21
 * Ai CC 21 win
 * Id CC 21
 * Ic CC 21
 * Au CC 21
-* Pr CC 21
+* Pr CC 21 win
 * Pl CC 21
 * Ch CC 21
-* Me CC 21
+* Me CC 21 win
 * Br CC 21
 * An CC 21
 * Dw CC 21

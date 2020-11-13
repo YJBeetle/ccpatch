@@ -214,7 +214,7 @@ May be killed by the watchdog
 * File
 
         Mac: /Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator
-        Win: C:\Program Files\Adobe\Adobe Illustrator\Support Files\Contents\Windows\Illustrator.exe
+        Win: C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe
 
 * Version
   * 25.0  
@@ -281,11 +281,11 @@ May be killed by the watchdog
 
 * File
 
-        Mac: /Applications/Adobe Premiere Pro/Adobe Premiere Pro.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
+        Mac: /Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
         Win: C:\Program Files\Adobe\Adobe Premiere Pro\Registration.dll
 
 * Version
-  * 14.0  
+  * 14.5  
     Use way B
     * Mac
       * 0x?: ```20 C8``` -> ```B0 01```
@@ -355,11 +355,11 @@ May be killed by the watchdog
 
 * File
 
-        Mac: /Applications/Adobe Media Encoder/Adobe Media Encoder.app/Contents/MacOS/Adobe Media Encoder
+        Mac: /Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder
         Win: C:\Program Files\Adobe\Adobe Media Encoder\Adobe Media Encoder.exe
 
 * Version
-  * 14.0  
+  * 14.5  
     Use way B
     * Mac
       * 0x?: ```20 C8``` -> ```B0 01```
