@@ -2,54 +2,58 @@
 
 ## Work
 
-*	Ps CC 20
-*	Lr CC 20 (only 8.x, and can't edit)
-*	Ai CC 20
-*	Id CC 20
-*	Ic CC 20
-*	Au CC 20
-*	Pr CC 20
-*	Pl CC 20
-*	Ch CC 20
-*	Ae CC 21
-*	Me CC 20
-*	Br CC 20
-*	An CC 20
-*	Dw CC 20
-*	Dn CC 20
+* Ps CC 21
+* Ai CC 21 mac
+* Ae CC 21
+
+## Not work
+
+* Lr CC 21
+* Ai CC 21 win
+* Id CC 21
+* Ic CC 21
+* Au CC 21
+* Pr CC 21
+* Pl CC 21
+* Ch CC 21
+* Me CC 21
+* Br CC 21
+* An CC 21
+* Dw CC 21
+* Dn CC 21
 
 ## Run
 
 ### Mac
 
-*	Via curl
+* Via curl
 
-	```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/run.sh)"```
+  ```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/run.sh)"```
 
-*	Via wget
+* Via wget
 
-	```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/run.sh -O -)"```
+  ```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/run.sh -O -)"```
 
 ### Win
 
-*	Via PowerShell (Administrator)
+* Via PowerShell (Administrator)
 
-	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/run.ps1')"```
+  ```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/run.ps1')"```
 
 ## Restore
 
 ### Mac
 
-*	Via curl
+* Via curl
 
-	```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/revoke.sh)"```
+  ```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/revoke.sh)"```
 
-*	Via wget
+* Via wget
 
-	```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/revoke.sh -O -)"```
+  ```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/revoke.sh -O -)"```
 
 ### Win
 
-*	Via PowerShell (Administrator)
+* Via PowerShell (Administrator)
 
-	```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2020/revoke.ps1')"```
+  ```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/revoke.ps1')"```

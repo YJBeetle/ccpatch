@@ -30,7 +30,7 @@ function _Ps()
 {
     revoke `
         'Ps' `
-        "C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe"
+        "C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe"
 }
 
 function _Lr()
