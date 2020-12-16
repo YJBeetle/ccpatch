@@ -121,9 +121,7 @@ function _Dw()
 {
     revoke `
         'Dw' `
-        'C:\Program Files\Adobe\Adobe Dreamweaver 2020\Dreamweaver.exe' `
-        "0F B6 41 08 84 C0 0F 84 AB 00 00 00 3C 07" `
-        "0F B6 41 08 B0 01 0F 84 AB 00 00 00 3C 07"
+        'C:\Program Files\Adobe\Adobe Dreamweaver 2020\Dreamweaver.exe'
 }
 
 function _Dn()
