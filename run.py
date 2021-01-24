@@ -350,10 +350,10 @@ def restoreApp(name: str):
     if not os.path.exists(path):
         print("The backup file does not exist, skipped.")
         return
-    print("Found and revoke %s" % name)
+    print("Found and restore %s" % name)
     shutil.move("%s.bak" % path, path)
     os.remove("%s.patched.sha1" % path)
-    print("Revoke succeeded.")
+    print("Restore succeeded.")
 
 def main():
     if len(sys.argv) > 1:
