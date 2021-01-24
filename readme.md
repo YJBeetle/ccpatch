@@ -2,27 +2,7 @@
 
 ## Work
 
-* Ps CC 21
-* Ai CC 21 mac
-* Ae CC 21
-* Pr CC 21 mac
-* Me CC 21 mac
-
-## Not work (or unknow)
-
-* Lr CC 21
-* Ai CC 21 win
-* Id CC 21
-* Ic CC 21
-* Au CC 21
-* Pr CC 21 win
-* Pl CC 21
-* Ch CC 21
-* Me CC 21 win
-* Br CC 21
-* An CC 21
-* Dw CC 21
-* Dn CC 21
+mac is work and win not work
 
 ## Run
 
@@ -30,11 +10,11 @@
 
 * Via curl
 
-  ```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/run.sh)"```
+  ```curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py | sudo python3```
 
 * Via wget
 
-  ```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/run.sh -O -)"```
+  ```wget https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.sh -O - | sudo python3```
 
 ### Win
 
@@ -48,11 +28,11 @@
 
 * Via curl
 
-  ```sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/revoke.sh)"```
+  ```curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py | sudo python3 restore```
 
 * Via wget
 
-  ```sudo sh -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/revoke.sh -O -)"```
+  ```wget https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.sh -O - | sudo python3 restore```
 
 ### Win
 
