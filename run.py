@@ -145,8 +145,8 @@ def patch(path: str):
         header = mach_header_64._make(
             struct.unpack(mach_header_64_struct,
                           mm[:struct.calcsize(mach_header_64_struct)]))
-        if header.magic == MH_MAGIC_64 and header.filetype == MH_EXECUTE:
-            # print(header)
+        # print(header)
+        if header.magic == MH_MAGIC_64 and (header.filetype == MH_EXECUTE or header.filetype == MH_DYLIB):
             ncmdOffset = 32
             for ncmd in range(0, header.ncmds):
                 cmd = load_command._make(
