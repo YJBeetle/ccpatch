@@ -312,6 +312,7 @@ appList = {
     },
 }
 
+
 def verify_patched_hash(path: str):
     if not os.path.exists("%s.patched.sha1" % path):
         return False
@@ -321,8 +322,12 @@ def verify_patched_hash(path: str):
         original = hashlib.sha1(fp.read()).hexdigest()
     return hashed == original
 
+
 def patchApp(app: str):
-    path = appList[app]["path"]
+    if app in appList:
+        path = appList[app.lower()]["path"]
+    else:
+        path = app
     if not os.path.exists(path):
         return
     print("Found and patching %s" % app)
@@ -355,13 +360,13 @@ def main():
         if sys.argv[1] == "restore":
             if len(sys.argv) > 2:
                 for app in sys.argv[2:]:
-                    restoreApp(app.lower())
+                    restoreApp(app)
             else:
                 for app in appList:
                     restoreApp(app)
         else:
             for app in sys.argv[1:]:
-                patchApp(app.lower())
+                patchApp(app)
     else:
         for app in appList:
             patchApp(app)
