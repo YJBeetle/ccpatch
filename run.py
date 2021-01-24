@@ -191,8 +191,8 @@ def patch(path: str):
                 if callKeywordOffset != -1:
                     funOffset = mm.rfind(b"\x55",
                                          textOffset, callKeywordOffset)
-                    funOffsetEnd = mm.find(b"\x5B\x5D\xC3",
-                                           callKeywordOffset, textOffsetEnd) + 3
+                    funOffsetEnd = mm.find(b"\x55",
+                                           callKeywordOffset, textOffsetEnd)
                     patch0192hOffset = mm.find(b"\xB8\x92\x01\x00\x00",
                                                funOffset, funOffsetEnd)
                     patch0193hOffset = mm.find(b"\xB8\x93\x01\x00\x00",
