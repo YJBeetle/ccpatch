@@ -30,6 +30,23 @@ section_64 = collections.namedtuple(
     'sectname segname addr size offset align reloff nreloc flags reserved1 reserved2 reserved3')
 section_64_struct = '@16s16sQQIIIIIIII'
 
+patchsData = [
+    {
+        'funcTrait': {
+            'type': 'callLeaEsiKeyword',
+            'keywordCString': b"PROFILE_AVAILABLE"
+        },
+        'patchPointList': [
+            {'find': bytes([0xB8, 0x92, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
+            {'find': bytes([0xB8, 0x93, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
+            {'find': bytes([0xB8, 0x94, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
+            {'find': bytes([0xB8, 0x95, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
+            {'find': bytes([0xB8, 0x96, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
+            {'find': bytes([0xB8, 0x97, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
+            {'find': bytes([0xB9, 0x98, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC9])},
+        ]
+    },
+]
 
 def patch(path: str):
     with open(path, "r+b") as f:
@@ -68,75 +85,45 @@ def patch(path: str):
                             cstringOffsetEnd = cstringOffset + sect.size
                         nsectOffset += struct.calcsize(section_64_struct)
                 ncmdOffset += cmd.cmdsize
-        if textOffset and textOffsetEnd and cstringOffset and cstringOffsetEnd:
-            strOffset = mm.find(b"PROFILE_AVAILABLE",
-                                cstringOffset, cstringOffsetEnd)
-            if strOffset:
-                callKeywordOffset = textOffset
-                while True:
-                    callKeywordOffset = mm.find(bytes([0x48, 0x8D, 0x35]),
-                                                callKeywordOffset, textOffsetEnd)
-                    if callKeywordOffset == -1:
-                        break
-                    op = mm[callKeywordOffset + 3: callKeywordOffset + 7]
-                    opi, = struct.unpack("@I", op)
-                    if callKeywordOffset + opi + 7 == strOffset:
-                        break
-                    callKeywordOffset += 7
-                if callKeywordOffset != -1:
-                    funOffset = mm.rfind(bytes([0x55]),
-                                         textOffset, callKeywordOffset)
-                    funOffsetEnd = mm.find(bytes([0x55]),
-                                           callKeywordOffset, textOffsetEnd)
-                    patch0192hOffset = mm.find(bytes([0xB8, 0x92, 0x01, 0x00, 0x00]),
-                                               funOffset, funOffsetEnd)
-                    patch0193hOffset = mm.find(bytes([0xB8, 0x93, 0x01, 0x00, 0x00]),
-                                               funOffset, funOffsetEnd)
-                    patch0194hOffset = mm.find(bytes([0xB8, 0x94, 0x01, 0x00, 0x00]),
-                                               funOffset, funOffsetEnd)
-                    patch0195hOffset = mm.find(bytes([0xB8, 0x95, 0x01, 0x00, 0x00]),
-                                               funOffset, funOffsetEnd)
-                    patch0196hOffset = mm.find(bytes([0xB8, 0x96, 0x01, 0x00, 0x00]),
-                                               funOffset, funOffsetEnd)
-                    patch0197hOffset = mm.find(bytes([0xB8, 0x97, 0x01, 0x00, 0x00]),
-                                               funOffset, funOffsetEnd)
-                    patch0198hOffset = mm.find(bytes([0xB9, 0x98, 0x01, 0x00, 0x00]),
-                                               funOffset, funOffsetEnd)
-                    if patch0192hOffset == -1:
-                        print("Error: '0192h' not found.", file=sys.stderr)
+        if textOffset and textOffsetEnd:
+            patched = 0
+            for patchData in patchsData:
+                funcOffsetList = []
+                if patchData['funcTrait']['type'] == 'callLeaEsiKeyword':
+                    if cstringOffset and cstringOffsetEnd:
+                        strOffset = mm.find(patchData['funcTrait']['keywordCString'],
+                                            cstringOffset, cstringOffsetEnd)
+                        if strOffset:
+                            callKeywordOffset = textOffset
+                            while True:
+                                callKeywordOffset = mm.find(bytes([0x48, 0x8D, 0x35]), callKeywordOffset, textOffsetEnd)
+                                if callKeywordOffset == -1:
+                                    break
+                                op = mm[callKeywordOffset + 3: callKeywordOffset + 7]
+                                opi, = struct.unpack("@I", op)
+                                if callKeywordOffset + opi + 7 == strOffset:
+                                    start = mm.rfind(bytes([0x55]), textOffset, callKeywordOffset)
+                                    end = mm.find(bytes([0x55]), callKeywordOffset, textOffsetEnd)
+                                    if start != -1 and end != -1:
+                                        funcOffsetList.append({"start": start, "end": end})
+                                callKeywordOffset += 7
+                        else:
+                            print("Error: Keyword CString '%s' not found." % patchData['funcTrait']['keywordCString'], file=sys.stderr)
                     else:
-                        mm[patch0192hOffset:patch0192hOffset + 5] =  bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
-                    if patch0193hOffset == -1:
-                        print("Error: '0193h' not found.", file=sys.stderr)
-                    else:
-                        mm[patch0193hOffset:patch0193hOffset + 5] = bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
-                    if patch0194hOffset == -1:
-                        print("Error: '0194h' not found.", file=sys.stderr)
-                    else:
-                        mm[patch0194hOffset:patch0194hOffset + 5] = bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
-                    if patch0195hOffset == -1:
-                        print("Error: '0195h' not found.", file=sys.stderr)
-                    else:
-                        mm[patch0195hOffset:patch0195hOffset + 5] = bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
-                    if patch0196hOffset == -1:
-                        print("Error: '0196h' not found.", file=sys.stderr)
-                    else:
-                        mm[patch0196hOffset:patch0196hOffset + 5] =  bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
-                    if patch0197hOffset == -1:
-                        print("Error: '0197h' not found.", file=sys.stderr)
-                    else:
-                        mm[patch0197hOffset:patch0197hOffset + 5] =  bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
-                    if patch0198hOffset == -1:
-                        print("Error: '0198h' not found.", file=sys.stderr)
-                    else:
-                        mm[patch0198hOffset:patch0198hOffset + 5] =  bytes([0x90, 0x90, 0x90, 0x31, 0xC9])
-                    return True
+                        print("Error: '__cstring' not found.", file=sys.stderr)
                 else:
-                    print("Error: 'GetProfileStatusCode' function not found.", file=sys.stderr)
-            else:
-                print("Error: 'PROFILE_AVAILABLE' not found.", file=sys.stderr)
+                    print("Error: Unknow funstion trait type.", file=sys.stderr)
+                for funcOffset in funcOffsetList:
+                    for patchPoint in patchData['patchPointList']:
+                        patchPointOffset = mm.find(patchPoint['find'], funcOffset['start'], funcOffset['end'])
+                        if patchPointOffset != -1:
+                            mm[patchPointOffset:patchPointOffset + len(patchPoint['find'])] = patchPoint['replace']
+                            patched+=1
+                        else:
+                            print("Error: %s not found." % str(patchPoint['find']), file=sys.stderr)
+            return patched
         else:
-            print("Error: '__text' or '__cstring' not found.", file=sys.stderr)
+            print("Error: '__text' not found.", file=sys.stderr)
         mm.close()
     return False
 
@@ -233,11 +220,12 @@ def patchApp(app: str):
     shutil.move(path, '%s.bak' % path)
     shutil.copy('%s.bak' % path, path)
     print("Backup succeeded.")
-    if patch(path):
+    patched = patch(path)
+    if patched:
         with open(path, "rb") as f:
             with open('%s.patched.sha1' % path, "w") as fp:
                 fp.write(hashlib.sha1(f.read()).hexdigest())
-        print("Patch succeeded.")
+        print("Patch succeeded, patched point: %d" % patched)
     else:
         print("Patch faild.")
 
@@ -275,11 +263,7 @@ def main():
 
 
 if __name__ == '__main__':
-
     if os.geteuid():
         args = [sys.executable] + sys.argv
-        # 下面两种写法，一种使用su，一种使用sudo，都可以
-        # os.execlp('su', 'su', '-c', ' '.join(args))
         os.execlp('sudo', 'sudo', *args)
-
     main()
