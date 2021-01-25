@@ -197,13 +197,13 @@ appList = {
 
 
 def verify_patched_hash(path: str):
-    if not os.path.exists("%s.patched.sha1" % path):
-        return False
-    with open("%s.patched.sha1" % path, "r") as fp:
-        hashed = fp.read()
-    with open(path, "rb") as fp:
-        original = hashlib.sha1(fp.read()).hexdigest()
-    return hashed == original
+    if os.path.exists("%s.patched.sha1" % path):
+        with open("%s.patched.sha1" % path, "r") as fp:
+            hashed = fp.read()
+        with open(path, "rb") as fp:
+            original = hashlib.sha1(fp.read()).hexdigest()
+        return hashed == original
+    return False
 
 
 def patchApp(app: str):
@@ -211,23 +211,22 @@ def patchApp(app: str):
         path = appList[app.lower()]["path"]
     else:
         path = app
-    if not os.path.exists(path):
-        return
-    print("Found and patching %s" % app)
-    if os.path.exists('%s.bak' % path) and verify_patched_hash(path):
-        print("Already patched, skipped.")
-        return
-    shutil.move(path, '%s.bak' % path)
-    shutil.copy('%s.bak' % path, path)
-    print("Backup succeeded.")
-    patched = patch(path)
-    if patched:
-        with open(path, "rb") as f:
-            with open('%s.patched.sha1' % path, "w") as fp:
-                fp.write(hashlib.sha1(f.read()).hexdigest())
-        print("Patch succeeded, patched point: %d" % patched)
-    else:
-        print("Patch faild.")
+    if os.path.exists(path):
+        print("Found and patching %s" % app)
+        if os.path.exists('%s.bak' % path) and verify_patched_hash(path):
+            print("Already patched, skipped.")
+            return
+        shutil.move(path, '%s.bak' % path)
+        shutil.copy('%s.bak' % path, path)
+        print("Backup succeeded.")
+        patched = patch(path)
+        if patched:
+            with open(path, "rb") as f:
+                with open('%s.patched.sha1' % path, "w") as fp:
+                    fp.write(hashlib.sha1(f.read()).hexdigest())
+            print("Patch succeeded, patched point: %d" % patched)
+        else:
+            print("Patch faild.")
 
 
 def restoreApp(app: str):
@@ -235,17 +234,22 @@ def restoreApp(app: str):
         path = appList[app.lower()]["path"]
     else:
         path = app
-    if not os.path.exists('%s.bak' % path):
+    if os.path.exists('%s.bak' % path):
+        print("Found and restore %s" % app)
+        shutil.move("%s.bak" % path, path)
+        if os.path.exists('%s.patched.sha1' % path):
+            os.remove("%s.patched.sha1" % path)
+        print("Restore succeeded.")
+    else:
         print("The backup file does not exist, skipped.")
-        return
-    print("Found and restore %s" % app)
-    shutil.move("%s.bak" % path, path)
-    if os.path.exists('%s.patched.sha1' % path):
-        os.remove("%s.patched.sha1" % path)
-    print("Restore succeeded.")
 
 
-def main():
+if __name__ == '__main__':
+    if os.geteuid():
+        print("Privilege is not sufficient, elevating...")
+        args = [sys.executable] + sys.argv
+        os.execlp('sudo', 'sudo', *args)
+
     if len(sys.argv) > 1:
         if sys.argv[1].lower() == "restore":
             if len(sys.argv) > 2:
@@ -260,10 +264,3 @@ def main():
     else:
         for app in appList:
             patchApp(app)
-
-
-if __name__ == '__main__':
-    if os.geteuid():
-        args = [sys.executable] + sys.argv
-        os.execlp('sudo', 'sudo', *args)
-    main()
