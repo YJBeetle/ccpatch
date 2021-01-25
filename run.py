@@ -54,8 +54,7 @@ def patch(path: str):
                         struct.unpack(segment_command_64_struct,
                                       mm[ncmdOffset:ncmdOffset+struct.calcsize(segment_command_64_struct)]))
                     # print(cmd)
-                    nsectOffset = ncmdOffset + \
-                        struct.calcsize(segment_command_64_struct)
+                    nsectOffset = ncmdOffset + struct.calcsize(segment_command_64_struct)
                     for nsect in range(0, cmd.nsects):
                         sect = section_64._make(
                             struct.unpack(section_64_struct,
@@ -104,48 +103,40 @@ def patch(path: str):
                     patch0198hOffset = mm.find(bytes([0xB9, 0x98, 0x01, 0x00, 0x00]),
                                                funOffset, funOffsetEnd)
                     if patch0192hOffset == -1:
-                        sys.stderr.write("Error: '0192h' not found.\n")
+                        print("Error: '0192h' not found.", file=sys.stderr)
                     else:
-                        mm[patch0192hOffset:patch0192hOffset + 5] = \
-                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
+                        mm[patch0192hOffset:patch0192hOffset + 5] =  bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0193hOffset == -1:
-                        sys.stderr.write("Error: '0193h' not found.\n")
+                        print("Error: '0193h' not found.", file=sys.stderr)
                     else:
-                        mm[patch0193hOffset:patch0193hOffset + 5] =\
-                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
+                        mm[patch0193hOffset:patch0193hOffset + 5] = bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0194hOffset == -1:
-                        sys.stderr.write("Error: '0194h' not found.\n")
+                        print("Error: '0194h' not found.", file=sys.stderr)
                     else:
-                        mm[patch0194hOffset:patch0194hOffset + 5] =\
-                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
+                        mm[patch0194hOffset:patch0194hOffset + 5] = bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0195hOffset == -1:
-                        sys.stderr.write("Error: '0195h' not found.\n")
+                        print("Error: '0195h' not found.", file=sys.stderr)
                     else:
-                        mm[patch0195hOffset:patch0195hOffset + 5] =\
-                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
+                        mm[patch0195hOffset:patch0195hOffset + 5] = bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0196hOffset == -1:
-                        sys.stderr.write("Error: '0196h' not found.\n")
+                        print("Error: '0196h' not found.", file=sys.stderr)
                     else:
-                        mm[patch0196hOffset:patch0196hOffset + 5] = \
-                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
+                        mm[patch0196hOffset:patch0196hOffset + 5] =  bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0197hOffset == -1:
-                        sys.stderr.write("Error: '0197h' not found.\n")
+                        print("Error: '0197h' not found.", file=sys.stderr)
                     else:
-                        mm[patch0197hOffset:patch0197hOffset + 5] = \
-                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
+                        mm[patch0197hOffset:patch0197hOffset + 5] =  bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0198hOffset == -1:
-                        sys.stderr.write("Error: '0198h' not found.\n")
+                        print("Error: '0198h' not found.", file=sys.stderr)
                     else:
-                        mm[patch0198hOffset:patch0198hOffset + 5] = \
-                            bytes([0x90, 0x90, 0x90, 0x31, 0xC9])
+                        mm[patch0198hOffset:patch0198hOffset + 5] =  bytes([0x90, 0x90, 0x90, 0x31, 0xC9])
                     return True
                 else:
-                    sys.stderr.write(
-                        "Error: 'GetProfileStatusCode' function not found.\n")
+                    print("Error: 'GetProfileStatusCode' function not found.", file=sys.stderr)
             else:
-                sys.stderr.write("Error: 'PROFILE_AVAILABLE' not found.\n")
+                print("Error: 'PROFILE_AVAILABLE' not found.", file=sys.stderr)
         else:
-            sys.stderr.write("Error: '__text' or '__cstring' not found.\n")
+            print("Error: '__text' or '__cstring' not found.", file=sys.stderr)
         mm.close()
     return False
 
