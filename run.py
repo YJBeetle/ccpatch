@@ -252,7 +252,8 @@ def restoreApp(app: str):
         return
     print("Found and restore %s" % app)
     shutil.move("%s.bak" % path, path)
-    os.remove("%s.patched.sha1" % path)
+    if os.path.exists('%s.patched.sha1' % path):
+        os.remove("%s.patched.sha1" % path)
     print("Restore succeeded.")
 
 
