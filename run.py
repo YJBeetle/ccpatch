@@ -61,10 +61,10 @@ def patch(path: str):
                             struct.unpack(section_64_struct,
                                           mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
                         # print(sect)
-                        if sect.sectname == b'__text\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00':
+                        if sect.sectname.decode("ascii").startswith("__text"):
                             textOffset = sect.offset
                             textOffsetEnd = textOffset + sect.size
-                        if sect.sectname == b'__cstring\x00\x00\x00\x00\x00\x00\x00':
+                        elif sect.sectname.decode("ascii").startswith("__cstring"):
                             cstringOffset = sect.offset
                             cstringOffsetEnd = cstringOffset + sect.size
                         nsectOffset += struct.calcsize(section_64_struct)
@@ -75,7 +75,7 @@ def patch(path: str):
             if strOffset:
                 callKeywordOffset = textOffset
                 while True:
-                    callKeywordOffset = mm.find(b"\x48\x8D\x35",
+                    callKeywordOffset = mm.find(bytes([0x48, 0x8D, 0x35]),
                                                 callKeywordOffset, textOffsetEnd)
                     if callKeywordOffset == -1:
                         break
@@ -85,59 +85,59 @@ def patch(path: str):
                         break
                     callKeywordOffset += 7
                 if callKeywordOffset != -1:
-                    funOffset = mm.rfind(b"\x55",
+                    funOffset = mm.rfind(bytes([0x55]),
                                          textOffset, callKeywordOffset)
-                    funOffsetEnd = mm.find(b"\x55",
+                    funOffsetEnd = mm.find(bytes([0x55]),
                                            callKeywordOffset, textOffsetEnd)
-                    patch0192hOffset = mm.find(b"\xB8\x92\x01\x00\x00",
+                    patch0192hOffset = mm.find(bytes([0xB8, 0x92, 0x01, 0x00, 0x00]),
                                                funOffset, funOffsetEnd)
-                    patch0193hOffset = mm.find(b"\xB8\x93\x01\x00\x00",
+                    patch0193hOffset = mm.find(bytes([0xB8, 0x93, 0x01, 0x00, 0x00]),
                                                funOffset, funOffsetEnd)
-                    patch0194hOffset = mm.find(b"\xB8\x94\x01\x00\x00",
+                    patch0194hOffset = mm.find(bytes([0xB8, 0x94, 0x01, 0x00, 0x00]),
                                                funOffset, funOffsetEnd)
-                    patch0195hOffset = mm.find(b"\xB8\x95\x01\x00\x00",
+                    patch0195hOffset = mm.find(bytes([0xB8, 0x95, 0x01, 0x00, 0x00]),
                                                funOffset, funOffsetEnd)
-                    patch0196hOffset = mm.find(b"\xB8\x96\x01\x00\x00",
+                    patch0196hOffset = mm.find(bytes([0xB8, 0x96, 0x01, 0x00, 0x00]),
                                                funOffset, funOffsetEnd)
-                    patch0197hOffset = mm.find(b"\xB8\x97\x01\x00\x00",
+                    patch0197hOffset = mm.find(bytes([0xB8, 0x97, 0x01, 0x00, 0x00]),
                                                funOffset, funOffsetEnd)
-                    patch0198hOffset = mm.find(b"\xB9\x98\x01\x00\x00",
+                    patch0198hOffset = mm.find(bytes([0xB9, 0x98, 0x01, 0x00, 0x00]),
                                                funOffset, funOffsetEnd)
                     if patch0192hOffset == -1:
                         sys.stderr.write("Error: '0192h' not found.\n")
                     else:
                         mm[patch0192hOffset:patch0192hOffset + 5] = \
-                            b"\x90\x90\x90\x31\xC0"
+                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0193hOffset == -1:
                         sys.stderr.write("Error: '0193h' not found.\n")
                     else:
                         mm[patch0193hOffset:patch0193hOffset + 5] =\
-                            b"\x90\x90\x90\x31\xC0"
+                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0194hOffset == -1:
                         sys.stderr.write("Error: '0194h' not found.\n")
                     else:
                         mm[patch0194hOffset:patch0194hOffset + 5] =\
-                            b"\x90\x90\x90\x31\xC0"
+                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0195hOffset == -1:
                         sys.stderr.write("Error: '0195h' not found.\n")
                     else:
                         mm[patch0195hOffset:patch0195hOffset + 5] =\
-                            b"\x90\x90\x90\x31\xC0"
+                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0196hOffset == -1:
                         sys.stderr.write("Error: '0196h' not found.\n")
                     else:
                         mm[patch0196hOffset:patch0196hOffset + 5] = \
-                            b"\x90\x90\x90\x31\xC0"
+                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0197hOffset == -1:
                         sys.stderr.write("Error: '0197h' not found.\n")
                     else:
                         mm[patch0197hOffset:patch0197hOffset + 5] = \
-                            b"\x90\x90\x90\x31\xC0"
+                            bytes([0x90, 0x90, 0x90, 0x31, 0xC0])
                     if patch0198hOffset == -1:
                         sys.stderr.write("Error: '0198h' not found.\n")
                     else:
                         mm[patch0198hOffset:patch0198hOffset + 5] = \
-                            b"\x90\x90\x90\x31\xC9"
+                            bytes([0x90, 0x90, 0x90, 0x31, 0xC9])
                     return True
                 else:
                     sys.stderr.write(
@@ -283,4 +283,11 @@ def main():
 
 
 if __name__ == '__main__':
+
+    if os.geteuid():
+        args = [sys.executable] + sys.argv
+        # 下面两种写法，一种使用su，一种使用sudo，都可以
+        # os.execlp('su', 'su', '-c', ' '.join(args))
+        os.execlp('sudo', 'sudo', *args)
+
     main()
