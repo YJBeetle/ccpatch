@@ -174,7 +174,7 @@ appList = {
     },
     "me": {
         "path": "/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app"
-        "/Contents/MacOS/Adobe Media Encoder"
+        "/Contents/MacOS/Adobe Media Encoder 2020"
     },
     "br": {
         "path": "/Applications/Adobe Bridge/Adobe Bridge.app"

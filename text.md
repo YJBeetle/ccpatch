@@ -246,7 +246,7 @@ May be killed by the watchdog
 
 * File
 
-        Mac: /Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder
+        Mac: /Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder 2020
         Win: C:\Program Files\Adobe\Adobe Media Encoder\Adobe Media Encoder.exe
 
 ## Br
