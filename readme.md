@@ -10,11 +10,11 @@
 
 * Via curl
 
-  ```curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py | sudo python3```
+  ```sudo python3 -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py)"```
 
 * Via wget
 
-  ```wget https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.sh -O - | sudo python3```
+  ```sudo python3 -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py -O -)"```
 
 ### Win
 
@@ -28,11 +28,11 @@
 
 * Via curl
 
-  ```curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py | sudo python3 restore```
+  ```sudo python3 -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py)" restore```
 
 * Via wget
 
-  ```wget https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.sh -O - | sudo python3 restore```
+  ```sudo python3 -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py -O -)" restore```
 
 ### Win
 
