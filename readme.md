@@ -1,8 +1,8 @@
 # CC patch
 
-## Work
+## Not work
 
-mac is work and win not work
+* Acrobat
 
 ## Run
 
