@@ -7,7 +7,7 @@ function run()
 
     if [ -f "$__file" ] && [ -f "$__file.bak" ] || [ -f "$__file.patched.sha1" ]; then
         echo "Found and codesign $__tab ..."
-        codesign --force --sign - "$__file"
+        codesign --force --deep --sign - "$__file"
         shasum -a1 "$__file" | awk '{printf $1}' > "$__file.patched.sha1"
     fi
 }
