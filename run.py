@@ -34,7 +34,7 @@ patchsData = [
     {
         'funcTrait': {
             'type': 'callLeaEsiKeyword',
-            'keywordCString': b"PROFILE_AVAILABLE"
+            'keywordString': b"PROFILE_AVAILABLE"
         },
         'patchPointList': [
             {'find': bytes([0xB8, 0x92, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
@@ -91,7 +91,7 @@ def patch(path: str):
                 funcOffsetList = []
                 if patchData['funcTrait']['type'] == 'callLeaEsiKeyword':
                     if cstringOffset and cstringOffsetEnd:
-                        strOffset = mm.find(patchData['funcTrait']['keywordCString'],
+                        strOffset = mm.find(patchData['funcTrait']['keywordString'],
                                             cstringOffset, cstringOffsetEnd)
                         if strOffset:
                             callKeywordOffset = textOffset
@@ -108,7 +108,7 @@ def patch(path: str):
                                         funcOffsetList.append({"start": start, "end": end})
                                 callKeywordOffset += 7
                         else:
-                            print("Error: Keyword CString '%s' not found." % patchData['funcTrait']['keywordCString'], file=sys.stderr)
+                            print("Error: Keyword String '%s' not found." % patchData['funcTrait']['keywordString'], file=sys.stderr)
                     else:
                         print("Error: '__cstring' not found.", file=sys.stderr)
                 else:
