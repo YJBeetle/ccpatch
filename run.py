@@ -50,8 +50,10 @@ patchsData = [
 
 def patch(path: str):
     with open(path, "r+b") as f:
+        textAddress = 0
         textOffset = 0
         textOffsetEnd = 0
+        cstringAddress = 0
         cstringOffset = 0
         cstringOffsetEnd = 0
         mm = mmap.mmap(f.fileno(), 0)
@@ -76,11 +78,12 @@ def patch(path: str):
                         sect = section_64._make(
                             struct.unpack(section_64_struct,
                                           mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
-                        # print(sect)
                         if sect.sectname.decode("ascii").startswith("__text"):
+                            textAddress = sect.addr
                             textOffset = sect.offset
                             textOffsetEnd = textOffset + sect.size
                         elif sect.sectname.decode("ascii").startswith("__cstring"):
+                            cstringAddress = sect.addr
                             cstringOffset = sect.offset
                             cstringOffsetEnd = cstringOffset + sect.size
                         nsectOffset += struct.calcsize(section_64_struct)
@@ -91,6 +94,7 @@ def patch(path: str):
                 funcOffsetList = []
                 if patchData['funcTrait']['type'] == 'callLeaEsiKeyword':
                     if cstringOffset and cstringOffsetEnd:
+                        addressDifferenceForTextAndCstring = (cstringAddress - cstringOffset) - (textAddress - textOffset)
                         strOffset = mm.find(patchData['funcTrait']['keywordString'],
                                             cstringOffset, cstringOffsetEnd)
                         if strOffset:
@@ -100,7 +104,7 @@ def patch(path: str):
                                 if callKeywordOffset == -1:
                                     break
                                 op, = struct.unpack("@I", mm[callKeywordOffset + 3: callKeywordOffset + 7])
-                                if callKeywordOffset + op + 7 == strOffset:
+                                if callKeywordOffset + 7 + op - addressDifferenceForTextAndCstring == strOffset:
                                     start = mm.rfind(bytes([0x55]), textOffset, callKeywordOffset)
                                     end = mm.find(bytes([0x55]), callKeywordOffset, textOffsetEnd)
                                     if start != -1 and end != -1:
