@@ -179,35 +179,12 @@ May be killed by the watchdog
         Mac: /Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app/Contents/MacOS/Adobe Photoshop 2021
         Win: C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe
 
-* Version
-  * 22.0.0  
-    Use way C
-    * Mac  
-      Same as [Ae](#Ae)
-    * Win
-      * find: **B8 92 01 00 00** E9 86 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 13 00 00 00 48 8D 15*1D 41 36 01*48 3B F8 4C 8B C7 4C 0F 47 C0 E8*BE A4 D3 FC*85 C0 75 10 48 83 FF 13 75 0A **B8 93 01 00 00** E9 4B 01 00 00 48 89 6C 24 30 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 0E 00 00 00 48 8D 15 F5 40 36 01 48 3B F8 48 8B EF 48 0F 47 E8 4C 8B C5 E8 7B A4 D3 FC 85 C0 75 10 48 83 FF 0E 75 0A **B8 94 01 00 00** E9 03 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 15 00 00 00 48 8D 15 C7 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 40 A4 D3 FC 85 C0 75 10 48 83 FF 15 75 0A **B8 95 01 00 00** E9 C8 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 11 00 00 00 48 8D 15 A4 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 05 A4 D3 FC 85 C0 75 0A 48 83 FF 11 0F 84 93 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 1A 00 00 00 48 8D 15 87 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 D0 A3 D3 FC 85 C0 75 0D 48 83 FF 1A 75 07 **B8 96 01 00 00** EB 5B 48 8B CB 48 83 FE 10 72 03 48 8B 0B 4C 8B C5 48 8D 15 71 40 36 01 E8 A4 A3 D3 FC 85 C0 75 0D 48 83 FF 0E 75 07 **B8 97 01 00 00** EB 2F 48 83 FE 10 72 03 48 8B 1B 4D 8B C6 48 8D 15 58 40 36 01 48 8B CB E8 78 A3 D3 FC 85 C0 75 0B **B8 98 01 00 00**
-      * repe: **B8 00 00 00 00** E9 86 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 13 00 00 00 48 8D 15*1D 41 36 01*48 3B F8 4C 8B C7 4C 0F 47 C0 E8*BE A4 D3 FC*85 C0 75 10 48 83 FF 13 75 0A **B8 00 00 00 00** E9 4B 01 00 00 48 89 6C 24 30 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 0E 00 00 00 48 8D 15 F5 40 36 01 48 3B F8 48 8B EF 48 0F 47 E8 4C 8B C5 E8 7B A4 D3 FC 85 C0 75 10 48 83 FF 0E 75 0A **B8 00 00 00 00** E9 03 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 15 00 00 00 48 8D 15 C7 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 40 A4 D3 FC 85 C0 75 10 48 83 FF 15 75 0A **B8 00 00 00 00** E9 C8 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 11 00 00 00 48 8D 15 A4 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 05 A4 D3 FC 85 C0 75 0A 48 83 FF 11 0F 84 93 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 1A 00 00 00 48 8D 15 87 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 D0 A3 D3 FC 85 C0 75 0D 48 83 FF 1A 75 07 **B8 00 00 00 00** EB 5B 48 8B CB 48 83 FE 10 72 03 48 8B 0B 4C 8B C5 48 8D 15 71 40 36 01 E8 A4 A3 D3 FC 85 C0 75 0D 48 83 FF 0E 75 07 **B8 00 00 00 00** EB 2F 48 83 FE 10 72 03 48 8B 1B 4D 8B C6 48 8D 15 58 40 36 01 48 8B CB E8 78 A3 D3 FC 85 C0 75 0B **B8 00 00 00 00**
-
 ## Lr
 
 * File
 
         Mac: /Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app/Contents/MacOS/Adobe Lightroom Classic
         Win: C:\Program Files\Adobe\Adobe Lightroom Classic\Lightroom.exe
-
-* Version
-  * 9.x (trying...)
-    * Mac
-      * 0x13EBF: 0F 84 -> 90 E9
-      * find and replace: 41 B6 01 83 F8 01 **0F 84** -> 41 B6 01 83 F8 01 **90 E9**
-      * ...
-  * 8.3.1
-    * Mac
-      * 0x9A7A0: 84 DB -> B3 01
-      * find and replace: 49 89 D4 49 89 F7 49 89 FE 66 41 8B 5E 08 **84 DB** 0F 84 F7 00 00 00 80 FB 07 -> 49 89 D4 49 89 F7 49 89 FE 66 41 8B 5E 08 **B3 01** 0F 84 F7 00 00 00 80 FB 07
-    * Win
-      * 0x1401A954C (0x1A894C): 84 C0 -> B0 01
-      * find and replace: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 ## Ai
 
@@ -216,31 +193,12 @@ May be killed by the watchdog
         Mac: /Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator
         Win: C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe
 
-* Version
-  * 25.0  
-    Use way C
-    * Mac
-      * find: **B9 98 01 00 00** B8 0A 00 00 00 0F 44 C1 EB 2C **B8 92 01 00 00** EB 25 **B8 93 01 00 00** EB 1E **B8 94 01 00 00** EB 17 **B8 95 01 00 00** EB 10 31 C0 EB 0C **B8 96 01 00 00** EB 05 **B8 97 01 00 00** 48 83 C4 08 5B 5D C3
-      * repe: **B9 00 00 00 00** B8 0A 00 00 00 90 31 C0 EB 2C **90 90 90 31 C0** EB 25 **90 90 90 31 C0** EB 1E **90 90 90 31 C0** EB 17 **90 90 90 31 C0** EB 10 31 C0 EB 0C **90 90 90 31 C0** EB 05 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3
-    * Win
-      * 0x14040F660: 84 C0 -> B0 01
-      * find and replace: **48 89 5C** 24 10 48 89 74 24 18 48 89 7C 24 20 41 56 48 83 EC 20 48 8B 71 58 -> **33 C0 C3** 24 10 48 89 74 24 18 48 89 7C 24 20 41 56 48 83 EC 20 48 8B 71 58
-
 ## Id
 
 * File
 
         Mac: /Applications/Adobe InDesign/Adobe InDesign.app/Contents/MacOS/PublicLib.dylib
         Win: C:\Program Files\Adobe\Adobe InDesign\Public.dll
-
-* Version
-  * 15.0.0.155
-    * Mac
-      * 0x3393F2: 84 C0 -> B0 01
-      * find and replace: 41 0F B6 47 08 **84 C0** 74 08 3C 07 -> 41 0F B6 47 08 **B0 01** 74 08 3C 07
-    * Win
-      * 0x1803F84FC: 84 C0 -> B0 01
-      * find and replace: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 ## Ic
 
@@ -249,33 +207,12 @@ May be killed by the watchdog
         Mac: /Applications/Adobe InCopy/Adobe InCopy.app/Contents/MacOS/PublicLib.dylib
         Win: C:\Program Files\Adobe\Adobe InCopy\Public.dll
 
-* Version
-  * 15.0.0.155
-    * Mac
-      * 0x3393F2: 84 C0 -> B0 01
-      * find and replace: 41 0F B6 47 08 **84 C0** 74 08 3C 07 -> 41 0F B6 47 08 **B0 01** 74 08 3C 07
-    * Win
-      * 0x1803F84FC: 84 C0 -> B0 01
-      * find and replace: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
-
 ## Au
 
 * File
 
         Mac: /Applications/Adobe Audition/Adobe Audition.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI
         Win: C:\Program Files\Adobe\Adobe Audition\AuUI.dll
-
-* Version
-  * 13.0.0.519  
-    Use way B
-    * Mac
-      * 0x?: ```20 C8``` -> ```B0 01```
-      * find: FE FF FF 0F 94 C0 **20 C8**
-      * repe:    FE FF FF 0F 94 C0 **B0 01**
-    * Win
-      * 0x?: ```32 C0``` -> ```B0 01```
-      * find:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
-      * repe:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
 ## Pr
 
@@ -284,36 +221,12 @@ May be killed by the watchdog
         Mac: /Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
         Win: C:\Program Files\Adobe\Adobe Premiere Pro\Registration.dll
 
-* Version
-  * 14.5  
-    Use way B
-    * Mac
-      * 0x?: ```20 C8``` -> ```B0 01```
-      * find:    FE FF FF 0F 94 C0 **20 C8**
-      * repe:    FE FF FF 0F 94 C0 **B0 01**
-    * Win
-      * 0x?: ```32 C0``` -> ```B0 01```
-      * find:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
-      * repe:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
-
 ## Pl
 
 * File
 
         Mac: /Applications/Adobe Prelude/Adobe Prelude.app/Contents/Frameworks/Registration.framework/Versions/A/Registration
         Win: C:\Program Files\Adobe\Adobe Prelude\Registration.dll
-
-* Version
-  * 9.0  
-    Use way B
-    * Mac
-      * 0x?: ```20 C8``` -> ```B0 01```
-      * find:    FE FF FF 0F 94 C0 **20 C8**
-      * repe:    FE FF FF 0F 94 C0 **B0 01**
-    * Win
-      * 0x?: ```32 C0``` -> ```B0 01```
-      * find:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
-      * repe:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
 
 ## Ch
 
@@ -322,34 +235,12 @@ May be killed by the watchdog
         Mac: /Applications/Adobe Character Animator/Adobe Character Animator.app/Contents/MacOS/Character Animator
         Win: C:\Program Files\Adobe\Adobe Character Animator\Support Files\Character Animator.exe
 
-* Version
-  * 3.0  
-    Use way B
-    * Mac
-      * 0x?: ```20 C8``` -> ```B0 01```
-      * find:    FE FF FF 0F 94 C0 **20 C8**
-      * repe:    FE FF FF 0F 94 C0 **B0 01**
-    * Win
-      * 0x?: ```32 C0``` -> ```B0 01```
-      * find:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
-      * repe:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
-
 ## Ae
 
 * File
 
         Mac: /Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib
         Win: C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll
-
-* Version
-  * 17.5  
-    Use way C
-    * Mac
-      * find: **B9 98 01 00 00** B8 0A 00 00 00 0F 44 C1 48 83 C4 08 5B 5D C3 **B8 92 01 00 00** 48 83 C4 08 5B 5D C3 **B8 93 01 00 00** 48 83 C4 08 5B 5D C3 **B8 94 01 00 00** 48 83 C4 08 5B 5D C3 **B8 95 01 00 00** 48 83 C4 08 5B 5D C3 31 C0 48 83 C4 08 5B 5D C3 **B8 96 01 00 00** 48 83 C4 08 5B 5D C3 **B8 97 01 00 00** 48 83 C4 08 5B 5D C3
-      * repe: **B9 00 00 00 00** B8 0A 00 00 00 0F 44 C1 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 31 C0 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3 **90 90 90 31 C0** 48 83 C4 08 5B 5D C3
-    * Win
-      * find: **B8 92 01 00 00** E9 86 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 13 00 00 00 48 8D 15 A5 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 D8 C6 0E 00 85 C0 75 10 48 83 FF 13 75 0A **B8 93 01 00 00** E9 4B 01 00 00 48 89 6C 24 30 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 0E 00 00 00 48 8D 15 7D 16 4F 00 48 3B F8 48 8B EF 48 0F 47 E8 4C 8B C5 E8 95 C6 0E 00 85 C0 75 10 48 83 FF 0E 75 0A **B8 94 01 00 00** E9 03 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 15 00 00 00 48 8D 15 4F 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 5A C6 0E 00 85 C0 75 10 48 83 FF 15 75 0A **B8 95 01 00 00** E9 C8 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 11 00 00 00 48 8D 15 2C 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 1F C6 0E 00 85 C0 75 0A 48 83 FF 11 0F 84 93 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 1A 00 00 00 48 8D 15 0F 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 EA C5 0E 00 85 C0 75 0D 48 83 FF 1A 75 07 **B8 96 01 00 00** EB 5B 48 8B CB 48 83 FE 10 72 03 48 8B 0B 4C 8B C5 48 8D 15 F9 15 4F 00 E8 BE C5 0E 00 85 C0 75 0D 48 83 FF 0E 75 07 **B8 97 01 00 00** EB 2F 48 83 FE 10 72 03 48 8B 1B 4D 8B C6 48 8D 15 E0 15 4F 00 48 8B CB E8 92 C5 0E 00 85 C0 75 0B **B8 98 01 00 00**
-      * repe: **B8 00 00 00 00** E9 86 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 13 00 00 00 48 8D 15 A5 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 D8 C6 0E 00 85 C0 75 10 48 83 FF 13 75 0A **B8 00 00 00 00** E9 4B 01 00 00 48 89 6C 24 30 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 0E 00 00 00 48 8D 15 7D 16 4F 00 48 3B F8 48 8B EF 48 0F 47 E8 4C 8B C5 E8 95 C6 0E 00 85 C0 75 10 48 83 FF 0E 75 0A **B8 00 00 00 00** E9 03 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 15 00 00 00 48 8D 15 4F 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 5A C6 0E 00 85 C0 75 10 48 83 FF 15 75 0A **B8 00 00 00 00** E9 C8 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 11 00 00 00 48 8D 15 2C 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 1F C6 0E 00 85 C0 75 0A 48 83 FF 11 0F 84 93 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 1A 00 00 00 48 8D 15 0F 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 EA C5 0E 00 85 C0 75 0D 48 83 FF 1A 75 07 **B8 00 00 00 00** EB 5B 48 8B CB 48 83 FE 10 72 03 48 8B 0B 4C 8B C5 48 8D 15 F9 15 4F 00 E8 BE C5 0E 00 85 C0 75 0D 48 83 FF 0E 75 07 **B8 00 00 00 00** EB 2F 48 83 FE 10 72 03 48 8B 1B 4D 8B C6 48 8D 15 E0 15 4F 00 48 8B CB E8 92 C5 0E 00 85 C0 75 0B **B8 00 00 00 00**
 
 ## Me
 
@@ -358,33 +249,12 @@ May be killed by the watchdog
         Mac: /Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder
         Win: C:\Program Files\Adobe\Adobe Media Encoder\Adobe Media Encoder.exe
 
-* Version
-  * 14.5  
-    Use way B
-    * Mac
-      * 0x?: ```20 C8``` -> ```B0 01```
-      * find:    FE FF FF 0F 94 C0 **20 C8**
-      * repe:    FE FF FF 0F 94 C0 **B0 01**
-    * Win
-      * 0x?: ```32 C0``` -> ```B0 01```
-      * find:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **32 C0**
-      * repe:    48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 **B0 01**
-
 ## Br
 
 * File
 
         Mac: /Applications/Adobe Bridge/Adobe Bridge.app/Contents/MacOS/Adobe Bridge
         Win: C:\Program Files\Adobe\Adobe Bridge\Bridge.exe
-
-* Version
-  * 10.0.0.124
-    * Mac
-      * 0x1005A3DB1: 84 DB -> B3 01
-      * find and replace: 0F B7 5F 08 **84 DB** 0F 84 EE 00 00 00 80 FB 07 -> 0F B7 5F 08 **B3 01** 0F 84 EE 00 00 00 80 FB 07
-    * Win
-      * 0x140A2BE03: 84 C0 -> B0 01
-      * find and replace: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
 
 ## An
 
@@ -393,30 +263,12 @@ May be killed by the watchdog
         Mac: /Applications/Adobe Animate/Adobe Animate.app/Contents/MacOS/Adobe Animate
         Win: C:\Program Files\Adobe\Adobe Animate\Animate.exe
 
-* Version
-  * 20.0.0.17400
-    * Mac
-      * 0x1000C5DB2: 66 25 FF 00 -> 90 90 B0 01
-      * find and replace: 41 0F B7 5E 08 **84 DB** 0F 84 F0 00 00 00 80 FB 07 -> 41 0F B7 5E 08 **B3 01** 0F 84 F0 00 00 00 80 FB 07
-    * Win
-      * 0x14047FBAD: 84 C0 -> B0 01
-      * find and replace: 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 0F B6 41 08 **B0 01** 74 0A 3C 07
-
 ## Dw
 
 * File
 
         Mac: /Applications/Adobe Dreamweaver/Adobe Dreamweaver.app/Contents/MacOS/Dreamweaver
         Win: C:\Program Files\Adobe\Adobe Dreamweaver\Dreamweaver.exe
-
-* Version
-  * 20.0.0.15196
-    * Mac
-      * 0x10176DA52: 84 DB -> B3 01
-      * find and replace: 66 41 8B 5D 08 **84 DB** 74 09 80 FB 07 -> 66 41 8B 5D 08 **B3 01** 74 09 80 FB 07
-    * Win
-      * 0xA62BA3: 84 C0 -> B0 01
-      * find and replace: 0F B6 41 08 **84 C0** 0F 84 AB 00 00 00 3C 07 -> 0F B6 41 08 **B0 01** 0F 84 AB 00 00 00 3C 07
 
 ## Dn
 
@@ -425,25 +277,9 @@ May be killed by the watchdog
         Mac: /Applications/Adobe Dimension/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper
         Win: C:\Program Files\Adobe\Adobe Dimension\euclid-core-plugin.pepper
 
-* Version
-  * 3.0
-    * Mac
-      * 0x4589FC2: 84 DB -> B3 01
-      * find and replace: 66 41 8B 5E 08 **84 DB** 0F 84 0F 01 00 00 80 FB 07 -> 66 41 8B 5E 08 **B3 01** 0F 84 0F 01 00 00 80 FB 07
-    * Win
-      * 0x18204481D: 84 C0 -> B0 01
-      * find and replace: 8B 05 92 C9 C1 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 **84 C0** 74 0A 3C 07 -> 8B 05 92 C9 C1 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 **B0 01** 74 0A 3C 07
-
 ## Acrobat
 
 * File
 
         Mac: /Applications/Adobe Acrobat DC/Adobe Acrobat.app/Contents/Frameworks/Acrobat.framework/Versions/A/Acrobat
         Win: C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.dll
-
-* Version
-  * 19.012.20040
-    * Mac
-      * find and replace: 66 41 8B 5E 08 **84 DB** 74 09 80 FB 07 -> 66 41 8B 5E 08 **B3 01** 74 09 80 FB 07
-    * Win
-      * find and replace: 8A 43 08 **84 C0** 74 0A 3C 07 -> 8A 43 08 **B0 01** 74 0A 3C 07
