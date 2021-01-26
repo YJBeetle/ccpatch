@@ -1,235 +1,399 @@
-$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-if(!$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
-{
-    echo "Privilege is not sufficient, elevating..."
-    $args = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
-    Start-Process -FilePath PowerShell.exe -Verb runas -ArgumentList $args
-    exit
+#!/usr/bin/env pwsh
+
+$IMAGE_FILE_MACHINE_AMD64 = 0x8664
+$IMAGE_FILE_MACHINE_I386 = 0x14c
+
+$DOT_TEXT = 0x747865742E
+$DOT_RDATA = 0x61746164722E
+
+Add-Type @"
+public struct CoffHeader {
+    public System.UInt16 Machine;
+    public System.UInt16 NumberOfSections;
+    public System.UInt32 TimeDateStamp;
+    public System.UInt32 PointerToSymbolTable;
+    public System.UInt32 NumberOfSymbols;
+    public System.UInt16 SizeOfOptionalHeader;
+    public System.UInt16 Characteristics;
+}
+"@
+
+Add-Type @"
+public struct OptionalHeader {
+    public System.UInt16 Magic;
+    public System.Byte MajorLinkerVersion;
+    public System.Byte MinorLinkerVersion;
+    public System.UInt32 SizeOfCode;
+    public System.UInt32 SizeOfInitializedData;
+    public System.UInt32 SizeOfUninitializedData;
+    public System.UInt32 AddressOfEntryPoint;
+    public System.UInt32 BaseOfCode;
+}
+"@
+
+Add-Type @"
+public struct SectionHeader {
+    public System.UInt64 Name;
+    public System.UInt32 VirtualSize;
+    public System.UInt32 VirtualAddress;
+    public System.UInt32 SizeOfRawData;
+    public System.UInt32 PointerToRawData;
+    public System.UInt32 PointerToRelocations;
+    public System.UInt32 PointerToLinenumbers;
+    public System.UInt16 NumberOfRelocations;
+    public System.UInt16 NumberOfLinenumbers;
+    public System.UInt32 Characteristics;
+}
+"@
+
+# Function originally by https://www.reddit.com/r/PowerShell/comments/7b9fxu/search_byte_array_for_byte_pattern/
+function Search-Binary {
+    [cmdletbinding()]
+    Param (
+        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True,Mandatory=$True)]
+        [Byte[]]$BinaryValue,
+        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True,Mandatory=$True)]
+        [Byte[]]$Pattern,
+        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True)]
+        [bool]$First,
+        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True)]
+        [bool]$Reverse
+    )
+    #  Original method function originally by Tommaso Belluzzo
+    #  https://stackoverflow.com/questions/16252518/boyer-moore-horspool-algorithm-for-all-matches-find-byte-array-inside-byte-arra
+    $MethodDefinition = @'
+        public static System.Collections.Generic.List<Int64> IndexesOf(Byte[] binaryValue, Byte[] pattern, bool first = false, bool reverse = false)
+        {
+            if (binaryValue == null)
+                throw new ArgumentNullException("binaryValue");
+            if (pattern == null)
+                throw new ArgumentNullException("pattern");
+            Int64 binaryValueLength = binaryValue.LongLength;
+            Int64 patternLength = pattern.LongLength;
+            Int64 searchLength = binaryValueLength - patternLength;
+            if ((binaryValueLength == 0) || (patternLength == 0) || (patternLength > binaryValueLength))
+                return (new System.Collections.Generic.List<Int64>());
+            Int64[] badCharacters = new Int64[256];
+            for (Int64 i = 0; i < 256; ++i)
+                badCharacters[i] = patternLength;
+            Int64 lastPatternByte = patternLength - 1;
+            for (Int64 i = 0; i < lastPatternByte; ++i)
+                badCharacters[pattern[i]] = lastPatternByte - i;
+            // Beginning
+            System.Collections.Generic.List<Int64> indexes = new System.Collections.Generic.List<Int64>();
+            if(reverse){
+                Int64 index = searchLength;
+                while (index >= 0)
+                {
+                    for (Int64 i = lastPatternByte; binaryValue[(index + i)] == pattern[i]; --i)
+                    {
+                        if (i == 0)
+                        {
+                            indexes.Add(index);
+                            if (first)
+                                return indexes;
+                            break;
+                        }
+                    }
+                    index -= badCharacters[binaryValue[(index + lastPatternByte)]];
+                }
+            }else{
+                Int64 index = 0;
+                while (index <= searchLength)
+                {
+                    for (Int64 i = lastPatternByte; binaryValue[(index + i)] == pattern[i]; --i)
+                    {
+                        if (i == 0)
+                        {
+                            indexes.Add(index);
+                            if (first)
+                                return indexes;
+                            break;
+                        }
+                    }
+                    index += badCharacters[binaryValue[(index + lastPatternByte)]];
+                }
+            }
+            return indexes;
+        }
+'@
+    if (-not ([System.Management.Automation.PSTypeName]'Random.Search').Type) {
+        Add-Type -MemberDefinition $MethodDefinition -Name 'Search' -Namespace 'Random' | Out-Null
+    }
+    return [Random.Search]::IndexesOf($binaryValue, $Pattern, $First, $Reverse)
 }
 
-function patch($__file, $__find, $__to)
+$patchsData = @(
+    @{
+        funcTrait = @{
+            type = 'callLeaRdxKeyword'
+            keywordString = "PROFILE_AVAILABLE"
+        }
+        patchPointList = @(
+            @{find = [Byte[]](0xB8, 0x92, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
+            @{find = [Byte[]](0xB8, 0x93, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
+            @{find = [Byte[]](0xB8, 0x94, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
+            @{find = [Byte[]](0xB8, 0x95, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
+            @{find = [Byte[]](0xB8, 0x96, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
+            @{find = [Byte[]](0xB8, 0x97, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
+            @{find = [Byte[]](0xB8, 0x98, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)}
+        )
+    }
+)
+
+function patch($path)
 {
-    # $find = ($__find -split ' ' | ForEach-Object {[char][byte]"0x$_"}) -join ''
-    # $to = ($__to -split ' ' | ForEach-Object {[char][byte]"0x$_"}) -join ''
-    [Byte[]] $find = $__find -split ' ' | ForEach-Object {[byte]"0x$_"}
-    [Byte[]] $to = $__to -split ' ' | ForEach-Object {[byte]"0x$_"}
-    # $to = [Byte[]](0x0F,0xB6,0x41,0x08,0xb0,0x01,0x74,0x0A,0x3C,0x07)
+    $mmf = [System.IO.MemoryMappedFiles.MemoryMappedFile]::CreateFromFile($path)
+    $accessor = $mmf.CreateViewAccessor()
+    $peOffset = $accessor.ReadUInt32(0x3C)
+    $signature = [Byte[]]::new(4)
+    $null = $accessor.ReadArray($peOffset, $signature, 0, $signature.Length)
+    if($null -eq (Compare-Object $signature ([Byte[]](0x50, 0x45, 0x00, 0x00)))){
+        $coffHeaderOffset = $peOffset + 4
+        # echo "coffHeaderOffset" $coffHeaderOffset
+        $coffHeader = [CoffHeader]@{}
+        $null = $accessor.Read($coffHeaderOffset, [ref]$coffHeader)
+        # echo "coffHeader" $coffHeader
 
-    [Byte[]] $file = [System.Io.File]::ReadAllBytes( $__file )
+        $optionalHeaderOffset = $coffHeaderOffset + [Runtime.InteropServices.Marshal]::SizeOf($coffHeader)
+        # echo "optionalHeaderOffset" $optionalHeaderOffset
+        $optionalHeader = [OptionalHeader]@{}
+        $null = $accessor.Read($optionalHeaderOffset, [ref]$OptionalHeader)
+        # echo "optionalHeader" $optionalHeader
 
-    $position = 0
-    for ($i = 0; $i -lt ($file.length - $find.length); $i++)
-    {
-        for ($ii = 0; $ii -lt $find.length; $ii++)
-        {
-            if($file[$i+$ii] -ne $find[$ii])
-            {
-                break
+        $SectionHeadersOffset = $optionalHeaderOffset + $coffHeader.SizeOfOptionalHeader
+        # echo "SectionHeadersOffset" $SectionHeadersOffset
+        $textAddress = 0
+        $textOffset = 0
+        $textSize = 0
+        $rdataAddress = 0
+        $rdataOffset = 0
+        $rdataSize = 0
+        for ($i = 0; $i -lt $coffHeader.NumberOfSections; $i++) {
+            $sectionHeader = [SectionHeader]@{}
+            $null = $accessor.Read($SectionHeadersOffset + [Runtime.InteropServices.Marshal]::SizeOf($sectionHeader) * $i, [ref]$sectionHeader)
+            # echo $sectionHeader
+            if ($sectionHeader.Name -eq $DOT_TEXT) {
+                $textAddress = $sectionHeader.VirtualAddress 
+                $textOffset = $sectionHeader.PointerToRawData
+                $textSize = $sectionHeader.SizeOfRawData
+            }elseif ($sectionHeader.Name -eq $DOT_RDATA) {
+                $rdataAddress = $sectionHeader.VirtualAddress 
+                $rdataOffset = $sectionHeader.PointerToRawData
+                $rdataSize = $sectionHeader.SizeOfRawData
             }
         }
-        if ($ii -eq $find.length)
-        {
-            $position = $i
-            
-            $fileStream = [System.IO.File]::Open($__file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
-            $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
-            $binaryWriter.BaseStream.Position = $position;
-            $binaryWriter.Write($to)
-            $fileStream.Close()
+        if($textOffset -and $textSize){
+            $patched = 0
+            foreach ($patchData in $patchsData) {
+                $funcOffsetList = @()
+                if($patchData.funcTrait.type -eq "callLeaRdxKeyword"){
+                    if($rdataOffset -and $rdataSize){
+                        $addressDifferenceForTextAndRdata = ($rdataAddress - $rdataOffset) - ($textAddress - $textOffset)
+                        $b = [Byte[]]::new($rdataSize)
+                        $null = $accessor.ReadArray($rdataOffset, $b, 0, $b.length)
+                        $p = Search-Binary $b ($patchData.funcTrait.keywordString.ToCharArray()) $true
+                        if ($p.Length) {
+                            $strOffset = $rdataOffset + $p[0]
+                            $b = [Byte[]]::new($textSize)
+                            $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
+                            $p = Search-Binary $b (0x48, 0x8D, 0x15)
+                            foreach ($pp in $p) {
+                                $callKeywordOffset = $textOffset + $pp
+                                $op = $accessor.ReadUInt32($textOffset + $pp + 3)
+                                if (($callKeywordOffset + 7 + $op - $addressDifferenceForTextAndRdata ) -eq $strOffset) {
+                                    $b = [Byte[]]::new($callKeywordOffset - $textOffset)
+                                    $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
+                                    $sp = Search-Binary $b (0xCC) $true $true
+                                    $start = $textOffset
+                                    if ($sp.Length) {
+                                        $start = $textOffset + $sp[0] + 1
+                                    }
+                                    $b = [Byte[]]::new($textOffset + $textSize - $callKeywordOffset)
+                                    $null = $accessor.ReadArray($callKeywordOffset, $b, 0, $b.length)
+                                    $ep = Search-Binary $b (0xCC) $true
+                                    $end = $textOffset + $textSize
+                                    if ($ep.Length) {
+                                        $end = $callKeywordOffset + $ep[0]
+                                    }
+                                    $funcOffsetList += @{start = $start; size = $end - $start}
+                                }
+                            }
+                        }
+                        else {
+                            Write-Host ("Error: Keyword String '" + $patchData.funcTrait.keywordString + "' not found.")
+                        }
+                    }else {
+                        Write-Host "Error: '.rdata' not found."
+                    }
+                }else {
+                    Write-Host "Error: Unknow funstion trait type."
+                }
+                foreach ($funcOffset in $funcOffsetList) {
+                    $b = [Byte[]]::new($funcOffset.size)
+                    $null = $accessor.ReadArray($funcOffset.start, $b, 0, $b.length)
+                    foreach ($patchPoint in $patchData.patchPointList) {
+                        $p = Search-Binary $b $patchPoint.find $true
+                        if($p.Length){
+                            $patchPointOffset = $funcOffset.start + $p
+                            $accessor.WriteArray($patchPointOffset, $patchPoint.replace, 0, $patchPoint.replace.Length)
+                            $patched+=1
+                        }else{
+                            Write-Host ("Error: (" + $patchPoint.find + ") not found.")
+                        }
+                    }
+                }
+            }
+            return $patched
         }
-    }
-
-    if ( $position -ne 0 )
-    {
-        ( Get-FileHash "$__file" -Algorithm MD5 ).Hash > "$__file.patched.md5"
-        echo "Patch succeeded."
-    }
-    else
-    {
-        echo "Patch faild."
+        else {
+            Write-Host "Error: '.text' not found."
+        }
+        return $false
     }
 }
 
-function run($__tab, $__file, $__find, $__to)
-{
-    if ( Test-Path "$__file" -PathType Leaf )
+$appList = @{
+    ps = @{
+        path = 'C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe'
+    }
+    lr = @{
+        path = 'C:\Program Files\Adobe\Adobe Lightroom Classic\Lightroom.exe'
+    }
+    ai = @{
+        path = 'C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe'
+    }
+    id = @{
+        path = 'C:\Program Files\Adobe\Adobe InDesign 2020\Public.dll'
+    }
+    ic = @{
+        path = 'C:\Program Files\Adobe\Adobe InCopy 2020\Public.dll'
+    }
+    au = @{
+        path = 'C:\Program Files\Adobe\Adobe Audition 2020\AuUI.dll'
+    }
+    pr = @{
+        path = 'C:\Program Files\Adobe\Adobe Premiere Pro 2020\Registration.dll'
+    }
+    pl = @{
+        path = 'C:\Program Files\Adobe\Adobe Prelude 2020\Registration.dll'
+    }
+    ch = @{
+        path = 'C:\Program Files\Adobe\Adobe Character Animator 2020\Support Files\Character Animator.exe'
+    }
+    ae = @{
+        path = 'C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll'
+    }
+    me = @{
+        path = 'C:\Program Files\Adobe\Adobe Media Encoder 2020\Adobe Media Encoder.exe'
+    }
+    br = @{
+        path = 'C:\Program Files\Adobe\Adobe Bridge 2020\Bridge.exe'
+    }
+    an = @{
+        path = 'C:\Program Files\Adobe\Adobe Animate 2020\Animate.exe'
+    }
+    dw = @{
+        path = 'C:\Program Files\Adobe\Adobe Dreamweaver 2020\Dreamweaver.exe'
+    }
+    dn = @{
+        path = 'C:\Program Files\Adobe\Adobe Dimension\euclid-core-plugin.pepper'
+    }
+    acrobat = @{
+        path = 'C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.dll'
+    }
+}
+
+function verify_patched_hash($path){
+    if(Test-Path "$path.patched.md5" -PathType Leaf)
     {
-        echo "Found and patching $__tab ..."
-        if ( ( ! ( Test-Path "$__file.bak" -PathType Leaf ) ) -or ( ! ( Test-Path "$__file.patched.md5" -PathType Leaf ) ) -or ( ( cat "$__file.patched.md5" ) -ne ( Get-FileHash "$__file" -Algorithm MD5 ).Hash ) )
+        return (cat "$path.patched.md5") -eq (Get-FileHash "$path" -Algorithm MD5).Hash
+    }
+    return $false
+}
+
+function patchApp($app)
+{
+    if($appList.Keys.IndexOf($app) -ne -1){
+        $path = $appList[$app].path
+    }else{
+        $path = $app
+    }
+    if (Test-Path "$path" -PathType Leaf)
+    {
+        Write-Host "Found and patching $app"
+        if ((Test-Path "$path.bak" -PathType Leaf) -and (verify_patched_hash "$path"))
         {
-            if(Test-Path "$__file.bak" -PathType Leaf)
-            {
-                rm "$__file.bak"
-            }
-            mv "$__file" "$__file.bak"
-            cp "$__file.bak" "$__file"
-            echo "Backup succeeded."
-            patch "$__file" "$__find" "$__to"
+            Write-Host "Already patched, skipped."
+            return
+        }
+        if(Test-Path "$path.bak" -PathType Leaf)
+        {
+            rm "$path.bak"
+        }
+        mv "$path" "$path.bak"
+        cp "$path.bak" "$path"
+        Write-Host "Backup succeeded."
+        $patched = patch "$path"
+        if($patched)
+        {
+            (Get-FileHash "$path" -Algorithm MD5).Hash > "$path.patched.md5"
+            Write-Host "Patch succeeded, patched point: $patched"
         }
         else
         {
-            echo "Already patched, skipped."
+            Write-Host "Patch faild."
         }
     }
 }
 
-function _Ps()
+function restoreApp($app)
 {
-    run `
-        'Ps' `
-        "C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe" `
-        "B8 92 01 00 00 E9 86 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 13 00 00 00 48 8D 15 1D 41 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 BE A4 D3 FC 85 C0 75 10 48 83 FF 13 75 0A B8 93 01 00 00 E9 4B 01 00 00 48 89 6C 24 30 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 0E 00 00 00 48 8D 15 F5 40 36 01 48 3B F8 48 8B EF 48 0F 47 E8 4C 8B C5 E8 7B A4 D3 FC 85 C0 75 10 48 83 FF 0E 75 0A B8 94 01 00 00 E9 03 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 15 00 00 00 48 8D 15 C7 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 40 A4 D3 FC 85 C0 75 10 48 83 FF 15 75 0A B8 95 01 00 00 E9 C8 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 11 00 00 00 48 8D 15 A4 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 05 A4 D3 FC 85 C0 75 0A 48 83 FF 11 0F 84 93 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 1A 00 00 00 48 8D 15 87 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 D0 A3 D3 FC 85 C0 75 0D 48 83 FF 1A 75 07 B8 96 01 00 00 EB 5B 48 8B CB 48 83 FE 10 72 03 48 8B 0B 4C 8B C5 48 8D 15 71 40 36 01 E8 A4 A3 D3 FC 85 C0 75 0D 48 83 FF 0E 75 07 B8 97 01 00 00 EB 2F 48 83 FE 10 72 03 48 8B 1B 4D 8B C6 48 8D 15 58 40 36 01 48 8B CB E8 78 A3 D3 FC 85 C0 75 0B B8 98 01 00 00" `
-        "B8 00 00 00 00 E9 86 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 13 00 00 00 48 8D 15 1D 41 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 BE A4 D3 FC 85 C0 75 10 48 83 FF 13 75 0A B8 00 00 00 00 E9 4B 01 00 00 48 89 6C 24 30 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 0E 00 00 00 48 8D 15 F5 40 36 01 48 3B F8 48 8B EF 48 0F 47 E8 4C 8B C5 E8 7B A4 D3 FC 85 C0 75 10 48 83 FF 0E 75 0A B8 00 00 00 00 E9 03 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 15 00 00 00 48 8D 15 C7 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 40 A4 D3 FC 85 C0 75 10 48 83 FF 15 75 0A B8 00 00 00 00 E9 C8 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 11 00 00 00 48 8D 15 A4 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 05 A4 D3 FC 85 C0 75 0A 48 83 FF 11 0F 84 93 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 1A 00 00 00 48 8D 15 87 40 36 01 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 D0 A3 D3 FC 85 C0 75 0D 48 83 FF 1A 75 07 B8 00 00 00 00 EB 5B 48 8B CB 48 83 FE 10 72 03 48 8B 0B 4C 8B C5 48 8D 15 71 40 36 01 E8 A4 A3 D3 FC 85 C0 75 0D 48 83 FF 0E 75 07 B8 00 00 00 00 EB 2F 48 83 FE 10 72 03 48 8B 1B 4D 8B C6 48 8D 15 58 40 36 01 48 8B CB E8 78 A3 D3 FC 85 C0 75 0B B8 00 00 00 00"
+    if($appList.Keys.IndexOf($app) -ne -1){
+        $path = $appList[$app].path
+    }else{
+        $path = $app
+    }
+    if ( Test-Path "$path.bak" -PathType Leaf )
+    {
+        Write-Host "Found and restore $app ..."
+        rm "$path"
+        mv "$path.bak" "$path"
+        rm "$path.patched.md5"
+        Write-Host "Restore succeeded."
+    }else{
+        Write-Host "The backup file does not exist, skipped."
+    }
 }
 
-function _Lr()
-{
-    run `
-        'Lr' `
-        "C:\Program Files\Adobe\Adobe Lightroom Classic\Lightroom.exe" `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+if ($IsWindows) {
+    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    if(!$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+    {
+        Write-Host "Privilege is not sufficient, elevating..."
+        $_args = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
+        Start-Process -FilePath PowerShell.exe -Verb runas -ArgumentList $_args
+        exit
+    }
 }
-
-function _Ai()
-{
-    run `
-        'Ai' `
-        'C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
+if($args.length){
+    if($args[0] -ieq "restore"){
+        if($args.length -gt 1){
+            foreach ($app in $args[1..$args.Length]) {
+                restoreApp $app
+            }
+        }else{
+            foreach ($app in $appList.Keys) {
+                restoreApp $app
+            }
+        }
+    }else{
+        foreach ($app in $args) {
+            patchApp $app
+        }
+    }
+}else{
+    foreach ($app in $appList.Keys) {
+        patchApp $app
+    }
 }
-
-function _Id()
-{
-    run `
-        'Id' `
-        'C:\Program Files\Adobe\Adobe InDesign 2020\Public.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
-}
-
-function _Ic()
-{
-    run `
-        'Ic' `
-        'C:\Program Files\Adobe\Adobe InCopy 2020\Public.dll' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
-}
-
-function _Au()
-{
-    run `
-        'Au' `
-        'C:\Program Files\Adobe\Adobe Audition 2020\AuUI.dll' `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
-}
-
-function _Pr()
-{
-    run `
-        'Pr' `
-        'C:\Program Files\Adobe\Adobe Premiere Pro 2020\Registration.dll' `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
-}
-
-function _Pl()
-{
-    run `
-        'Pl' `
-        'C:\Program Files\Adobe\Adobe Prelude 2020\Registration.dll' `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
-}
-
-function _Ch()
-{
-    run `
-        'Ch' `
-        'C:\Program Files\Adobe\Adobe Character Animator 2020\Support Files\Character Animator.exe' `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
-}
-
-function _Ae()
-{
-    run `
-        'Ae' `
-        'C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll' `
-        "B8 92 01 00 00 E9 86 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 13 00 00 00 48 8D 15 A5 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 D8 C6 0E 00 85 C0 75 10 48 83 FF 13 75 0A B8 93 01 00 00 E9 4B 01 00 00 48 89 6C 24 30 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 0E 00 00 00 48 8D 15 7D 16 4F 00 48 3B F8 48 8B EF 48 0F 47 E8 4C 8B C5 E8 95 C6 0E 00 85 C0 75 10 48 83 FF 0E 75 0A B8 94 01 00 00 E9 03 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 15 00 00 00 48 8D 15 4F 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 5A C6 0E 00 85 C0 75 10 48 83 FF 15 75 0A B8 95 01 00 00 E9 C8 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 11 00 00 00 48 8D 15 2C 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 1F C6 0E 00 85 C0 75 0A 48 83 FF 11 0F 84 93 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 1A 00 00 00 48 8D 15 0F 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 EA C5 0E 00 85 C0 75 0D 48 83 FF 1A 75 07 B8 96 01 00 00 EB 5B 48 8B CB 48 83 FE 10 72 03 48 8B 0B 4C 8B C5 48 8D 15 F9 15 4F 00 E8 BE C5 0E 00 85 C0 75 0D 48 83 FF 0E 75 07 B8 97 01 00 00 EB 2F 48 83 FE 10 72 03 48 8B 1B 4D 8B C6 48 8D 15 E0 15 4F 00 48 8B CB E8 92 C5 0E 00 85 C0 75 0B B8 98 01 00 00" `
-        "B8 00 00 00 00 E9 86 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 13 00 00 00 48 8D 15 A5 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 D8 C6 0E 00 85 C0 75 10 48 83 FF 13 75 0A B8 00 00 00 00 E9 4B 01 00 00 48 89 6C 24 30 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 0E 00 00 00 48 8D 15 7D 16 4F 00 48 3B F8 48 8B EF 48 0F 47 E8 4C 8B C5 E8 95 C6 0E 00 85 C0 75 10 48 83 FF 0E 75 0A B8 00 00 00 00 E9 03 01 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 15 00 00 00 48 8D 15 4F 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 5A C6 0E 00 85 C0 75 10 48 83 FF 15 75 0A B8 00 00 00 00 E9 C8 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 11 00 00 00 48 8D 15 2C 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 1F C6 0E 00 85 C0 75 0A 48 83 FF 11 0F 84 93 00 00 00 48 8B CB 48 83 FE 10 72 03 48 8B 0B B8 1A 00 00 00 48 8D 15 0F 16 4F 00 48 3B F8 4C 8B C7 4C 0F 47 C0 E8 EA C5 0E 00 85 C0 75 0D 48 83 FF 1A 75 07 B8 00 00 00 00 EB 5B 48 8B CB 48 83 FE 10 72 03 48 8B 0B 4C 8B C5 48 8D 15 F9 15 4F 00 E8 BE C5 0E 00 85 C0 75 0D 48 83 FF 0E 75 07 B8 00 00 00 00 EB 2F 48 83 FE 10 72 03 48 8B 1B 4D 8B C6 48 8D 15 E0 15 4F 00 48 8B CB E8 92 C5 0E 00 85 C0 75 0B B8 00 00 00 00"
-}
-
-function _Me()
-{
-    run `
-        'Me' `
-        'C:\Program Files\Adobe\Adobe Media Encoder 2020\Adobe Media Encoder.exe' `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 32 C0" `
-        "48 8B 48 08 48 8B 44 24 60 48 39 48 08 75 0E 8B 44 24 48 39 44 24 58 75 04 B0 01 EB 02 B0 01"
-}
-
-function _Br()
-{
-    run `
-        'Br' `
-        'C:\Program Files\Adobe\Adobe Bridge 2020\Bridge.exe' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
-}
-
-function _An()
-{
-    run `
-        'An' `
-        'C:\Program Files\Adobe\Adobe Animate 2020\Animate.exe' `
-        "0F B6 41 08 84 C0 74 0A 3C 07" `
-        "0F B6 41 08 B0 01 74 0A 3C 07"
-}
-
-function _Dw()
-{
-    run `
-        'Dw' `
-        'C:\Program Files\Adobe\Adobe Dreamweaver 2020\Dreamweaver.exe' `
-        "0F B6 41 08 84 C0 0F 84 AB 00 00 00 3C 07" `
-        "0F B6 41 08 B0 01 0F 84 AB 00 00 00 3C 07"
-}
-
-function _Dn()
-{
-    run `
-        'Dn' `
-        'C:\Program Files\Adobe\Adobe Dimension\euclid-core-plugin.pepper' `
-        "8B 05 92 C9 C1 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 84 C0 74 0A 3C 07" `
-        "8B 05 92 C9 C1 02 48 33 C4 48 89 85 A8 00 00 00 49 8B F8 4C 8B FA 4C 8B E1 0F B6 41 08 B0 01 74 0A 3C 07"
-}
-
-function _Acrobat()
-{
-    run `
-        'Acrobat' `
-        'C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.dll' `
-        "8A 43 08 84 C0 74 0A 3C 07" `
-        "8A 43 08 B0 01 74 0A 3C 07"
-}
-
-_Ps
-_Lr
-_Ai
-_Id
-_Ic
-_Au
-_Pr
-_Pl
-_Ch
-_Ae
-_Me
-_Br
-_An
-_Dw
-_Dn
-_Acrobat
