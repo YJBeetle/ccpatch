@@ -99,9 +99,8 @@ def patch(path: str):
                                 callKeywordOffset = mm.find(bytes([0x48, 0x8D, 0x35]), callKeywordOffset, textOffsetEnd)
                                 if callKeywordOffset == -1:
                                     break
-                                op = mm[callKeywordOffset + 3: callKeywordOffset + 7]
-                                opi, = struct.unpack("@I", op)
-                                if callKeywordOffset + opi + 7 == strOffset:
+                                op, = struct.unpack("@I", mm[callKeywordOffset + 3: callKeywordOffset + 7])
+                                if callKeywordOffset + op + 7 == strOffset:
                                     start = mm.rfind(bytes([0x55]), textOffset, callKeywordOffset)
                                     end = mm.find(bytes([0x55]), callKeywordOffset, textOffsetEnd)
                                     if start != -1 and end != -1:
