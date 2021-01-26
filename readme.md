@@ -20,7 +20,7 @@ mac is work and win not work
 
 * Via PowerShell (Administrator)
 
-  ```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/run.ps1')"```
+  ```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.ps1')"```
 
 ## Restore
 
@@ -38,4 +38,4 @@ mac is work and win not work
 
 * Via PowerShell (Administrator)
 
-  ```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/2021/revoke.ps1')"```
+  ```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.ps1')" restore```
