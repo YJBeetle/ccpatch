@@ -366,6 +366,9 @@ function restoreApp($app)
     }
 }
 
+if ((Get-Variable -Name IsWindows -ErrorAction SilentlyContinue) -eq $null) { # IsWindows is PowerShell Core 5.0's feature
+	$IsWindows = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT
+}
 if ($IsWindows) {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
     if(!$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
