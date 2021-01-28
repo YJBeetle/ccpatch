@@ -50,13 +50,13 @@ public struct SectionHeader {
 function Search-Binary {
     [cmdletbinding()]
     Param (
-        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, Mandatory=$True)]
+        [parameter(ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, Mandatory = $True)]
         [Byte[]]$BinaryValue,
-        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, Mandatory=$True)]
+        [parameter(ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, Mandatory = $True)]
         [Byte[]]$Pattern,
-        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
+        [parameter(ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
         [bool]$First,
-        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
+        [parameter(ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
         [bool]$Reverse
     )
     #  Original method function originally by Tommaso Belluzzo
@@ -130,13 +130,13 @@ $patchsData = @(
             keywordString = "PROFILE_AVAILABLE"
         }
         patchPointList = @(
-            @{find = [Byte[]](0xB8, 0x92, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
-            @{find = [Byte[]](0xB8, 0x93, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
-            @{find = [Byte[]](0xB8, 0x94, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
-            @{find = [Byte[]](0xB8, 0x95, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
-            @{find = [Byte[]](0xB8, 0x96, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
-            @{find = [Byte[]](0xB8, 0x97, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)},
-            @{find = [Byte[]](0xB8, 0x98, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0)}
+            @{find = [Byte[]](0xB8, 0x92, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) },
+            @{find = [Byte[]](0xB8, 0x93, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) },
+            @{find = [Byte[]](0xB8, 0x94, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) },
+            @{find = [Byte[]](0xB8, 0x95, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) },
+            @{find = [Byte[]](0xB8, 0x96, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) },
+            @{find = [Byte[]](0xB8, 0x97, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) },
+            @{find = [Byte[]](0xB8, 0x98, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) }
         )
     }
 )
@@ -177,7 +177,8 @@ function patch($path) {
                     $textAddress = $sectionHeader.VirtualAddress 
                     $textOffset = $sectionHeader.PointerToRawData
                     $textSize = $sectionHeader.SizeOfRawData
-                } elseif ($sectionHeader.Name -eq $DOT_RDATA) {
+                }
+                elseif ($sectionHeader.Name -eq $DOT_RDATA) {
                     $rdataAddress = $sectionHeader.VirtualAddress 
                     $rdataOffset = $sectionHeader.PointerToRawData
                     $rdataSize = $sectionHeader.SizeOfRawData
@@ -216,16 +217,19 @@ function patch($path) {
                                         if ($ep.Length) {
                                             $end = $callKeywordOffset + $ep[0]
                                         }
-                                        $funcOffsetList += @{start = $start; size = $end - $start}
+                                        $funcOffsetList += @{start = $start; size = $end - $start }
                                     }
                                 }
-                            } else {
+                            }
+                            else {
                                 Write-Host ("Error: Keyword String '" + $patchData.funcTrait.keywordString + "' not found.")
                             }
-                        } else {
+                        }
+                        else {
                             Write-Host "Error: '.rdata' not found."
                         }
-                    } else {
+                    }
+                    else {
                         Write-Host "Error: Unknow funstion trait type."
                     }
                     foreach ($funcOffset in $funcOffsetList) {
@@ -237,19 +241,22 @@ function patch($path) {
                                 $patchPointOffset = $funcOffset.start + $p
                                 $accessor.WriteArray($patchPointOffset, $patchPoint.replace, 0, $patchPoint.replace.Length)
                                 $patched += 1
-                            } else {
+                            }
+                            else {
                                 Write-Host ("Error: (" + $patchPoint.find + ") not found.")
                             }
                         }
                     }
                 }
                 return $patched
-            } else {
+            }
+            else {
                 Write-Host "Error: '.text' not found."
             }
             return $false
         }
-    } finally {
+    }
+    finally {
         $accessor.Dispose()
         $mmf.Dispose()
     }
@@ -307,7 +314,7 @@ $appList = @{
 }
 
 function verifyPatchedHash($path) {
-    if(Test-Path "$path.patched.md5" -PathType Leaf) {
+    if (Test-Path "$path.patched.md5" -PathType Leaf) {
         return (cat "$path.patched.md5") -eq (Get-FileHash "$path" -Algorithm MD5).Hash
     }
     return $false
@@ -316,7 +323,8 @@ function verifyPatchedHash($path) {
 function patchApp($app) {
     if ($appList.ContainsKey($app)) {
         $path = $appList[$app].path
-    } else {
+    }
+    else {
         $path = $app
     }
     if (Test-Path "$path" -PathType Leaf) {
@@ -325,17 +333,18 @@ function patchApp($app) {
             Write-Host "Already patched, skipped."
             return
         }
-        if(Test-Path "$path.bak" -PathType Leaf) {
+        if (Test-Path "$path.bak" -PathType Leaf) {
             rm "$path.bak"
         }
         mv "$path" "$path.bak"
         cp "$path.bak" "$path"
         Write-Host "Backup succeeded."
         $patched = patch "$path"
-        if($patched) {
+        if ($patched) {
             (Get-FileHash "$path" -Algorithm MD5).Hash > "$path.patched.md5"
             Write-Host "Patch succeeded, patched point: $patched"
-        } else {
+        }
+        else {
             Write-Host "Patch faild."
         }
     }
@@ -344,7 +353,8 @@ function patchApp($app) {
 function restoreApp($app) {
     if ($appList.ContainsKey($app)) {
         $path = $appList[$app].path
-    } else {
+    }
+    else {
         $path = $app
     }
     if (Test-Path "$path.bak" -PathType Leaf) {
@@ -353,12 +363,14 @@ function restoreApp($app) {
         mv "$path.bak" "$path"
         rm "$path.patched.md5"
         Write-Host "Restore succeeded."
-    } else {
+    }
+    else {
         Write-Host "The backup file does not exist, skipped."
     }
 }
 
-if ((Get-Variable -Name IsWindows -ErrorAction SilentlyContinue) -eq $null) { # IsWindows is PowerShell Core 5.0's feature
+if ((Get-Variable -Name IsWindows -ErrorAction SilentlyContinue) -eq $null) {
+    # IsWindows is PowerShell Core 5.0's feature
     $IsWindows = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT
 }
 if ($IsWindows) {
@@ -376,17 +388,20 @@ if ($args.length) {
             foreach ($app in $args[1..$args.Length]) {
                 restoreApp $app
             }
-        } else {
+        }
+        else {
             foreach ($app in $appList.Keys) {
                 restoreApp $app
             }
         }
-    } else {
+    }
+    else {
         foreach ($app in $args) {
             patchApp $app
         }
     }
-} else {
+}
+else {
     foreach ($app in $appList.Keys) {
         patchApp $app
     }
