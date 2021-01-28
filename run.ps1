@@ -50,13 +50,13 @@ public struct SectionHeader {
 function Search-Binary {
     [cmdletbinding()]
     Param (
-        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True,Mandatory=$True)]
+        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, Mandatory=$True)]
         [Byte[]]$BinaryValue,
-        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True,Mandatory=$True)]
+        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, Mandatory=$True)]
         [Byte[]]$Pattern,
-        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True)]
+        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
         [bool]$First,
-        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True)]
+        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
         [bool]$Reverse
     )
     #  Original method function originally by Tommaso Belluzzo
@@ -141,14 +141,13 @@ $patchsData = @(
     }
 )
 
-function patch($path)
-{
+function patch($path) {
     $mmf = [System.IO.MemoryMappedFiles.MemoryMappedFile]::CreateFromFile($path)
     $accessor = $mmf.CreateViewAccessor()
     $peOffset = $accessor.ReadUInt32(0x3C)
     $signature = [Byte[]]::new(4)
     $null = $accessor.ReadArray($peOffset, $signature, 0, $signature.Length)
-    if($null -eq (Compare-Object $signature ([Byte[]](0x50, 0x45, 0x00, 0x00)))){
+    if ($null -eq (Compare-Object $signature ([Byte[]](0x50, 0x45, 0x00, 0x00)))) {
         $coffHeaderOffset = $peOffset + 4
         # echo "coffHeaderOffset" $coffHeaderOffset
         $coffHeader = [CoffHeader]@{}
@@ -177,18 +176,18 @@ function patch($path)
                 $textAddress = $sectionHeader.VirtualAddress 
                 $textOffset = $sectionHeader.PointerToRawData
                 $textSize = $sectionHeader.SizeOfRawData
-            }elseif ($sectionHeader.Name -eq $DOT_RDATA) {
+            } elseif ($sectionHeader.Name -eq $DOT_RDATA) {
                 $rdataAddress = $sectionHeader.VirtualAddress 
                 $rdataOffset = $sectionHeader.PointerToRawData
                 $rdataSize = $sectionHeader.SizeOfRawData
             }
         }
-        if($textOffset -and $textSize){
+        if ($textOffset -and $textSize) {
             $patched = 0
             foreach ($patchData in $patchsData) {
                 $funcOffsetList = @()
-                if($patchData.funcTrait.type -eq "callLeaRdxKeyword"){
-                    if($rdataOffset -and $rdataSize){
+                if ($patchData.funcTrait.type -eq "callLeaRdxKeyword") {
+                    if ($rdataOffset -and $rdataSize) {
                         $addressDifferenceForTextAndRdata = ($rdataAddress - $rdataOffset) - ($textAddress - $textOffset)
                         $b = [Byte[]]::new($rdataSize)
                         $null = $accessor.ReadArray($rdataOffset, $b, 0, $b.length)
@@ -219,14 +218,13 @@ function patch($path)
                                     $funcOffsetList += @{start = $start; size = $end - $start}
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             Write-Host ("Error: Keyword String '" + $patchData.funcTrait.keywordString + "' not found.")
                         }
-                    }else {
+                    } else {
                         Write-Host "Error: '.rdata' not found."
                     }
-                }else {
+                } else {
                     Write-Host "Error: Unknow funstion trait type."
                 }
                 foreach ($funcOffset in $funcOffsetList) {
@@ -234,19 +232,18 @@ function patch($path)
                     $null = $accessor.ReadArray($funcOffset.start, $b, 0, $b.length)
                     foreach ($patchPoint in $patchData.patchPointList) {
                         $p = Search-Binary $b $patchPoint.find $true
-                        if($p.Length){
+                        if ($p.Length) {
                             $patchPointOffset = $funcOffset.start + $p
                             $accessor.WriteArray($patchPointOffset, $patchPoint.replace, 0, $patchPoint.replace.Length)
-                            $patched+=1
-                        }else{
+                            $patched += 1
+                        } else {
                             Write-Host ("Error: (" + $patchPoint.find + ") not found.")
                         }
                     }
                 }
             }
             return $patched
-        }
-        else {
+        } else {
             Write-Host "Error: '.text' not found."
         }
         return $false
@@ -304,64 +301,54 @@ $appList = @{
     }
 }
 
-function verify_patched_hash($path){
-    if(Test-Path "$path.patched.md5" -PathType Leaf)
-    {
+function verify_patched_hash($path) {
+    if(Test-Path "$path.patched.md5" -PathType Leaf) {
         return (cat "$path.patched.md5") -eq (Get-FileHash "$path" -Algorithm MD5).Hash
     }
     return $false
 }
 
-function patchApp($app)
-{
-    if($appList.ContainsKey($app)){
+function patchApp($app) {
+    if ($appList.ContainsKey($app)) {
         $path = $appList[$app].path
-    }else{
+    } else {
         $path = $app
     }
-    if (Test-Path "$path" -PathType Leaf)
-    {
+    if (Test-Path "$path" -PathType Leaf) {
         Write-Host "Found and patching $app"
-        if ((Test-Path "$path.bak" -PathType Leaf) -and (verify_patched_hash "$path"))
-        {
+        if ((Test-Path "$path.bak" -PathType Leaf) -and (verify_patched_hash "$path")) {
             Write-Host "Already patched, skipped."
             return
         }
-        if(Test-Path "$path.bak" -PathType Leaf)
-        {
+        if(Test-Path "$path.bak" -PathType Leaf) {
             rm "$path.bak"
         }
         mv "$path" "$path.bak"
         cp "$path.bak" "$path"
         Write-Host "Backup succeeded."
         $patched = patch "$path"
-        if($patched)
-        {
+        if($patched) {
             (Get-FileHash "$path" -Algorithm MD5).Hash > "$path.patched.md5"
             Write-Host "Patch succeeded, patched point: $patched"
-        }
-        else
-        {
+        } else {
             Write-Host "Patch faild."
         }
     }
 }
 
-function restoreApp($app)
-{
-    if($appList.Keys.IndexOf($app) -ne -1){
+function restoreApp($app) {
+    if ($appList.ContainsKey($app)) {
         $path = $appList[$app].path
-    }else{
+    } else {
         $path = $app
     }
-    if ( Test-Path "$path.bak" -PathType Leaf )
-    {
+    if (Test-Path "$path.bak" -PathType Leaf) {
         Write-Host "Found and restore $app ..."
         rm "$path"
         mv "$path.bak" "$path"
         rm "$path.patched.md5"
         Write-Host "Restore succeeded."
-    }else{
+    } else {
         Write-Host "The backup file does not exist, skipped."
     }
 }
@@ -371,31 +358,30 @@ if ((Get-Variable -Name IsWindows -ErrorAction SilentlyContinue) -eq $null) { # 
 }
 if ($IsWindows) {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-    if(!$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
-    {
+    if (!$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
         Write-Host "Privilege is not sufficient, elevating..."
         $_args = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
         Start-Process -FilePath PowerShell.exe -Verb runas -ArgumentList $_args
         exit
     }
 }
-if($args.length){
-    if($args[0] -ieq "restore"){
-        if($args.length -gt 1){
+if ($args.length) {
+    if ($args[0] -ieq "restore") {
+        if ($args.length -gt 1) {
             foreach ($app in $args[1..$args.Length]) {
                 restoreApp $app
             }
-        }else{
+        } else {
             foreach ($app in $appList.Keys) {
                 restoreApp $app
             }
         }
-    }else{
+    } else {
         foreach ($app in $args) {
             patchApp $app
         }
     }
-}else{
+} else {
     foreach ($app in $appList.Keys) {
         patchApp $app
     }
