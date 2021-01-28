@@ -50,13 +50,13 @@ public struct SectionHeader {
 function Search-Binary {
     [cmdletbinding()]
     Param (
-        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True,Mandatory=$True)]
+        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, Mandatory=$True)]
         [Byte[]]$BinaryValue,
-        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True,Mandatory=$True)]
+        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, Mandatory=$True)]
         [Byte[]]$Pattern,
-        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True)]
+        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
         [bool]$First,
-        [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True)]
+        [parameter(ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True)]
         [bool]$Reverse
     )
     #  Original method function originally by Tommaso Belluzzo
@@ -141,115 +141,117 @@ $patchsData = @(
     }
 )
 
-function patch($path)
-{
+function patch($path) {
     $mmf = [System.IO.MemoryMappedFiles.MemoryMappedFile]::CreateFromFile($path)
     $accessor = $mmf.CreateViewAccessor()
-    $peOffset = $accessor.ReadUInt32(0x3C)
-    $signature = [Byte[]]::new(4)
-    $null = $accessor.ReadArray($peOffset, $signature, 0, $signature.Length)
-    if($null -eq (Compare-Object $signature ([Byte[]](0x50, 0x45, 0x00, 0x00)))){
-        $coffHeaderOffset = $peOffset + 4
-        # echo "coffHeaderOffset" $coffHeaderOffset
-        $coffHeader = [CoffHeader]@{}
-        $null = $accessor.Read($coffHeaderOffset, [ref]$coffHeader)
-        # echo "coffHeader" $coffHeader
+    try {
+        $peOffset = $accessor.ReadUInt32(0x3C)
+        $signature = [Byte[]]::new(4)
+        $null = $accessor.ReadArray($peOffset, $signature, 0, $signature.Length)
+        if ($null -eq (Compare-Object $signature ([Byte[]](0x50, 0x45, 0x00, 0x00)))) {
+            $coffHeaderOffset = $peOffset + 4
+            # echo "coffHeaderOffset" $coffHeaderOffset
+            $coffHeader = [CoffHeader]@{}
+            $null = $accessor.Read($coffHeaderOffset, [ref]$coffHeader)
+            # echo "coffHeader" $coffHeader
 
-        $optionalHeaderOffset = $coffHeaderOffset + [Runtime.InteropServices.Marshal]::SizeOf($coffHeader)
-        # echo "optionalHeaderOffset" $optionalHeaderOffset
-        $optionalHeader = [OptionalHeader]@{}
-        $null = $accessor.Read($optionalHeaderOffset, [ref]$OptionalHeader)
-        # echo "optionalHeader" $optionalHeader
+            $optionalHeaderOffset = $coffHeaderOffset + [Runtime.InteropServices.Marshal]::SizeOf($coffHeader)
+            # echo "optionalHeaderOffset" $optionalHeaderOffset
+            $optionalHeader = [OptionalHeader]@{}
+            $null = $accessor.Read($optionalHeaderOffset, [ref]$OptionalHeader)
+            # echo "optionalHeader" $optionalHeader
 
-        $SectionHeadersOffset = $optionalHeaderOffset + $coffHeader.SizeOfOptionalHeader
-        # echo "SectionHeadersOffset" $SectionHeadersOffset
-        $textAddress = 0
-        $textOffset = 0
-        $textSize = 0
-        $rdataAddress = 0
-        $rdataOffset = 0
-        $rdataSize = 0
-        for ($i = 0; $i -lt $coffHeader.NumberOfSections; $i++) {
-            $sectionHeader = [SectionHeader]@{}
-            $null = $accessor.Read($SectionHeadersOffset + [Runtime.InteropServices.Marshal]::SizeOf($sectionHeader) * $i, [ref]$sectionHeader)
-            # echo $sectionHeader
-            if ($sectionHeader.Name -eq $DOT_TEXT) {
-                $textAddress = $sectionHeader.VirtualAddress 
-                $textOffset = $sectionHeader.PointerToRawData
-                $textSize = $sectionHeader.SizeOfRawData
-            }elseif ($sectionHeader.Name -eq $DOT_RDATA) {
-                $rdataAddress = $sectionHeader.VirtualAddress 
-                $rdataOffset = $sectionHeader.PointerToRawData
-                $rdataSize = $sectionHeader.SizeOfRawData
+            $SectionHeadersOffset = $optionalHeaderOffset + $coffHeader.SizeOfOptionalHeader
+            # echo "SectionHeadersOffset" $SectionHeadersOffset
+            $textAddress = 0
+            $textOffset = 0
+            $textSize = 0
+            $rdataAddress = 0
+            $rdataOffset = 0
+            $rdataSize = 0
+            for ($i = 0; $i -lt $coffHeader.NumberOfSections; $i++) {
+                $sectionHeader = [SectionHeader]@{}
+                $null = $accessor.Read($SectionHeadersOffset + [Runtime.InteropServices.Marshal]::SizeOf($sectionHeader) * $i, [ref]$sectionHeader)
+                # echo $sectionHeader
+                if ($sectionHeader.Name -eq $DOT_TEXT) {
+                    $textAddress = $sectionHeader.VirtualAddress 
+                    $textOffset = $sectionHeader.PointerToRawData
+                    $textSize = $sectionHeader.SizeOfRawData
+                } elseif ($sectionHeader.Name -eq $DOT_RDATA) {
+                    $rdataAddress = $sectionHeader.VirtualAddress 
+                    $rdataOffset = $sectionHeader.PointerToRawData
+                    $rdataSize = $sectionHeader.SizeOfRawData
+                }
             }
-        }
-        if($textOffset -and $textSize){
-            $patched = 0
-            foreach ($patchData in $patchsData) {
-                $funcOffsetList = @()
-                if($patchData.funcTrait.type -eq "callLeaRdxKeyword"){
-                    if($rdataOffset -and $rdataSize){
-                        $addressDifferenceForTextAndRdata = ($rdataAddress - $rdataOffset) - ($textAddress - $textOffset)
-                        $b = [Byte[]]::new($rdataSize)
-                        $null = $accessor.ReadArray($rdataOffset, $b, 0, $b.length)
-                        $p = Search-Binary $b ($patchData.funcTrait.keywordString.ToCharArray()) $true
-                        if ($p.Length) {
-                            $strOffset = $rdataOffset + $p[0]
-                            $b = [Byte[]]::new($textSize)
-                            $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
-                            $p = Search-Binary $b (0x48, 0x8D, 0x15)
-                            foreach ($pp in $p) {
-                                $callKeywordOffset = $textOffset + $pp
-                                $op = $accessor.ReadUInt32($textOffset + $pp + 3)
-                                if (($callKeywordOffset + 7 + $op - $addressDifferenceForTextAndRdata ) -eq $strOffset) {
-                                    $b = [Byte[]]::new($callKeywordOffset - $textOffset)
-                                    $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
-                                    $sp = Search-Binary $b (0xCC) $true $true
-                                    $start = $textOffset
-                                    if ($sp.Length) {
-                                        $start = $textOffset + $sp[0] + 1
+            if ($textOffset -and $textSize) {
+                $patched = 0
+                foreach ($patchData in $patchsData) {
+                    $funcOffsetList = @()
+                    if ($patchData.funcTrait.type -eq "callLeaRdxKeyword") {
+                        if ($rdataOffset -and $rdataSize) {
+                            $addressDifferenceForTextAndRdata = ($rdataAddress - $rdataOffset) - ($textAddress - $textOffset)
+                            $b = [Byte[]]::new($rdataSize)
+                            $null = $accessor.ReadArray($rdataOffset, $b, 0, $b.length)
+                            $p = Search-Binary $b ($patchData.funcTrait.keywordString.ToCharArray()) $true
+                            if ($p.Length) {
+                                $strOffset = $rdataOffset + $p[0]
+                                $b = [Byte[]]::new($textSize)
+                                $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
+                                $p = Search-Binary $b (0x48, 0x8D, 0x15)
+                                foreach ($pp in $p) {
+                                    $callKeywordOffset = $textOffset + $pp
+                                    $op = $accessor.ReadUInt32($textOffset + $pp + 3)
+                                    if (($callKeywordOffset + 7 + $op - $addressDifferenceForTextAndRdata ) -eq $strOffset) {
+                                        $b = [Byte[]]::new($callKeywordOffset - $textOffset)
+                                        $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
+                                        $sp = Search-Binary $b (0xCC) $true $true
+                                        $start = $textOffset
+                                        if ($sp.Length) {
+                                            $start = $textOffset + $sp[0] + 1
+                                        }
+                                        $b = [Byte[]]::new($textOffset + $textSize - $callKeywordOffset)
+                                        $null = $accessor.ReadArray($callKeywordOffset, $b, 0, $b.length)
+                                        $ep = Search-Binary $b (0xCC) $true
+                                        $end = $textOffset + $textSize
+                                        if ($ep.Length) {
+                                            $end = $callKeywordOffset + $ep[0]
+                                        }
+                                        $funcOffsetList += @{start = $start; size = $end - $start}
                                     }
-                                    $b = [Byte[]]::new($textOffset + $textSize - $callKeywordOffset)
-                                    $null = $accessor.ReadArray($callKeywordOffset, $b, 0, $b.length)
-                                    $ep = Search-Binary $b (0xCC) $true
-                                    $end = $textOffset + $textSize
-                                    if ($ep.Length) {
-                                        $end = $callKeywordOffset + $ep[0]
-                                    }
-                                    $funcOffsetList += @{start = $start; size = $end - $start}
                                 }
+                            } else {
+                                Write-Host ("Error: Keyword String '" + $patchData.funcTrait.keywordString + "' not found.")
+                            }
+                        } else {
+                            Write-Host "Error: '.rdata' not found."
+                        }
+                    } else {
+                        Write-Host "Error: Unknow funstion trait type."
+                    }
+                    foreach ($funcOffset in $funcOffsetList) {
+                        $b = [Byte[]]::new($funcOffset.size)
+                        $null = $accessor.ReadArray($funcOffset.start, $b, 0, $b.length)
+                        foreach ($patchPoint in $patchData.patchPointList) {
+                            $p = Search-Binary $b $patchPoint.find $true
+                            if ($p.Length) {
+                                $patchPointOffset = $funcOffset.start + $p
+                                $accessor.WriteArray($patchPointOffset, $patchPoint.replace, 0, $patchPoint.replace.Length)
+                                $patched += 1
+                            } else {
+                                Write-Host ("Error: (" + $patchPoint.find + ") not found.")
                             }
                         }
-                        else {
-                            Write-Host ("Error: Keyword String '" + $patchData.funcTrait.keywordString + "' not found.")
-                        }
-                    }else {
-                        Write-Host "Error: '.rdata' not found."
-                    }
-                }else {
-                    Write-Host "Error: Unknow funstion trait type."
-                }
-                foreach ($funcOffset in $funcOffsetList) {
-                    $b = [Byte[]]::new($funcOffset.size)
-                    $null = $accessor.ReadArray($funcOffset.start, $b, 0, $b.length)
-                    foreach ($patchPoint in $patchData.patchPointList) {
-                        $p = Search-Binary $b $patchPoint.find $true
-                        if($p.Length){
-                            $patchPointOffset = $funcOffset.start + $p
-                            $accessor.WriteArray($patchPointOffset, $patchPoint.replace, 0, $patchPoint.replace.Length)
-                            $patched+=1
-                        }else{
-                            Write-Host ("Error: (" + $patchPoint.find + ") not found.")
-                        }
                     }
                 }
+                return $patched
+            } else {
+                Write-Host "Error: '.text' not found."
             }
-            return $patched
+            return $false
         }
-        else {
-            Write-Host "Error: '.text' not found."
-        }
-        return $false
+    } finally {
+        $accessor.Dispose()
+        $mmf.Dispose()
     }
 }
 
@@ -304,95 +306,87 @@ $appList = @{
     }
 }
 
-function verify_patched_hash($path){
-    if(Test-Path "$path.patched.md5" -PathType Leaf)
-    {
+function verifyPatchedHash($path) {
+    if(Test-Path "$path.patched.md5" -PathType Leaf) {
         return (cat "$path.patched.md5") -eq (Get-FileHash "$path" -Algorithm MD5).Hash
     }
     return $false
 }
 
-function patchApp($app)
-{
-    if($appList.Keys.IndexOf($app) -ne -1){
+function patchApp($app) {
+    if ($appList.ContainsKey($app)) {
         $path = $appList[$app].path
-    }else{
+    } else {
         $path = $app
     }
-    if (Test-Path "$path" -PathType Leaf)
-    {
+    if (Test-Path "$path" -PathType Leaf) {
         Write-Host "Found and patching $app"
-        if ((Test-Path "$path.bak" -PathType Leaf) -and (verify_patched_hash "$path"))
-        {
+        if ((Test-Path "$path.bak" -PathType Leaf) -and (verifyPatchedHash "$path")) {
             Write-Host "Already patched, skipped."
             return
         }
-        if(Test-Path "$path.bak" -PathType Leaf)
-        {
+        if(Test-Path "$path.bak" -PathType Leaf) {
             rm "$path.bak"
         }
         mv "$path" "$path.bak"
         cp "$path.bak" "$path"
         Write-Host "Backup succeeded."
         $patched = patch "$path"
-        if($patched)
-        {
+        if($patched) {
             (Get-FileHash "$path" -Algorithm MD5).Hash > "$path.patched.md5"
             Write-Host "Patch succeeded, patched point: $patched"
-        }
-        else
-        {
+        } else {
             Write-Host "Patch faild."
         }
     }
 }
 
-function restoreApp($app)
-{
-    if($appList.Keys.IndexOf($app) -ne -1){
+function restoreApp($app) {
+    if ($appList.ContainsKey($app)) {
         $path = $appList[$app].path
-    }else{
+    } else {
         $path = $app
     }
-    if ( Test-Path "$path.bak" -PathType Leaf )
-    {
+    if (Test-Path "$path.bak" -PathType Leaf) {
         Write-Host "Found and restore $app ..."
         rm "$path"
         mv "$path.bak" "$path"
         rm "$path.patched.md5"
         Write-Host "Restore succeeded."
-    }else{
+    } else {
         Write-Host "The backup file does not exist, skipped."
     }
 }
 
+if ((Get-Variable -Name IsWindows -ErrorAction SilentlyContinue) -eq $null) { # IsWindows is PowerShell Core 5.0's feature
+    $IsWindows = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT
+}
 if ($IsWindows) {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-    if(!$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
-    {
+    if (!$currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
         Write-Host "Privilege is not sufficient, elevating..."
         $_args = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
         Start-Process -FilePath PowerShell.exe -Verb runas -ArgumentList $_args
         exit
     }
 }
-if($args.length){
-    if($args[0] -ieq "restore"){
-        if($args.length -gt 1){
+if ($args.length) {
+    if ($args[0] -ieq "restore") {
+        if ($args.length -gt 1) {
             foreach ($app in $args[1..$args.Length]) {
                 restoreApp $app
             }
-        }else{
+        } else {
             foreach ($app in $appList.Keys) {
                 restoreApp $app
             }
         }
-    }else{
+    } else {
         foreach ($app in $args) {
             patchApp $app
         }
     }
-}else{
+} else {
     foreach ($app in $appList.Keys) {
         patchApp $app
     }
