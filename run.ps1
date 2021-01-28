@@ -314,7 +314,7 @@ function verify_patched_hash($path){
 
 function patchApp($app)
 {
-    if($appList.Keys.IndexOf($app) -ne -1){
+    if($appList.ContainsKey($app)){
         $path = $appList[$app].path
     }else{
         $path = $app
