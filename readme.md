@@ -8,13 +8,9 @@
 
 ### Mac
 
-* Via curl
+* Via curl and python3
 
   ```sudo python3 -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py)"```
-
-* Via wget
-
-  ```sudo python3 -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py -O -)"```
 
 ### Win
 
@@ -26,13 +22,9 @@
 
 ### Mac
 
-* Via curl
+* Via curl and python3
 
   ```sudo python3 -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py)" restore```
-
-* Via wget
-
-  ```sudo python3 -c "$(wget https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py -O -)" restore```
 
 ### Win
 
