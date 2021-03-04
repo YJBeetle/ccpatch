@@ -153,7 +153,7 @@ appList = {
         "/Contents/MacOS/PublicLib.dylib"
     },
     "au": {
-        "path": "/Applications/Adobe Audition/Adobe Audition.app"
+        "path": "/Applications/Adobe Audition 2020/Adobe Audition 2020.app"
         "/Contents/Frameworks/AuUI.framework/Versions/A/AuUI"
     },
     "pr": {
