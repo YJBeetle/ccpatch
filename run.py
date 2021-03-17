@@ -60,9 +60,10 @@ patchsData = [
     {
         'funcTrait': {
             'cpuType': CPU_TYPE_X86_64,
-            'type': 'callLeaEsiKeyword',
-            'keywordString': b"PROFILE_AVAILABLE"
-            'functionSplit': bytes([0xC3, 0x55])
+            'type': 'callKeyword',
+            'op': bytes([0x48, 0x8D, 0x35]), # LeaEsi
+            'keywordString': b"PROFILE_AVAILABLE",
+            'functionSplit': bytes([0xC3, 0x55]),
         },
         'patchPointList': [
             {'find': bytes([0xB8, 0x92, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
@@ -167,7 +168,7 @@ def patch(path: str):
                     if patchData['funcTrait']['cpuType'] != machHeader.cputype:
                         break
                     funcOffsetList = []
-                    if patchData['funcTrait']['type'] == 'callLeaEsiKeyword':
+                    if patchData['funcTrait']['type'] == 'callKeyword':
                         if cstringOffset and cstringOffsetEnd:
                             addressDifferenceForTextAndCstring = (cstringAddress - cstringOffset) - (textAddress - textOffset)
                             strOffset = mm.find(patchData['funcTrait']['keywordString'],
@@ -175,16 +176,16 @@ def patch(path: str):
                             if strOffset:
                                 callKeywordOffset = textOffset
                                 while True:
-                                    callKeywordOffset = mm.find(bytes([0x48, 0x8D, 0x35]), callKeywordOffset, textOffsetEnd)
+                                    callKeywordOffset = mm.find(patchData['funcTrait']['op'], callKeywordOffset, textOffsetEnd)
                                     if callKeywordOffset == -1:
                                         break
-                                    op, = struct.unpack("@I", mm[callKeywordOffset + 3: callKeywordOffset + 7])
-                                    if callKeywordOffset + 7 + op - addressDifferenceForTextAndCstring == strOffset:
+                                    op, = struct.unpack("@I", mm[callKeywordOffset + len(patchData['funcTrait']['op']):callKeywordOffset + len(patchData['funcTrait']['op']) + 4])
+                                    if callKeywordOffset + len(patchData['funcTrait']['op']) + 4 + op - addressDifferenceForTextAndCstring == strOffset:
                                         start = mm.rfind(patchData['funcTrait']['functionSplit'], textOffset, callKeywordOffset)
-                                        end = mm.find(patchData['funcTrait']['functionSplit'], callKeywordOffset + 7, textOffsetEnd)
+                                        end = mm.find(patchData['funcTrait']['functionSplit'], callKeywordOffset + len(patchData['funcTrait']['op']) + 4, textOffsetEnd)
                                         if start != -1 and end != -1:
                                             funcOffsetList.append({"start": start, "end": end})
-                                    callKeywordOffset += 7
+                                    callKeywordOffset += len(patchData['funcTrait']['op']) + 4
                             else:
                                 print("Error: Keyword String '%s' not found." % patchData['funcTrait']['keywordString'], file=sys.stderr)
                         else:

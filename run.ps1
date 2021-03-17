@@ -126,7 +126,8 @@ function Search-Binary {
 $patchsData = @(
     @{
         funcTrait = @{
-            type = 'callLeaRdxKeyword'
+            type = 'callKeyword'
+            op = [Byte[]](0x48, 0x8D, 0x15) # LeaRdx
             keywordString = "PROFILE_AVAILABLE"
             functionSplit = [Byte[]](0xCC)
         }
@@ -194,7 +195,7 @@ function patch($path) {
         if ($textOffset -and $textSize) {
             foreach ($patchData in $patchsData) {
                 $funcOffsetList = @()
-                if ($patchData.funcTrait.type -eq "callLeaRdxKeyword") {
+                if ($patchData.funcTrait.type -eq "callKeyword") {
                     if ($rdataOffset -and $rdataSize) {
                         $addressDifferenceForTextAndRdata = ($rdataAddress - $rdataOffset) - ($textAddress - $textOffset)
                         $b = [Byte[]]::new($rdataSize)
@@ -204,11 +205,11 @@ function patch($path) {
                             $strOffset = $rdataOffset + $p[0]
                             $b = [Byte[]]::new($textSize)
                             $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
-                            $p = Search-Binary $b (0x48, 0x8D, 0x15)
+                            $p = Search-Binary $b $patchData.funcTrait.op
                             foreach ($pp in $p) {
                                 $callKeywordOffset = $textOffset + $pp
                                 $op = $accessor.ReadUInt32($textOffset + $pp + 3)
-                                if (($callKeywordOffset + 7 + $op - $addressDifferenceForTextAndRdata ) -eq $strOffset) {
+                                if (($callKeywordOffset + $patchData.funcTrait.op.length + 4 + $op - $addressDifferenceForTextAndRdata ) -eq $strOffset) {
                                     $b = [Byte[]]::new($callKeywordOffset - $textOffset)
                                     $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
                                     $sp = Search-Binary $b $patchData.funcTrait.functionSplit $true $true
