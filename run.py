@@ -133,68 +133,97 @@ def patch(path: str):
 
 appList = {
     "ps": {
-        "path": "/Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app"
-        "/Contents/MacOS/Adobe Photoshop 2021"
+        "paths": [
+            "/Applications/Adobe Photoshop 2020/Adobe Photoshop 2020.app/Contents/MacOS/Adobe Photoshop 2020",
+            "/Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app/Contents/MacOS/Adobe Photoshop 2021",
+        ]
     },
     "lr": {
-        "path": "/Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app"
-        "/Contents/MacOS/Adobe Lightroom Classic"
+        "paths": [
+            "/Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app/Contents/MacOS/Adobe Lightroom Classic",
+        ]
     },
     "ai": {
-        "path": "/Applications/Adobe Illustrator 2021/Adobe Illustrator.app"
-        "/Contents/MacOS/Adobe Illustrator"
+        "paths": [
+            "/Applications/Adobe Illustrator 2020/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
+            "/Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
+        ]
     },
     "id": {
-        "path": "/Applications/Adobe InDesign/Adobe InDesign.app"
-        "/Contents/MacOS/PublicLib.dylib"
+        "paths": [
+            "/Applications/Adobe InDesign 2020/Adobe InDesign 2020.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InDesign 2021/Adobe InDesign 2021.app/Contents/MacOS/PublicLib.dylib",
+        ]
     },
     "ic": {
-        "path": "/Applications/Adobe InCopy/Adobe InCopy.app"
-        "/Contents/MacOS/PublicLib.dylib"
+        "paths": [
+            "/Applications/Adobe InCopy 2020/Adobe InCopy 2020.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InCopy 2021/Adobe InCopy 2021.app/Contents/MacOS/PublicLib.dylib",
+        ]
     },
     "au": {
-        "path": "/Applications/Adobe Audition 2020/Adobe Audition 2020.app"
-        "/Contents/Frameworks/AuUI.framework/Versions/A/AuUI"
+        "paths": [
+            "/Applications/Adobe Audition 2020/Adobe Audition 2020.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
+            "/Applications/Adobe Audition 2021/Adobe Audition 2021.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
+        ]
     },
     "pr": {
-        "path": "/Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app"
-        "/Contents/Frameworks/Registration.framework/Versions/A/Registration"
+        "paths": [
+            "/Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Premiere Pro 2021/Adobe Premiere Pro 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+        ]
     },
     "pl": {
-        "path": "/Applications/Adobe Prelude/Adobe Prelude.app"
-        "/Contents/Frameworks/Registration.framework/Versions/A/Registration"
+        "paths": [
+            "/Applications/Adobe Prelude 2020/Adobe Prelude 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Prelude 2021/Adobe Prelude 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+        ]
     },
     "ch": {
-        "path": "/Applications/Adobe Character Animator/Adobe Character Animator.app"
-        "/Contents/MacOS/Character Animator"
+        "paths": [
+            "/Applications/Adobe Character Animator 2020/Adobe Character Animator 2020.app/Contents/MacOS/Character Animator",
+            "/Applications/Adobe Character Animator 2021/Adobe Character Animator 2021.app/Contents/MacOS/Character Animator",
+        ]
     },
     "ae": {
-        "path": "/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app"
-        "/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib"
+        "paths": [
+            "/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
+            "/Applications/Adobe After Effects 2021/Adobe After Effects 2021.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
+        ]
     },
     "me": {
-        "path": "/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app"
-        "/Contents/MacOS/Adobe Media Encoder 2020"
+        "paths": [
+            "/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder 2020",
+            "/Applications/Adobe Media Encoder 2021/Adobe Media Encoder 2021.app/Contents/MacOS/Adobe Media Encoder 2021",
+        ]
     },
     "br": {
-        "path": "/Applications/Adobe Bridge/Adobe Bridge.app"
-        "/Contents/MacOS/Adobe Bridge"
+        "paths": [
+            "/Applications/Adobe Bridge 2020/Adobe Bridge 2020.app/Contents/MacOS/Adobe Bridge",
+            "/Applications/Adobe Bridge 2021/Adobe Bridge 2021.app/Contents/MacOS/Adobe Bridge",
+        ]
     },
     "an": {
-        "path": "/Applications/Adobe Animate/Adobe Animate.app"
-        "/Contents/MacOS/Adobe Animate"
+        "paths": [
+            "/Applications/Adobe Animate 2020/Adobe Animate 2020.app/Contents/MacOS/Adobe Animate",
+            "/Applications/Adobe Animate 2021/Adobe Animate 2021.app/Contents/MacOS/Adobe Animate",
+        ]
     },
     "dw": {
-        "path": "/Applications/Adobe Dreamweaver/Adobe Dreamweaver.app"
-        "/Contents/MacOS/Dreamweaver"
+        "paths": [
+            "/Applications/Adobe Dreamweaver 2020/Adobe Dreamweaver 2020.app/Contents/MacOS/Dreamweaver",
+            "/Applications/Adobe Dreamweaver 2021/Adobe Dreamweaver 2021.app/Contents/MacOS/Dreamweaver",
+        ]
     },
     "dn": {
-        "path": "/Applications/Adobe Dimension/Adobe Dimension.app"
-        "/Contents/Frameworks/euclid-core-plugin.pepper"
+        "paths": [
+            "/Applications/Adobe Dimension/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper",
+        ]
     },
     "acrobat": {
-        "path": "/Applications/Adobe Acrobat DC/Adobe Acrobat.app"
-        "/Contents/Frameworks/Acrobat.framework/Versions/A/Acrobat"
+        "paths": [
+            "/Applications/Adobe Acrobat DC/Adobe Acrobat.app/Contents/Frameworks/Acrobat.framework/Versions/A/Acrobat",
+        ]
     },
 }
 
@@ -209,11 +238,7 @@ def verify_patched_hash(path: str):
     return False
 
 
-def patchApp(app: str):
-    if app in appList:
-        path = appList[app.lower()]["path"]
-    else:
-        path = app
+def patchPath(path: str):
     if os.path.exists(path):
         print("Found and patching %s" % app)
         if os.path.exists('%s.bak' % path) and verify_patched_hash(path):
@@ -231,6 +256,13 @@ def patchApp(app: str):
         else:
             print("Patch faild.")
 
+def patchApp(app: str):
+    if app in appList:
+        paths = appList[app.lower()]["paths"]
+        for path in paths:
+            patchPath(path)
+    else:
+        patchPath(app)
 
 def restoreApp(app: str):
     if app in appList:
