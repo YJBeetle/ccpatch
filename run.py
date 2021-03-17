@@ -105,8 +105,8 @@ def patch(path: str):
                                     break
                                 op, = struct.unpack("@I", mm[callKeywordOffset + 3: callKeywordOffset + 7])
                                 if callKeywordOffset + 7 + op - addressDifferenceForTextAndCstring == strOffset:
-                                    start = mm.rfind(bytes([0x55]), textOffset, callKeywordOffset)
-                                    end = mm.find(bytes([0x55]), callKeywordOffset, textOffsetEnd)
+                                    start = mm.rfind(bytes([0xC3, 0x55]), textOffset, callKeywordOffset)
+                                    end = mm.find(bytes([0xC3, 0x55]), callKeywordOffset + 7, textOffsetEnd)
                                     if start != -1 and end != -1:
                                         funcOffsetList.append({"start": start, "end": end})
                                 callKeywordOffset += 7
