@@ -59,6 +59,7 @@ section_64_struct_BE = '>16s16sQQIIIIIIII'
 patchsData = [
     {
         'funcTrait': {
+            'cpuType': CPU_TYPE_X86_64,
             'type': 'callLeaEsiKeyword',
             'keywordString': b"PROFILE_AVAILABLE"
         },
@@ -76,13 +77,8 @@ patchsData = [
 
 
 def patch(path: str):
+    patched = 0
     with open(path, "r+b") as f:
-        textAddress = 0
-        textOffset = 0
-        textOffsetEnd = 0
-        cstringAddress = 0
-        cstringOffset = 0
-        cstringOffsetEnd = 0
         mm = mmap.mmap(f.fileno(), 0)
 
         global fat_header_struct
@@ -124,75 +120,89 @@ def patch(path: str):
                 segment_command_64_struct = segment_command_64_struct_BE
                 section_64_struct = section_64_struct_BE
             # print(machHeader)
-            if machHeader.magic == MH_MAGIC_64 and machHeader.cputype == CPU_TYPE_X86_64 and (machHeader.filetype == MH_EXECUTE or machHeader.filetype == MH_DYLIB):
-                cmdOffset = machOffset['start'] + struct.calcsize(mach_header_64_struct)
-                for ncmd in range(0, machHeader.ncmds):
-                    cmd = load_command._make(
-                        struct.unpack(load_command_struct,
-                                    mm[cmdOffset:cmdOffset+struct.calcsize(load_command_struct)]))
+            if machHeader.magic != MH_MAGIC_64:
+                print("Error: Unknow magic number.", file=sys.stderr)
+                break
+            if machHeader.cputype != CPU_TYPE_X86_64 and machHeader.cputype != CPU_TYPE_ARM64:
+                print("Error: Unknow CPU type.", file=sys.stderr)
+                break
+            if machHeader.filetype != MH_EXECUTE and machHeader.filetype != MH_DYLIB:
+                print("Error: Not executable or library.", file=sys.stderr)
+                break
+            cmdOffset = machOffset['start'] + struct.calcsize(mach_header_64_struct)
+            textAddress = 0
+            textOffset = 0
+            textOffsetEnd = 0
+            cstringAddress = 0
+            cstringOffset = 0
+            cstringOffsetEnd = 0
+            for ncmd in range(0, machHeader.ncmds):
+                cmd = load_command._make(
+                    struct.unpack(load_command_struct,
+                                mm[cmdOffset:cmdOffset+struct.calcsize(load_command_struct)]))
+                # print(cmd)
+                if cmd.cmd == LC_SEGMENT_64:
+                    cmd = segment_command_64._make(
+                        struct.unpack(segment_command_64_struct,
+                                    mm[cmdOffset:cmdOffset+struct.calcsize(segment_command_64_struct)]))
                     # print(cmd)
-                    if cmd.cmd == LC_SEGMENT_64:
-                        cmd = segment_command_64._make(
-                            struct.unpack(segment_command_64_struct,
-                                        mm[cmdOffset:cmdOffset+struct.calcsize(segment_command_64_struct)]))
-                        # print(cmd)
-                        nsectOffset = cmdOffset + struct.calcsize(segment_command_64_struct)
-                        for nsect in range(0, cmd.nsects):
-                            sect = section_64._make(
-                                struct.unpack(section_64_struct,
-                                            mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
-                            if sect.sectname.decode("ascii").startswith("__text"):
-                                textAddress = sect.addr
-                                textOffset = sect.offset
-                                textOffsetEnd = textOffset + sect.size
-                            elif sect.sectname.decode("ascii").startswith("__cstring"):
-                                cstringAddress = sect.addr
-                                cstringOffset = sect.offset
-                                cstringOffsetEnd = cstringOffset + sect.size
-                            nsectOffset += struct.calcsize(section_64_struct)
-                    cmdOffset += cmd.cmdsize
-
-        if textOffset and textOffsetEnd:
-            patched = 0
-            for patchData in patchsData:
-                funcOffsetList = []
-                if patchData['funcTrait']['type'] == 'callLeaEsiKeyword':
-                    if cstringOffset and cstringOffsetEnd:
-                        addressDifferenceForTextAndCstring = (cstringAddress - cstringOffset) - (textAddress - textOffset)
-                        strOffset = mm.find(patchData['funcTrait']['keywordString'],
-                                            cstringOffset, cstringOffsetEnd)
-                        if strOffset:
-                            callKeywordOffset = textOffset
-                            while True:
-                                callKeywordOffset = mm.find(bytes([0x48, 0x8D, 0x35]), callKeywordOffset, textOffsetEnd)
-                                if callKeywordOffset == -1:
-                                    break
-                                op, = struct.unpack("@I", mm[callKeywordOffset + 3: callKeywordOffset + 7])
-                                if callKeywordOffset + 7 + op - addressDifferenceForTextAndCstring == strOffset:
-                                    start = mm.rfind(bytes([0xC3, 0x55]), textOffset, callKeywordOffset)
-                                    end = mm.find(bytes([0xC3, 0x55]), callKeywordOffset + 7, textOffsetEnd)
-                                    if start != -1 and end != -1:
-                                        funcOffsetList.append({"start": start, "end": end})
-                                callKeywordOffset += 7
+                    nsectOffset = cmdOffset + struct.calcsize(segment_command_64_struct)
+                    for nsect in range(0, cmd.nsects):
+                        sect = section_64._make(
+                            struct.unpack(section_64_struct,
+                                        mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
+                        if sect.sectname.decode("ascii").startswith("__text"):
+                            textAddress = sect.addr
+                            textOffset = sect.offset
+                            textOffsetEnd = textOffset + sect.size
+                        elif sect.sectname.decode("ascii").startswith("__cstring"):
+                            cstringAddress = sect.addr
+                            cstringOffset = sect.offset
+                            cstringOffsetEnd = cstringOffset + sect.size
+                        nsectOffset += struct.calcsize(section_64_struct)
+                cmdOffset += cmd.cmdsize
+            if textOffset and textOffsetEnd:
+                for patchData in patchsData:
+                    if patchData['funcTrait']['cpuType'] != machHeader.cputype:
+                        break
+                    funcOffsetList = []
+                    if patchData['funcTrait']['type'] == 'callLeaEsiKeyword':
+                        if cstringOffset and cstringOffsetEnd:
+                            addressDifferenceForTextAndCstring = (cstringAddress - cstringOffset) - (textAddress - textOffset)
+                            strOffset = mm.find(patchData['funcTrait']['keywordString'],
+                                                cstringOffset, cstringOffsetEnd)
+                            if strOffset:
+                                callKeywordOffset = textOffset
+                                while True:
+                                    callKeywordOffset = mm.find(bytes([0x48, 0x8D, 0x35]), callKeywordOffset, textOffsetEnd)
+                                    if callKeywordOffset == -1:
+                                        break
+                                    op, = struct.unpack("@I", mm[callKeywordOffset + 3: callKeywordOffset + 7])
+                                    if callKeywordOffset + 7 + op - addressDifferenceForTextAndCstring == strOffset:
+                                        start = mm.rfind(bytes([0xC3, 0x55]), textOffset, callKeywordOffset)
+                                        end = mm.find(bytes([0xC3, 0x55]), callKeywordOffset + 7, textOffsetEnd)
+                                        if start != -1 and end != -1:
+                                            funcOffsetList.append({"start": start, "end": end})
+                                    callKeywordOffset += 7
+                            else:
+                                print("Error: Keyword String '%s' not found." % patchData['funcTrait']['keywordString'], file=sys.stderr)
                         else:
-                            print("Error: Keyword String '%s' not found." % patchData['funcTrait']['keywordString'], file=sys.stderr)
+                            print("Error: '__cstring' not found.", file=sys.stderr)
                     else:
-                        print("Error: '__cstring' not found.", file=sys.stderr)
-                else:
-                    print("Error: Unknow funstion trait type.", file=sys.stderr)
-                for funcOffset in funcOffsetList:
-                    for patchPoint in patchData['patchPointList']:
-                        patchPointOffset = mm.find(patchPoint['find'], funcOffset['start'], funcOffset['end'])
-                        if patchPointOffset != -1:
-                            mm[patchPointOffset:patchPointOffset + len(patchPoint['find'])] = patchPoint['replace']
-                            patched+=1
-                        else:
-                            print("Error: %s not found." % str(patchPoint['find']), file=sys.stderr)
-            return patched
-        else:
-            print("Error: '__text' not found.", file=sys.stderr)
+                        print("Error: Unknow funstion trait type.", file=sys.stderr)
+                    for funcOffset in funcOffsetList:
+                        for patchPoint in patchData['patchPointList']:
+                            patchPointOffset = mm.find(patchPoint['find'], funcOffset['start'], funcOffset['end'])
+                            if patchPointOffset != -1:
+                                mm[patchPointOffset:patchPointOffset + len(patchPoint['find'])] = patchPoint['replace']
+                                patched+=1
+                            else:
+                                print("Error: %s not found." % str(patchPoint['find']), file=sys.stderr)
+                # print(patched)
+            else:
+                print("Error: '__text' not found.", file=sys.stderr)
         mm.close()
-    return False
+    return patched
 
 
 appList = {
