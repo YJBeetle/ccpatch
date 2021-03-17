@@ -128,6 +128,7 @@ $patchsData = @(
         funcTrait = @{
             type = 'callLeaRdxKeyword'
             keywordString = "PROFILE_AVAILABLE"
+            functionSplit = [Byte[]](0xCC)
         }
         patchPointList = @(
             @{find = [Byte[]](0xB8, 0x92, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) },
@@ -210,14 +211,14 @@ function patch($path) {
                                 if (($callKeywordOffset + 7 + $op - $addressDifferenceForTextAndRdata ) -eq $strOffset) {
                                     $b = [Byte[]]::new($callKeywordOffset - $textOffset)
                                     $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
-                                    $sp = Search-Binary $b (0xCC) $true $true
+                                    $sp = Search-Binary $b $patchData.funcTrait.functionSplit $true $true
                                     $start = $textOffset
                                     if ($sp.Length) {
                                         $start = $textOffset + $sp[0] + 1
                                     }
                                     $b = [Byte[]]::new($textOffset + $textSize - $callKeywordOffset)
                                     $null = $accessor.ReadArray($callKeywordOffset, $b, 0, $b.length)
-                                    $ep = Search-Binary $b (0xCC) $true
+                                    $ep = Search-Binary $b $patchData.funcTrait.functionSplit $true
                                     $end = $textOffset + $textSize
                                     if ($ep.Length) {
                                         $end = $callKeywordOffset + $ep[0]

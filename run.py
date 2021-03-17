@@ -62,6 +62,7 @@ patchsData = [
             'cpuType': CPU_TYPE_X86_64,
             'type': 'callLeaEsiKeyword',
             'keywordString': b"PROFILE_AVAILABLE"
+            'functionSplit': bytes([0xC3, 0x55])
         },
         'patchPointList': [
             {'find': bytes([0xB8, 0x92, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
@@ -179,8 +180,8 @@ def patch(path: str):
                                         break
                                     op, = struct.unpack("@I", mm[callKeywordOffset + 3: callKeywordOffset + 7])
                                     if callKeywordOffset + 7 + op - addressDifferenceForTextAndCstring == strOffset:
-                                        start = mm.rfind(bytes([0xC3, 0x55]), textOffset, callKeywordOffset)
-                                        end = mm.find(bytes([0xC3, 0x55]), callKeywordOffset + 7, textOffsetEnd)
+                                        start = mm.rfind(patchData['funcTrait']['functionSplit'], textOffset, callKeywordOffset)
+                                        end = mm.find(patchData['funcTrait']['functionSplit'], callKeywordOffset + 7, textOffsetEnd)
                                         if start != -1 and end != -1:
                                             funcOffsetList.append({"start": start, "end": end})
                                     callKeywordOffset += 7
