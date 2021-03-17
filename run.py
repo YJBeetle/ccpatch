@@ -7,7 +7,29 @@ import collections
 import hashlib
 import shutil
 
+FAT_MAGIC = 0xcafebabe
+FAT_CIGAM = 0xbebafeca
+
+fat_header = collections.namedtuple(
+    'fat_header',
+    'magic nfat_arch')
+fat_header_struct = '<II'
+fat_header_struct_BE = '>II'
+
+CPU_ARCH_ABI64 = 0x01000000
+CPU_TYPE_X86 = 7
+CPU_TYPE_X86_64 = CPU_TYPE_X86 | CPU_ARCH_ABI64
+CPU_TYPE_ARM = 12
+CPU_TYPE_ARM64 = CPU_TYPE_ARM | CPU_ARCH_ABI64
+
+fat_arch = collections.namedtuple(
+    'fat_arch',
+    'cputype cpusubtype offset size align')
+fat_arch_struct = '<iiIII'
+fat_arch_struct_BE = '>iiIII'
+
 MH_MAGIC_64 = 0xfeedfacf
+MH_CIGAM_64 = 0xcffaedfe
 MH_EXECUTE = 0x2
 MH_DYLIB = 0x6
 LC_SEGMENT_64 = 0x19
@@ -15,20 +37,24 @@ LC_SEGMENT_64 = 0x19
 mach_header_64 = collections.namedtuple(
     'mach_header_64',
     'magic cputype cpusubtype filetype ncmds sizeofcmds flags reserved')
-mach_header_64_struct = '@IiiIIIII'
+mach_header_64_struct = '<IiiIIIII'
+mach_header_64_struct_BE = '>IiiIIIII'
 
 load_command = collections.namedtuple('load_command', 'cmd cmdsize')
-load_command_struct = '@II'
+load_command_struct = '<II'
+load_command_struct_BE = '>II'
 
 segment_command_64 = collections.namedtuple(
     'segment_command_64',
     'cmd cmdsize segname vmaddr vmsize fileoff filesize maxprot initprot nsects flags')
-segment_command_64_struct = '@II16sQQQQiiII'
+segment_command_64_struct = '<II16sQQQQiiII'
+segment_command_64_struct_BE = '>II16sQQQQiiII'
 
 section_64 = collections.namedtuple(
     'section_64',
     'sectname segname addr size offset align reloff nreloc flags reserved1 reserved2 reserved3')
-section_64_struct = '@16s16sQQIIIIIIII'
+section_64_struct = '<16s16sQQIIIIIIII'
+section_64_struct_BE = '>16s16sQQIIIIIIII'
 
 patchsData = [
     {
@@ -48,6 +74,7 @@ patchsData = [
     },
 ]
 
+
 def patch(path: str):
     with open(path, "r+b") as f:
         textAddress = 0
@@ -57,37 +84,74 @@ def patch(path: str):
         cstringOffset = 0
         cstringOffsetEnd = 0
         mm = mmap.mmap(f.fileno(), 0)
-        header = mach_header_64._make(
-            struct.unpack(mach_header_64_struct,
-                          mm[:struct.calcsize(mach_header_64_struct)]))
-        # print(header)
-        if header.magic == MH_MAGIC_64 and (header.filetype == MH_EXECUTE or header.filetype == MH_DYLIB):
-            ncmdOffset = 32
-            for ncmd in range(0, header.ncmds):
-                cmd = load_command._make(
-                    struct.unpack(load_command_struct,
-                                  mm[ncmdOffset:ncmdOffset+struct.calcsize(load_command_struct)]))
-                # print(cmd)
-                if cmd.cmd == LC_SEGMENT_64:
-                    cmd = segment_command_64._make(
-                        struct.unpack(segment_command_64_struct,
-                                      mm[ncmdOffset:ncmdOffset+struct.calcsize(segment_command_64_struct)]))
+
+        global fat_header_struct
+        global fat_arch_struct
+        fatHeader = fat_header._make(
+            struct.unpack(fat_header_struct,
+                          mm[:struct.calcsize(fat_header_struct)]))
+        if fatHeader.magic == FAT_CIGAM:
+            fat_header_struct = fat_header_struct_BE
+            fat_arch_struct = fat_arch_struct_BE
+            fatHeader = fat_header._make(
+                struct.unpack(fat_header_struct,
+                              mm[:struct.calcsize(fat_header_struct)]))
+        machOffsetList = []
+        if fatHeader.magic == FAT_MAGIC:
+            # print(fatHeader)
+            fatArchOffset = 0 + struct.calcsize(fat_header_struct)
+            for nfatArch in range(0, fatHeader.nfat_arch):
+                fatArch = fat_arch._make(
+                    struct.unpack(fat_arch_struct,
+                                  mm[fatArchOffset:fatArchOffset+struct.calcsize(fat_arch_struct)]))
+                # print(fatArch)
+                fatArchOffset += struct.calcsize(fat_arch_struct)
+                machOffsetList.append({"start": fatArch.offset, "end": fatArch.offset+fatArch.size})
+        else:
+            machOffsetList.append({"start": 0, "end": mm.size})
+
+        for machOffset in machOffsetList:
+            global mach_header_64_struct
+            global load_command_struct
+            global segment_command_64_struct
+            global section_64_struct
+            machHeader = mach_header_64._make(
+                struct.unpack(mach_header_64_struct,
+                            mm[machOffset['start']:machOffset['start']+struct.calcsize(mach_header_64_struct)]))
+            if machHeader.magic == MH_CIGAM_64:
+                mach_header_64_struct = mach_header_64_struct_BE
+                load_command_struct = load_command_struct_BE
+                segment_command_64_struct = segment_command_64_struct_BE
+                section_64_struct = section_64_struct_BE
+            # print(machHeader)
+            if machHeader.magic == MH_MAGIC_64 and machHeader.cputype == CPU_TYPE_X86_64 and (machHeader.filetype == MH_EXECUTE or machHeader.filetype == MH_DYLIB):
+                cmdOffset = machOffset['start'] + struct.calcsize(mach_header_64_struct)
+                for ncmd in range(0, machHeader.ncmds):
+                    cmd = load_command._make(
+                        struct.unpack(load_command_struct,
+                                    mm[cmdOffset:cmdOffset+struct.calcsize(load_command_struct)]))
                     # print(cmd)
-                    nsectOffset = ncmdOffset + struct.calcsize(segment_command_64_struct)
-                    for nsect in range(0, cmd.nsects):
-                        sect = section_64._make(
-                            struct.unpack(section_64_struct,
-                                          mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
-                        if sect.sectname.decode("ascii").startswith("__text"):
-                            textAddress = sect.addr
-                            textOffset = sect.offset
-                            textOffsetEnd = textOffset + sect.size
-                        elif sect.sectname.decode("ascii").startswith("__cstring"):
-                            cstringAddress = sect.addr
-                            cstringOffset = sect.offset
-                            cstringOffsetEnd = cstringOffset + sect.size
-                        nsectOffset += struct.calcsize(section_64_struct)
-                ncmdOffset += cmd.cmdsize
+                    if cmd.cmd == LC_SEGMENT_64:
+                        cmd = segment_command_64._make(
+                            struct.unpack(segment_command_64_struct,
+                                        mm[cmdOffset:cmdOffset+struct.calcsize(segment_command_64_struct)]))
+                        # print(cmd)
+                        nsectOffset = cmdOffset + struct.calcsize(segment_command_64_struct)
+                        for nsect in range(0, cmd.nsects):
+                            sect = section_64._make(
+                                struct.unpack(section_64_struct,
+                                            mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
+                            if sect.sectname.decode("ascii").startswith("__text"):
+                                textAddress = sect.addr
+                                textOffset = sect.offset
+                                textOffsetEnd = textOffset + sect.size
+                            elif sect.sectname.decode("ascii").startswith("__cstring"):
+                                cstringAddress = sect.addr
+                                cstringOffset = sect.offset
+                                cstringOffsetEnd = cstringOffset + sect.size
+                            nsectOffset += struct.calcsize(section_64_struct)
+                    cmdOffset += cmd.cmdsize
+
         if textOffset and textOffsetEnd:
             patched = 0
             for patchData in patchsData:
@@ -105,8 +169,8 @@ def patch(path: str):
                                     break
                                 op, = struct.unpack("@I", mm[callKeywordOffset + 3: callKeywordOffset + 7])
                                 if callKeywordOffset + 7 + op - addressDifferenceForTextAndCstring == strOffset:
-                                    start = mm.rfind(bytes([0x55]), textOffset, callKeywordOffset)
-                                    end = mm.find(bytes([0x55]), callKeywordOffset, textOffsetEnd)
+                                    start = mm.rfind(bytes([0xC3, 0x55]), textOffset, callKeywordOffset)
+                                    end = mm.find(bytes([0xC3, 0x55]), callKeywordOffset + 7, textOffsetEnd)
                                     if start != -1 and end != -1:
                                         funcOffsetList.append({"start": start, "end": end})
                                 callKeywordOffset += 7
@@ -133,68 +197,97 @@ def patch(path: str):
 
 appList = {
     "ps": {
-        "path": "/Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app"
-        "/Contents/MacOS/Adobe Photoshop 2021"
+        "paths": [
+            "/Applications/Adobe Photoshop 2020/Adobe Photoshop 2020.app/Contents/MacOS/Adobe Photoshop 2020",
+            "/Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app/Contents/MacOS/Adobe Photoshop 2021",
+        ]
     },
     "lr": {
-        "path": "/Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app"
-        "/Contents/MacOS/Adobe Lightroom Classic"
+        "paths": [
+            "/Applications/Adobe Lightroom Classic/Adobe Lightroom Classic.app/Contents/MacOS/Adobe Lightroom Classic",
+        ]
     },
     "ai": {
-        "path": "/Applications/Adobe Illustrator 2021/Adobe Illustrator.app"
-        "/Contents/MacOS/Adobe Illustrator"
+        "paths": [
+            "/Applications/Adobe Illustrator 2020/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
+            "/Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
+        ]
     },
     "id": {
-        "path": "/Applications/Adobe InDesign/Adobe InDesign.app"
-        "/Contents/MacOS/PublicLib.dylib"
+        "paths": [
+            "/Applications/Adobe InDesign 2020/Adobe InDesign 2020.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InDesign 2021/Adobe InDesign 2021.app/Contents/MacOS/PublicLib.dylib",
+        ]
     },
     "ic": {
-        "path": "/Applications/Adobe InCopy/Adobe InCopy.app"
-        "/Contents/MacOS/PublicLib.dylib"
+        "paths": [
+            "/Applications/Adobe InCopy 2020/Adobe InCopy 2020.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InCopy 2021/Adobe InCopy 2021.app/Contents/MacOS/PublicLib.dylib",
+        ]
     },
     "au": {
-        "path": "/Applications/Adobe Audition 2020/Adobe Audition 2020.app"
-        "/Contents/Frameworks/AuUI.framework/Versions/A/AuUI"
+        "paths": [
+            "/Applications/Adobe Audition 2020/Adobe Audition 2020.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
+            "/Applications/Adobe Audition 2021/Adobe Audition 2021.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
+        ]
     },
     "pr": {
-        "path": "/Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app"
-        "/Contents/Frameworks/Registration.framework/Versions/A/Registration"
+        "paths": [
+            "/Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Premiere Pro 2021/Adobe Premiere Pro 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+        ]
     },
     "pl": {
-        "path": "/Applications/Adobe Prelude/Adobe Prelude.app"
-        "/Contents/Frameworks/Registration.framework/Versions/A/Registration"
+        "paths": [
+            "/Applications/Adobe Prelude 2020/Adobe Prelude 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Prelude 2021/Adobe Prelude 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+        ]
     },
     "ch": {
-        "path": "/Applications/Adobe Character Animator/Adobe Character Animator.app"
-        "/Contents/MacOS/Character Animator"
+        "paths": [
+            "/Applications/Adobe Character Animator 2020/Adobe Character Animator 2020.app/Contents/MacOS/Character Animator",
+            "/Applications/Adobe Character Animator 2021/Adobe Character Animator 2021.app/Contents/MacOS/Character Animator",
+        ]
     },
     "ae": {
-        "path": "/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app"
-        "/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib"
+        "paths": [
+            "/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
+            "/Applications/Adobe After Effects 2021/Adobe After Effects 2021.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
+        ]
     },
     "me": {
-        "path": "/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app"
-        "/Contents/MacOS/Adobe Media Encoder 2020"
+        "paths": [
+            "/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder 2020",
+            "/Applications/Adobe Media Encoder 2021/Adobe Media Encoder 2021.app/Contents/MacOS/Adobe Media Encoder 2021",
+        ]
     },
     "br": {
-        "path": "/Applications/Adobe Bridge/Adobe Bridge.app"
-        "/Contents/MacOS/Adobe Bridge"
+        "paths": [
+            "/Applications/Adobe Bridge 2020/Adobe Bridge 2020.app/Contents/MacOS/Adobe Bridge",
+            "/Applications/Adobe Bridge 2021/Adobe Bridge 2021.app/Contents/MacOS/Adobe Bridge",
+        ]
     },
     "an": {
-        "path": "/Applications/Adobe Animate/Adobe Animate.app"
-        "/Contents/MacOS/Adobe Animate"
+        "paths": [
+            "/Applications/Adobe Animate 2020/Adobe Animate 2020.app/Contents/MacOS/Adobe Animate",
+            "/Applications/Adobe Animate 2021/Adobe Animate 2021.app/Contents/MacOS/Adobe Animate",
+        ]
     },
     "dw": {
-        "path": "/Applications/Adobe Dreamweaver/Adobe Dreamweaver.app"
-        "/Contents/MacOS/Dreamweaver"
+        "paths": [
+            "/Applications/Adobe Dreamweaver 2020/Adobe Dreamweaver 2020.app/Contents/MacOS/Dreamweaver",
+            "/Applications/Adobe Dreamweaver 2021/Adobe Dreamweaver 2021.app/Contents/MacOS/Dreamweaver",
+        ]
     },
     "dn": {
-        "path": "/Applications/Adobe Dimension/Adobe Dimension.app"
-        "/Contents/Frameworks/euclid-core-plugin.pepper"
+        "paths": [
+            "/Applications/Adobe Dimension/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper",
+        ]
     },
     "acrobat": {
-        "path": "/Applications/Adobe Acrobat DC/Adobe Acrobat.app"
-        "/Contents/Frameworks/Acrobat.framework/Versions/A/Acrobat"
+        "paths": [
+            "/Applications/Adobe Acrobat DC/Adobe Acrobat.app/Contents/Frameworks/Acrobat.framework/Versions/A/Acrobat",
+        ]
     },
 }
 
@@ -209,11 +302,7 @@ def verify_patched_hash(path: str):
     return False
 
 
-def patchApp(app: str):
-    if app in appList:
-        path = appList[app.lower()]["path"]
-    else:
-        path = app
+def patchPath(path: str):
     if os.path.exists(path):
         print("Found and patching %s" % app)
         if os.path.exists('%s.bak' % path) and verify_patched_hash(path):
@@ -230,6 +319,15 @@ def patchApp(app: str):
             print("Patch succeeded, patched point: %d" % patched)
         else:
             print("Patch faild.")
+
+
+def patchApp(app: str):
+    if app in appList:
+        paths = appList[app.lower()]["paths"]
+        for path in paths:
+            patchPath(path)
+    else:
+        patchPath(app)
 
 
 def restoreApp(app: str):
