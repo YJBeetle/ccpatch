@@ -7,7 +7,29 @@ import collections
 import hashlib
 import shutil
 
+FAT_MAGIC = 0xcafebabe
+FAT_CIGAM = 0xbebafeca
+
+fat_header = collections.namedtuple(
+    'fat_header',
+    'magic nfat_arch')
+fat_header_struct = '<II'
+fat_header_struct_BE = '>II'
+
+CPU_ARCH_ABI64 = 0x01000000
+CPU_TYPE_X86 = 7
+CPU_TYPE_X86_64 = CPU_TYPE_X86 | CPU_ARCH_ABI64
+CPU_TYPE_ARM = 12
+CPU_TYPE_ARM64 = CPU_TYPE_ARM | CPU_ARCH_ABI64
+
+fat_arch = collections.namedtuple(
+    'fat_arch',
+    'cputype cpusubtype offset size align')
+fat_arch_struct = '<iiIII'
+fat_arch_struct_BE = '>iiIII'
+
 MH_MAGIC_64 = 0xfeedfacf
+MH_CIGAM_64 = 0xcffaedfe
 MH_EXECUTE = 0x2
 MH_DYLIB = 0x6
 LC_SEGMENT_64 = 0x19
@@ -15,20 +37,24 @@ LC_SEGMENT_64 = 0x19
 mach_header_64 = collections.namedtuple(
     'mach_header_64',
     'magic cputype cpusubtype filetype ncmds sizeofcmds flags reserved')
-mach_header_64_struct = '@IiiIIIII'
+mach_header_64_struct = '<IiiIIIII'
+mach_header_64_struct_BE = '>IiiIIIII'
 
 load_command = collections.namedtuple('load_command', 'cmd cmdsize')
-load_command_struct = '@II'
+load_command_struct = '<II'
+load_command_struct_BE = '>II'
 
 segment_command_64 = collections.namedtuple(
     'segment_command_64',
     'cmd cmdsize segname vmaddr vmsize fileoff filesize maxprot initprot nsects flags')
-segment_command_64_struct = '@II16sQQQQiiII'
+segment_command_64_struct = '<II16sQQQQiiII'
+segment_command_64_struct_BE = '>II16sQQQQiiII'
 
 section_64 = collections.namedtuple(
     'section_64',
     'sectname segname addr size offset align reloff nreloc flags reserved1 reserved2 reserved3')
-section_64_struct = '@16s16sQQIIIIIIII'
+section_64_struct = '<16s16sQQIIIIIIII'
+section_64_struct_BE = '>16s16sQQIIIIIIII'
 
 patchsData = [
     {
@@ -48,6 +74,7 @@ patchsData = [
     },
 ]
 
+
 def patch(path: str):
     with open(path, "r+b") as f:
         textAddress = 0
@@ -57,37 +84,74 @@ def patch(path: str):
         cstringOffset = 0
         cstringOffsetEnd = 0
         mm = mmap.mmap(f.fileno(), 0)
-        header = mach_header_64._make(
-            struct.unpack(mach_header_64_struct,
-                          mm[:struct.calcsize(mach_header_64_struct)]))
-        # print(header)
-        if header.magic == MH_MAGIC_64 and (header.filetype == MH_EXECUTE or header.filetype == MH_DYLIB):
-            ncmdOffset = 32
-            for ncmd in range(0, header.ncmds):
-                cmd = load_command._make(
-                    struct.unpack(load_command_struct,
-                                  mm[ncmdOffset:ncmdOffset+struct.calcsize(load_command_struct)]))
-                # print(cmd)
-                if cmd.cmd == LC_SEGMENT_64:
-                    cmd = segment_command_64._make(
-                        struct.unpack(segment_command_64_struct,
-                                      mm[ncmdOffset:ncmdOffset+struct.calcsize(segment_command_64_struct)]))
+
+        global fat_header_struct
+        global fat_arch_struct
+        fatHeader = fat_header._make(
+            struct.unpack(fat_header_struct,
+                          mm[:struct.calcsize(fat_header_struct)]))
+        if fatHeader.magic == FAT_CIGAM:
+            fat_header_struct = fat_header_struct_BE
+            fat_arch_struct = fat_arch_struct_BE
+            fatHeader = fat_header._make(
+                struct.unpack(fat_header_struct,
+                              mm[:struct.calcsize(fat_header_struct)]))
+        machOffsetList = []
+        if fatHeader.magic == FAT_MAGIC:
+            # print(fatHeader)
+            fatArchOffset = 0 + struct.calcsize(fat_header_struct)
+            for nfatArch in range(0, fatHeader.nfat_arch):
+                fatArch = fat_arch._make(
+                    struct.unpack(fat_arch_struct,
+                                  mm[fatArchOffset:fatArchOffset+struct.calcsize(fat_arch_struct)]))
+                # print(fatArch)
+                fatArchOffset += struct.calcsize(fat_arch_struct)
+                machOffsetList.append({"start": fatArch.offset, "end": fatArch.offset+fatArch.size})
+        else:
+            machOffsetList.append({"start": 0, "end": mm.size})
+
+        for machOffset in machOffsetList:
+            global mach_header_64_struct
+            global load_command_struct
+            global segment_command_64_struct
+            global section_64_struct
+            machHeader = mach_header_64._make(
+                struct.unpack(mach_header_64_struct,
+                            mm[machOffset['start']:machOffset['start']+struct.calcsize(mach_header_64_struct)]))
+            if machHeader.magic == MH_CIGAM_64:
+                mach_header_64_struct = mach_header_64_struct_BE
+                load_command_struct = load_command_struct_BE
+                segment_command_64_struct = segment_command_64_struct_BE
+                section_64_struct = section_64_struct_BE
+            # print(machHeader)
+            if machHeader.magic == MH_MAGIC_64 and machHeader.cputype == CPU_TYPE_X86_64 and (machHeader.filetype == MH_EXECUTE or machHeader.filetype == MH_DYLIB):
+                cmdOffset = machOffset['start'] + struct.calcsize(mach_header_64_struct)
+                for ncmd in range(0, machHeader.ncmds):
+                    cmd = load_command._make(
+                        struct.unpack(load_command_struct,
+                                    mm[cmdOffset:cmdOffset+struct.calcsize(load_command_struct)]))
                     # print(cmd)
-                    nsectOffset = ncmdOffset + struct.calcsize(segment_command_64_struct)
-                    for nsect in range(0, cmd.nsects):
-                        sect = section_64._make(
-                            struct.unpack(section_64_struct,
-                                          mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
-                        if sect.sectname.decode("ascii").startswith("__text"):
-                            textAddress = sect.addr
-                            textOffset = sect.offset
-                            textOffsetEnd = textOffset + sect.size
-                        elif sect.sectname.decode("ascii").startswith("__cstring"):
-                            cstringAddress = sect.addr
-                            cstringOffset = sect.offset
-                            cstringOffsetEnd = cstringOffset + sect.size
-                        nsectOffset += struct.calcsize(section_64_struct)
-                ncmdOffset += cmd.cmdsize
+                    if cmd.cmd == LC_SEGMENT_64:
+                        cmd = segment_command_64._make(
+                            struct.unpack(segment_command_64_struct,
+                                        mm[cmdOffset:cmdOffset+struct.calcsize(segment_command_64_struct)]))
+                        # print(cmd)
+                        nsectOffset = cmdOffset + struct.calcsize(segment_command_64_struct)
+                        for nsect in range(0, cmd.nsects):
+                            sect = section_64._make(
+                                struct.unpack(section_64_struct,
+                                            mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
+                            if sect.sectname.decode("ascii").startswith("__text"):
+                                textAddress = sect.addr
+                                textOffset = sect.offset
+                                textOffsetEnd = textOffset + sect.size
+                            elif sect.sectname.decode("ascii").startswith("__cstring"):
+                                cstringAddress = sect.addr
+                                cstringOffset = sect.offset
+                                cstringOffsetEnd = cstringOffset + sect.size
+                            nsectOffset += struct.calcsize(section_64_struct)
+                    cmdOffset += cmd.cmdsize
+
         if textOffset and textOffsetEnd:
             patched = 0
             for patchData in patchsData:
@@ -256,6 +320,7 @@ def patchPath(path: str):
         else:
             print("Patch faild.")
 
+
 def patchApp(app: str):
     if app in appList:
         paths = appList[app.lower()]["paths"]
@@ -263,6 +328,7 @@ def patchApp(app: str):
             patchPath(path)
     else:
         patchPath(app)
+
 
 def restoreApp(app: str):
     if app in appList:
