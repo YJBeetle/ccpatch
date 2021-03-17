@@ -142,6 +142,7 @@ $patchsData = @(
 )
 
 function patch($path) {
+    $patched = 0
     $mmf = [System.IO.MemoryMappedFiles.MemoryMappedFile]::CreateFromFile($path)
     $accessor = $mmf.CreateViewAccessor()
     try {
@@ -190,7 +191,6 @@ function patch($path) {
         }
 
         if ($textOffset -and $textSize) {
-            $patched = 0
             foreach ($patchData in $patchsData) {
                 $funcOffsetList = @()
                 if ($patchData.funcTrait.type -eq "callLeaRdxKeyword") {
@@ -253,17 +253,17 @@ function patch($path) {
                     }
                 }
             }
-            return $patched
+            # echo $patched
         }
         else {
             Write-Host "Error: '.text' not found."
         }
-        return $false
     }
     finally {
         $accessor.Dispose()
         $mmf.Dispose()
     }
+    return $patched
 }
 
 $appList = @{
