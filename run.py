@@ -76,6 +76,24 @@ patchsData = [
             {'find': bytes([0xB9, 0x98, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC9])},
         ]
     },
+    {
+        'funcTrait': {
+            'cpuType': CPU_TYPE_ARM64,
+            'type': 'callKeyword',
+            'keywordString': b"PROFILE_AVAILABLE",
+            'functionSplitUp': bytes([0xA9]),
+            'functionSplitDown': bytes([0xBF, 0xA9]),
+        },
+        'patchPointList': [
+            {'find': bytes([0x09, 0x33, 0x80, 0x52]), 'replace': bytes([0x1F, 0x00, 0x00, 0x71])},
+            {'find': bytes([0x40, 0x32, 0x80, 0x52]), 'replace': bytes([0x1F, 0x00, 0x00, 0x71])},
+            {'find': bytes([0x60, 0x32, 0x80, 0x52]), 'replace': bytes([0x1F, 0x00, 0x00, 0x71])},
+            {'find': bytes([0x80, 0x32, 0x80, 0x52]), 'replace': bytes([0x1F, 0x00, 0x00, 0x71])},
+            {'find': bytes([0xA0, 0x32, 0x80, 0x52]), 'replace': bytes([0x1F, 0x00, 0x00, 0x71])},
+            {'find': bytes([0xC0, 0x32, 0x80, 0x52]), 'replace': bytes([0x1F, 0x00, 0x00, 0x71])},
+            {'find': bytes([0xE0, 0x32, 0x80, 0x52]), 'replace': bytes([0x1F, 0x00, 0x00, 0x71])},
+        ]
+    },
 ]
 
 
@@ -178,7 +196,10 @@ def patch(path: str):
                     continue
                 funcOffsetList = []
                 if patchData['funcTrait']['type'] == 'callKeyword':
-                    opLen = len(patchData['funcTrait']['opPrefix']) + 4
+                    if machHeader.cputype == CPU_TYPE_X86_64:
+                        opLen = len(patchData['funcTrait']['opPrefix']) + 4
+                    elif machHeader.cputype == CPU_TYPE_ARM64:
+                        opLen = 8
                     if cstringOffset == 0 or cstringOffsetEnd == 0:
                         print("Error: '__cstring' not found.", file=sys.stderr)
                         continue
@@ -192,18 +213,43 @@ def patch(path: str):
                     # print("strAddress: 0x%x" % strAddress)
                     callKeywordOffset = textOffset
                     while True:
-                        callKeywordOffset = mm.find(patchData['funcTrait']['opPrefix'], callKeywordOffset, textOffsetEnd)
-                        if callKeywordOffset == -1:
-                            break
-                        callKeywordOffset += opLen
-                        op, = struct.unpack("@I", mm[callKeywordOffset-4:callKeywordOffset])
-                        callKeywordAddress = textAddress + (callKeywordOffset - textOffset)
-                        # print("callKeywordOffset: %x" % callKeywordOffset)
-                        # print("callKeywordAddress: %x" % callKeywordAddress)
-                        if callKeywordAddress+op == strAddress:
-                            # print("OK!")
+                        if machHeader.cputype == CPU_TYPE_X86_64:
+                            callKeywordOffset = mm.find(patchData['funcTrait']['opPrefix'], callKeywordOffset, textOffsetEnd)
+                            if callKeywordOffset == -1:
+                                break
+                            callKeywordOffset += opLen
+                            callKeywordAddress = textAddress + (callKeywordOffset - textOffset)
+                            op, = struct.unpack("@I", mm[callKeywordOffset-4:callKeywordOffset])
+                            quotedStrAddress = callKeywordAddress + op
+                        elif machHeader.cputype == CPU_TYPE_ARM64:
+                            callKeywordOffset = mm.find(bytes([0x91]), callKeywordOffset, textOffsetEnd) # ADD
+                            if callKeywordOffset == -1:
+                                break
+                            if (callKeywordOffset-3-textOffset) % 4 != 0 or (int.from_bytes(mm[callKeywordOffset-4:callKeywordOffset-3], "little") & 0b10011111) != 0x90:
+                                callKeywordOffset += 1
+                                continue
+                            callKeywordOffset += 1
+                            callKeywordAddress = textAddress + (callKeywordOffset - textOffset)
+                            adprImm, = struct.unpack("@I", mm[callKeywordOffset-8:callKeywordOffset-4])
+                            adprImmhi = adprImm & 0b00000000111111111111111111100000
+                            adprImmhi >>= 5
+                            adprImmlo = adprImm & 0b01100000000000000000000000000000
+                            adprImmlo >>= 29
+                            adprImm = (adprImmhi << 2) + adprImmlo
+                            # print("adprImm: 0x%x" % adprImm)
+                            addImm12, = struct.unpack("@I", mm[callKeywordOffset-4:callKeywordOffset])
+                            addImm12 &= 0b00000000001111111111110000000000
+                            addImm12 >>= 10
+                            # print("addImm12: 0x%x" % addImm12)
+                            quotedStrAddress = (callKeywordAddress & 0xfffffffffffff000) + (adprImm << 12) + addImm12
+                        # print("quotedStrAddress: 0x%x" % quotedStrAddress)
+                        if quotedStrAddress == strAddress:
+                            # print("callKeywordOffset: 0x%x" % callKeywordOffset)
+                            # print("callKeywordAddress: 0x%x" % callKeywordAddress)
                             start = mm.rfind(patchData['funcTrait']['functionSplitUp'], textOffset, callKeywordOffset-opLen)
                             end = mm.find(patchData['funcTrait']['functionSplitDown'], callKeywordOffset, textOffsetEnd)
+                            # print("start: 0x%x" % (textAddress + (start - textOffset)) )
+                            # print("end: 0x%x" % (textAddress + (end - textOffset)) )
                             if start != -1 and end != -1:
                                 funcOffsetList.append({"start": start, "end": end})
                 else:
