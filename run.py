@@ -173,7 +173,7 @@ def patch(path: str):
                             addressDifferenceForTextAndCstring = (cstringAddress - cstringOffset) - (textAddress - textOffset)
                             strOffset = mm.find(patchData['funcTrait']['keywordString'],
                                                 cstringOffset, cstringOffsetEnd)
-                            if strOffset:
+                            if strOffset != -1:
                                 callKeywordOffset = textOffset
                                 while True:
                                     callKeywordOffset = mm.find(patchData['funcTrait']['op'], callKeywordOffset, textOffsetEnd)
