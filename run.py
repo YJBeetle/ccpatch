@@ -124,13 +124,13 @@ def patch(path: str):
             # print(machHeader)
             if machHeader.magic != MH_MAGIC_64:
                 print("Error: Unknow magic number.", file=sys.stderr)
-                break
+                continue
             if machHeader.cputype != CPU_TYPE_X86_64 and machHeader.cputype != CPU_TYPE_ARM64:
                 print("Error: Unknow CPU type.", file=sys.stderr)
-                break
+                continue
             if machHeader.filetype != MH_EXECUTE and machHeader.filetype != MH_DYLIB:
                 print("Error: Not executable or library.", file=sys.stderr)
-                break
+                continue
             cmdOffset = machOffset['start'] + struct.calcsize(mach_header_64_struct)
             textAddress = 0
             textOffset = 0
@@ -166,7 +166,7 @@ def patch(path: str):
             if textOffset and textOffsetEnd:
                 for patchData in patchsData:
                     if patchData['funcTrait']['cpuType'] != machHeader.cputype:
-                        break
+                        continue
                     funcOffsetList = []
                     if patchData['funcTrait']['type'] == 'callKeyword':
                         if cstringOffset and cstringOffsetEnd:
