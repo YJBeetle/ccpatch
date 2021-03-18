@@ -127,7 +127,7 @@ $patchsData = @(
     @{
         funcTrait = @{
             type = 'callKeyword'
-            op = [Byte[]](0x48, 0x8D, 0x15) # LeaRdx
+            opPrefix = [Byte[]](0x48, 0x8D, 0x15) # LeaRdx
             keywordString = "PROFILE_AVAILABLE"
             functionSplitUp = [Byte[]](0xCC)
             functionSplitDown = [Byte[]](0xCC)
@@ -212,12 +212,12 @@ function patch($path) {
                     $strAddress = $rdataAddress + $p[0]
                     $b = [Byte[]]::new($textSize)
                     $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
-                    $p = Search-Binary $b $patchData.funcTrait.op
+                    $p = Search-Binary $b $patchData.funcTrait.opPrefix
                     foreach ($pp in $p) {
                         $callKeywordOffset = $textOffset + $pp
                         $callKeywordAddress = $textAddress + $pp
                         $op = $accessor.ReadUInt32($textOffset + $pp + 3)
-                        if (($callKeywordAddress + $patchData.funcTrait.op.length + 4 + $op) -eq $strAddress) {
+                        if (($callKeywordAddress + $patchData.funcTrait.opPrefix.length + 4 + $op) -eq $strAddress) {
                             $b = [Byte[]]::new($callKeywordOffset - $textOffset)
                             $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
                             $sp = Search-Binary $b $patchData.funcTrait.functionSplitUp $true $true

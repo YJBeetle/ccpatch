@@ -61,7 +61,7 @@ patchsData = [
         'funcTrait': {
             'cpuType': CPU_TYPE_X86_64,
             'type': 'callKeyword',
-            'op': bytes([0x48, 0x8D, 0x35]), # LeaEsi
+            'opPrefix': bytes([0x48, 0x8D, 0x35]), # LeaEsi
             'keywordString': b"PROFILE_AVAILABLE",
             'functionSplitUp': bytes([0xC3, 0x55]),
             'functionSplitDown': bytes([0xC3, 0x55]),
@@ -178,6 +178,8 @@ def patch(path: str):
                     continue
                 funcOffsetList = []
                 if patchData['funcTrait']['type'] == 'callKeyword':
+                    opPrefixLen = len(patchData['funcTrait']['opPrefix'])
+                    opLen = opPrefixLen + 4
                     if cstringOffset == 0 or cstringOffsetEnd == 0:
                         print("Error: '__cstring' not found.", file=sys.stderr)
                         continue
@@ -191,20 +193,20 @@ def patch(path: str):
                     # print("strAddress: 0x%x" % strAddress)
                     callKeywordOffset = textOffset
                     while True:
-                        callKeywordOffset = mm.find(patchData['funcTrait']['op'], callKeywordOffset, textOffsetEnd)
+                        callKeywordOffset = mm.find(patchData['funcTrait']['opPrefix'], callKeywordOffset, textOffsetEnd)
                         if callKeywordOffset == -1:
                             break
                         callKeywordAddress = textAddress + (callKeywordOffset - textOffset)
                         # print("callKeywordOffset: %x" % callKeywordOffset)
                         # print("callKeywordAddress: %x" % callKeywordAddress)
-                        op, = struct.unpack("@I", mm[callKeywordOffset + len(patchData['funcTrait']['op']):callKeywordOffset + len(patchData['funcTrait']['op']) + 4])
-                        if callKeywordAddress + len(patchData['funcTrait']['op']) + 4 + op == strAddress:
+                        op, = struct.unpack("@I", mm[callKeywordOffset+opPrefixLen:callKeywordOffset+opLen])
+                        if callKeywordAddress+opLen+op == strAddress:
                             # print("OK!")
                             start = mm.rfind(patchData['funcTrait']['functionSplitUp'], textOffset, callKeywordOffset)
-                            end = mm.find(patchData['funcTrait']['functionSplitDown'], callKeywordOffset + len(patchData['funcTrait']['op']) + 4, textOffsetEnd)
+                            end = mm.find(patchData['funcTrait']['functionSplitDown'], callKeywordOffset+opLen, textOffsetEnd)
                             if start != -1 and end != -1:
                                 funcOffsetList.append({"start": start, "end": end})
-                        callKeywordOffset += len(patchData['funcTrait']['op']) + 4
+                        callKeywordOffset += opLen
                 else:
                     print("Error: Unknow funstion trait type.", file=sys.stderr)
                 for funcOffset in funcOffsetList:
