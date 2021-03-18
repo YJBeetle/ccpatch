@@ -198,19 +198,20 @@ function patch($path) {
                 $funcOffsetList = @()
                 if ($patchData.funcTrait.type -eq "callKeyword") {
                     if ($rdataOffset -and $rdataSize) {
-                        $addressDifferenceForTextAndRdata = ($rdataAddress - $rdataOffset) - ($textAddress - $textOffset)
                         $b = [Byte[]]::new($rdataSize)
                         $null = $accessor.ReadArray($rdataOffset, $b, 0, $b.length)
                         $p = Search-Binary $b ($patchData.funcTrait.keywordString.ToCharArray()) $true
                         if ($p.Length) {
                             $strOffset = $rdataOffset + $p[0]
+                            $strAddress = $rdataAddress + $p[0]
                             $b = [Byte[]]::new($textSize)
                             $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
                             $p = Search-Binary $b $patchData.funcTrait.op
                             foreach ($pp in $p) {
                                 $callKeywordOffset = $textOffset + $pp
+                                $callKeywordAddress = $textAddress + $pp
                                 $op = $accessor.ReadUInt32($textOffset + $pp + 3)
-                                if (($callKeywordOffset + $patchData.funcTrait.op.length + 4 + $op - $addressDifferenceForTextAndRdata ) -eq $strOffset) {
+                                if (($callKeywordAddress + $patchData.funcTrait.op.length + 4 + $op) -eq $strAddress) {
                                     $b = [Byte[]]::new($callKeywordOffset - $textOffset)
                                     $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
                                     $sp = Search-Binary $b $patchData.funcTrait.functionSplitUp $true $true
