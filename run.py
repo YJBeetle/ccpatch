@@ -170,51 +170,52 @@ def patch(path: str):
             # print("cstringAddress: 0x%x" % cstringAddress)
             # print("cstringOffset: 0x%x" % cstringOffset)
             # print("cstringOffsetEnd: 0x%x" % cstringOffsetEnd)
-            if textOffset and textOffsetEnd:
-                for patchData in patchsData:
-                    if patchData['funcTrait']['cpuType'] != machHeader.cputype:
-                        continue
-                    funcOffsetList = []
-                    if patchData['funcTrait']['type'] == 'callKeyword':
-                        if cstringOffset and cstringOffsetEnd:
-                            strOffset = mm.find(patchData['funcTrait']['keywordString'],
-                                                cstringOffset, cstringOffsetEnd)
-                            strAddress = cstringAddress + (strOffset - cstringOffset)
-                            # print("strOffset: 0x%x" % strOffset)
-                            # print("strAddress: 0x%x" % strAddress)
-                            if strOffset != -1:
-                                callKeywordOffset = textOffset
-                                while True:
-                                    callKeywordOffset = mm.find(patchData['funcTrait']['op'], callKeywordOffset, textOffsetEnd)
-                                    callKeywordAddress = textAddress + (callKeywordOffset - textOffset)
-                                    # print("callKeywordOffset: %x" % callKeywordOffset)
-                                    if callKeywordOffset == -1:
-                                        break
-                                    op, = struct.unpack("@I", mm[callKeywordOffset + len(patchData['funcTrait']['op']):callKeywordOffset + len(patchData['funcTrait']['op']) + 4])
-                                    if callKeywordAddress + len(patchData['funcTrait']['op']) + 4 + op == strAddress:
-                                        # print("OK!")
-                                        start = mm.rfind(patchData['funcTrait']['functionSplitUp'], textOffset, callKeywordOffset)
-                                        end = mm.find(patchData['funcTrait']['functionSplitDown'], callKeywordOffset + len(patchData['funcTrait']['op']) + 4, textOffsetEnd)
-                                        if start != -1 and end != -1:
-                                            funcOffsetList.append({"start": start, "end": end})
-                                    callKeywordOffset += len(patchData['funcTrait']['op']) + 4
-                            else:
-                                print("Error: Keyword String '%s' not found." % patchData['funcTrait']['keywordString'], file=sys.stderr)
-                        else:
-                            print("Error: '__cstring' not found.", file=sys.stderr)
-                    else:
-                        print("Error: Unknow funstion trait type.", file=sys.stderr)
-                    for funcOffset in funcOffsetList:
-                        for patchPoint in patchData['patchPointList']:
-                            patchPointOffset = mm.find(patchPoint['find'], funcOffset['start'], funcOffset['end'])
-                            if patchPointOffset != -1:
-                                mm[patchPointOffset:patchPointOffset + len(patchPoint['find'])] = patchPoint['replace']
-                                patched+=1
-                            else:
-                                print("Error: %s not found." % str(patchPoint['find']), file=sys.stderr)
-                # print(patched)
-            else:
+            if textOffset == 0 or textOffsetEnd == 0:
                 print("Error: '__text' not found.", file=sys.stderr)
+                continue
+            for patchData in patchsData:
+                if patchData['funcTrait']['cpuType'] != machHeader.cputype:
+                    continue
+                funcOffsetList = []
+                if patchData['funcTrait']['type'] == 'callKeyword':
+                    if cstringOffset == 0 or cstringOffsetEnd == 0:
+                        print("Error: '__cstring' not found.", file=sys.stderr)
+                        continue
+                    strOffset = mm.find(patchData['funcTrait']['keywordString'],
+                                        cstringOffset, cstringOffsetEnd)
+                    if strOffset == -1:
+                        print("Error: Keyword String '%s' not found." % patchData['funcTrait']['keywordString'], file=sys.stderr)
+                        continue
+                    strAddress = cstringAddress + (strOffset - cstringOffset)
+                    # print("strOffset: 0x%x" % strOffset)
+                    # print("strAddress: 0x%x" % strAddress)
+                    callKeywordOffset = textOffset
+                    while True:
+                        callKeywordOffset = mm.find(patchData['funcTrait']['op'], callKeywordOffset, textOffsetEnd)
+                        if callKeywordOffset == -1:
+                            break
+                        callKeywordAddress = textAddress + (callKeywordOffset - textOffset)
+                        # print("callKeywordOffset: %x" % callKeywordOffset)
+                        # print("callKeywordAddress: %x" % callKeywordAddress)
+                        op, = struct.unpack("@I", mm[callKeywordOffset + len(patchData['funcTrait']['op']):callKeywordOffset + len(patchData['funcTrait']['op']) + 4])
+                        if callKeywordAddress + len(patchData['funcTrait']['op']) + 4 + op == strAddress:
+                            # print("OK!")
+                            start = mm.rfind(patchData['funcTrait']['functionSplitUp'], textOffset, callKeywordOffset)
+                            end = mm.find(patchData['funcTrait']['functionSplitDown'], callKeywordOffset + len(patchData['funcTrait']['op']) + 4, textOffsetEnd)
+                            if start != -1 and end != -1:
+                                funcOffsetList.append({"start": start, "end": end})
+                        callKeywordOffset += len(patchData['funcTrait']['op']) + 4
+                else:
+                    print("Error: Unknow funstion trait type.", file=sys.stderr)
+                for funcOffset in funcOffsetList:
+                    for patchPoint in patchData['patchPointList']:
+                        patchPointOffset = mm.find(patchPoint['find'], funcOffset['start'], funcOffset['end'])
+                        if patchPointOffset == -1:
+                            print("Error: %s not found." % str(patchPoint['find']), file=sys.stderr)
+                            continue
+                        mm[patchPointOffset:patchPointOffset + len(patchPoint['find'])] = patchPoint['replace']
+                        patched+=1
+            # print(patched)
         mm.close()
     return patched
 

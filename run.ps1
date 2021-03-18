@@ -197,45 +197,43 @@ function patch($path) {
             foreach ($patchData in $patchsData) {
                 $funcOffsetList = @()
                 if ($patchData.funcTrait.type -eq "callKeyword") {
-                    if ($rdataOffset -and $rdataSize) {
-                        $b = [Byte[]]::new($rdataSize)
-                        $null = $accessor.ReadArray($rdataOffset, $b, 0, $b.length)
-                        $p = Search-Binary $b ($patchData.funcTrait.keywordString.ToCharArray()) $true
-                        if ($p.Length) {
-                            $strOffset = $rdataOffset + $p[0]
-                            $strAddress = $rdataAddress + $p[0]
-                            $b = [Byte[]]::new($textSize)
-                            $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
-                            $p = Search-Binary $b $patchData.funcTrait.op
-                            foreach ($pp in $p) {
-                                $callKeywordOffset = $textOffset + $pp
-                                $callKeywordAddress = $textAddress + $pp
-                                $op = $accessor.ReadUInt32($textOffset + $pp + 3)
-                                if (($callKeywordAddress + $patchData.funcTrait.op.length + 4 + $op) -eq $strAddress) {
-                                    $b = [Byte[]]::new($callKeywordOffset - $textOffset)
-                                    $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
-                                    $sp = Search-Binary $b $patchData.funcTrait.functionSplitUp $true $true
-                                    $start = $textOffset
-                                    if ($sp.Length) {
-                                        $start = $textOffset + $sp[0] + 1
-                                    }
-                                    $b = [Byte[]]::new($textOffset + $textSize - $callKeywordOffset)
-                                    $null = $accessor.ReadArray($callKeywordOffset, $b, 0, $b.length)
-                                    $ep = Search-Binary $b $patchData.funcTrait.functionSplitDown $true
-                                    $end = $textOffset + $textSize
-                                    if ($ep.Length) {
-                                        $end = $callKeywordOffset + $ep[0]
-                                    }
-                                    $funcOffsetList += @{start = $start; size = $end - $start }
-                                }
-                            }
-                        }
-                        else {
-                            Write-Host ("Error: Keyword String '" + $patchData.funcTrait.keywordString + "' not found.")
-                        }
-                    }
-                    else {
+                    if (($rdataOffset -eq 0) -or ($rdataSize -eq 0)) {
                         Write-Host "Error: '.rdata' not found."
+                        continue
+                    }
+                    $b = [Byte[]]::new($rdataSize)
+                    $null = $accessor.ReadArray($rdataOffset, $b, 0, $b.length)
+                    $p = Search-Binary $b ($patchData.funcTrait.keywordString.ToCharArray()) $true
+                    if ($p.Length -eq 0) {
+                        Write-Host ("Error: Keyword String '" + $patchData.funcTrait.keywordString + "' not found.")
+                        continue
+                    }
+                    $strOffset = $rdataOffset + $p[0]
+                    $strAddress = $rdataAddress + $p[0]
+                    $b = [Byte[]]::new($textSize)
+                    $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
+                    $p = Search-Binary $b $patchData.funcTrait.op
+                    foreach ($pp in $p) {
+                        $callKeywordOffset = $textOffset + $pp
+                        $callKeywordAddress = $textAddress + $pp
+                        $op = $accessor.ReadUInt32($textOffset + $pp + 3)
+                        if (($callKeywordAddress + $patchData.funcTrait.op.length + 4 + $op) -eq $strAddress) {
+                            $b = [Byte[]]::new($callKeywordOffset - $textOffset)
+                            $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
+                            $sp = Search-Binary $b $patchData.funcTrait.functionSplitUp $true $true
+                            $start = $textOffset
+                            if ($sp.Length) {
+                                $start = $textOffset + $sp[0] + 1
+                            }
+                            $b = [Byte[]]::new($textOffset + $textSize - $callKeywordOffset)
+                            $null = $accessor.ReadArray($callKeywordOffset, $b, 0, $b.length)
+                            $ep = Search-Binary $b $patchData.funcTrait.functionSplitDown $true
+                            $end = $textOffset + $textSize
+                            if ($ep.Length) {
+                                $end = $callKeywordOffset + $ep[0]
+                            }
+                            $funcOffsetList += @{start = $start; size = $end - $start }
+                        }
                     }
                 }
                 else {
@@ -246,14 +244,13 @@ function patch($path) {
                     $null = $accessor.ReadArray($funcOffset.start, $b, 0, $b.length)
                     foreach ($patchPoint in $patchData.patchPointList) {
                         $p = Search-Binary $b $patchPoint.find $true
-                        if ($p.Length) {
-                            $patchPointOffset = $funcOffset.start + $p
-                            $accessor.WriteArray($patchPointOffset, $patchPoint.replace, 0, $patchPoint.replace.Length)
-                            $patched += 1
-                        }
-                        else {
+                        if ($p.Length -eq 0) {
                             Write-Host ("Error: (" + $patchPoint.find + ") not found.")
+                            continue
                         }
+                        $patchPointOffset = $funcOffset.start + $p
+                        $accessor.WriteArray($patchPointOffset, $patchPoint.replace, 0, $patchPoint.replace.Length)
+                        $patched += 1
                     }
                 }
             }
