@@ -197,6 +197,7 @@ function patch($path) {
             foreach ($patchData in $patchsData) {
                 $funcOffsetList = @()
                 if ($patchData.funcTrait.type -eq "callKeyword") {
+                    $opLen = $patchData.funcTrait.opPrefix.length + 4
                     if (($rdataOffset -eq 0) -or ($rdataSize -eq 0)) {
                         Write-Host "Error: '.rdata' not found."
                         continue
@@ -214,11 +215,11 @@ function patch($path) {
                     $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
                     $p = Search-Binary $b $patchData.funcTrait.opPrefix
                     foreach ($pp in $p) {
-                        $callKeywordOffset = $textOffset + $pp
-                        $callKeywordAddress = $textAddress + $pp
+                        $callKeywordOffset = $textOffset + $opLen + $pp
+                        $callKeywordAddress = $textAddress + $opLen + $pp
                         $op = $accessor.ReadUInt32($textOffset + $pp + 3)
-                        if (($callKeywordAddress + $patchData.funcTrait.opPrefix.length + 4 + $op) -eq $strAddress) {
-                            $b = [Byte[]]::new($callKeywordOffset - $textOffset)
+                        if (($callKeywordAddress + $op) -eq $strAddress) {
+                            $b = [Byte[]]::new($callKeywordOffset - $opLen - $textOffset)
                             $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
                             $sp = Search-Binary $b $patchData.funcTrait.functionSplitUp $true $true
                             $start = $textOffset
