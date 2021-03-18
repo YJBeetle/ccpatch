@@ -63,7 +63,8 @@ patchsData = [
             'type': 'callKeyword',
             'op': bytes([0x48, 0x8D, 0x35]), # LeaEsi
             'keywordString': b"PROFILE_AVAILABLE",
-            'functionSplit': bytes([0xC3, 0x55]),
+            'functionSplitUp': bytes([0xC3, 0x55]),
+            'functionSplitDown': bytes([0xC3, 0x55]),
         },
         'patchPointList': [
             {'find': bytes([0xB8, 0x92, 0x01, 0x00, 0x00]), 'replace': bytes([0x90, 0x90, 0x90, 0x31, 0xC0])},
@@ -181,8 +182,8 @@ def patch(path: str):
                                         break
                                     op, = struct.unpack("@I", mm[callKeywordOffset + len(patchData['funcTrait']['op']):callKeywordOffset + len(patchData['funcTrait']['op']) + 4])
                                     if callKeywordOffset + len(patchData['funcTrait']['op']) + 4 + op - addressDifferenceForTextAndCstring == strOffset:
-                                        start = mm.rfind(patchData['funcTrait']['functionSplit'], textOffset, callKeywordOffset)
-                                        end = mm.find(patchData['funcTrait']['functionSplit'], callKeywordOffset + len(patchData['funcTrait']['op']) + 4, textOffsetEnd)
+                                        start = mm.rfind(patchData['funcTrait']['functionSplitUp'], textOffset, callKeywordOffset)
+                                        end = mm.find(patchData['funcTrait']['functionSplitDown'], callKeywordOffset + len(patchData['funcTrait']['op']) + 4, textOffsetEnd)
                                         if start != -1 and end != -1:
                                             funcOffsetList.append({"start": start, "end": end})
                                     callKeywordOffset += len(patchData['funcTrait']['op']) + 4

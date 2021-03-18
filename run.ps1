@@ -129,7 +129,8 @@ $patchsData = @(
             type = 'callKeyword'
             op = [Byte[]](0x48, 0x8D, 0x15) # LeaRdx
             keywordString = "PROFILE_AVAILABLE"
-            functionSplit = [Byte[]](0xCC)
+            functionSplitUp = [Byte[]](0xCC)
+            functionSplitDown = [Byte[]](0xCC)
         }
         patchPointList = @(
             @{find = [Byte[]](0xB8, 0x92, 0x01, 0x00, 0x00); replace = [Byte[]](0x90, 0x90, 0x90, 0x31, 0xC0) },
@@ -212,14 +213,14 @@ function patch($path) {
                                 if (($callKeywordOffset + $patchData.funcTrait.op.length + 4 + $op - $addressDifferenceForTextAndRdata ) -eq $strOffset) {
                                     $b = [Byte[]]::new($callKeywordOffset - $textOffset)
                                     $null = $accessor.ReadArray($textOffset, $b, 0, $b.length)
-                                    $sp = Search-Binary $b $patchData.funcTrait.functionSplit $true $true
+                                    $sp = Search-Binary $b $patchData.funcTrait.functionSplitUp $true $true
                                     $start = $textOffset
                                     if ($sp.Length) {
                                         $start = $textOffset + $sp[0] + 1
                                     }
                                     $b = [Byte[]]::new($textOffset + $textSize - $callKeywordOffset)
                                     $null = $accessor.ReadArray($callKeywordOffset, $b, 0, $b.length)
-                                    $ep = Search-Binary $b $patchData.funcTrait.functionSplit $true
+                                    $ep = Search-Binary $b $patchData.funcTrait.functionSplitDown $true
                                     $end = $textOffset + $textSize
                                     if ($ep.Length) {
                                         $end = $callKeywordOffset + $ep[0]
