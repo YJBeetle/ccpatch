@@ -155,11 +155,11 @@ def patch(path: str):
                                         mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
                         if sect.sectname.decode("ascii").startswith("__text"):
                             textAddress = sect.addr
-                            textOffset = sect.offset
+                            textOffset = machOffset['start'] + sect.offset
                             textOffsetEnd = textOffset + sect.size
                         elif sect.sectname.decode("ascii").startswith("__cstring"):
                             cstringAddress = sect.addr
-                            cstringOffset = sect.offset
+                            cstringOffset = machOffset['start'] + sect.offset
                             cstringOffsetEnd = cstringOffset + sect.size
                         nsectOffset += struct.calcsize(section_64_struct)
                 cmdOffset += cmd.cmdsize
