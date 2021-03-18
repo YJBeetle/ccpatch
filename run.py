@@ -164,6 +164,12 @@ def patch(path: str):
                             cstringOffsetEnd = cstringOffset + sect.size
                         nsectOffset += struct.calcsize(section_64_struct)
                 cmdOffset += cmd.cmdsize
+            # print("textAddress: 0x%x" % textAddress)
+            # print("textOffset: 0x%x" % textOffset)
+            # print("textOffsetEnd: 0x%x" % textOffsetEnd)
+            # print("cstringAddress: 0x%x" % cstringAddress)
+            # print("cstringOffset: 0x%x" % cstringOffset)
+            # print("cstringOffsetEnd: 0x%x" % cstringOffsetEnd)
             if textOffset and textOffsetEnd:
                 for patchData in patchsData:
                     if patchData['funcTrait']['cpuType'] != machHeader.cputype:
@@ -171,17 +177,22 @@ def patch(path: str):
                     funcOffsetList = []
                     if patchData['funcTrait']['type'] == 'callKeyword':
                         if cstringOffset and cstringOffsetEnd:
-                            addressDifferenceForTextAndCstring = (cstringAddress - cstringOffset) - (textAddress - textOffset)
                             strOffset = mm.find(patchData['funcTrait']['keywordString'],
                                                 cstringOffset, cstringOffsetEnd)
+                            strAddress = cstringAddress + (strOffset - cstringOffset)
+                            # print("strOffset: 0x%x" % strOffset)
+                            # print("strAddress: 0x%x" % strAddress)
                             if strOffset != -1:
                                 callKeywordOffset = textOffset
                                 while True:
                                     callKeywordOffset = mm.find(patchData['funcTrait']['op'], callKeywordOffset, textOffsetEnd)
+                                    callKeywordAddress = textAddress + (callKeywordOffset - textOffset)
+                                    # print("callKeywordOffset: %x" % callKeywordOffset)
                                     if callKeywordOffset == -1:
                                         break
                                     op, = struct.unpack("@I", mm[callKeywordOffset + len(patchData['funcTrait']['op']):callKeywordOffset + len(patchData['funcTrait']['op']) + 4])
-                                    if callKeywordOffset + len(patchData['funcTrait']['op']) + 4 + op - addressDifferenceForTextAndCstring == strOffset:
+                                    if callKeywordAddress + len(patchData['funcTrait']['op']) + 4 + op == strAddress:
+                                        # print("OK!")
                                         start = mm.rfind(patchData['funcTrait']['functionSplitUp'], textOffset, callKeywordOffset)
                                         end = mm.find(patchData['funcTrait']['functionSplitDown'], callKeywordOffset + len(patchData['funcTrait']['op']) + 4, textOffsetEnd)
                                         if start != -1 and end != -1:
