@@ -51,7 +51,7 @@ function Au()
 {
     run \
         'Au' \
-        '/Applications/Adobe Audition 2020/Adobe Audition 2020.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI'
+        '/Applications/Adobe Audition 2021/Adobe Audition 2021.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI'
 }
 
 function Pr()
