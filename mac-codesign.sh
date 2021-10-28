@@ -16,7 +16,13 @@ function Ps()
 {
     run \
         'Ps' \
+        '/Applications/Adobe Photoshop 2020/Adobe Photoshop 2020.app/Contents/MacOS/Adobe Photoshop 2020'
+    run \
+        'Ps' \
         '/Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app/Contents/MacOS/Adobe Photoshop 2021'
+    run \
+        'Ps' \
+        '/Applications/Adobe Photoshop 2022/Adobe Photoshop 2022.app/Contents/MacOS/Adobe Photoshop 2022'
 }
 
 function Lr()
@@ -30,7 +36,13 @@ function Ai()
 {
     run \
         'Ai' \
+        '/Applications/Adobe Illustrator 2020/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator'
+    run \
+        'Ai' \
         '/Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator'
+    run \
+        'Ai' \
+        '/Applications/Adobe Illustrator 2022/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator'
 }
 
 function Id()
@@ -38,6 +50,12 @@ function Id()
     run \
         'Id' \
         '/Applications/Adobe InDesign 2020/Adobe InDesign 2020.app/Contents/MacOS/PublicLib.dylib'
+    run \
+        'Id' \
+        '/Applications/Adobe InDesign 2021/Adobe InDesign 2021.app/Contents/MacOS/PublicLib.dylib'
+    run \
+        'Id' \
+        '/Applications/Adobe InDesign 2022/Adobe InDesign 2022.app/Contents/MacOS/PublicLib.dylib'
 }
 
 function Ic()
@@ -45,13 +63,25 @@ function Ic()
     run \
         'Ic' \
         '/Applications/Adobe InCopy 2020/Adobe InCopy 2020.app/Contents/MacOS/PublicLib.dylib'
+    run \
+        'Ic' \
+        '/Applications/Adobe InCopy 2021/Adobe InCopy 2021.app/Contents/MacOS/PublicLib.dylib'
+    run \
+        'Ic' \
+        '/Applications/Adobe InCopy 2022/Adobe InCopy 2022.app/Contents/MacOS/PublicLib.dylib'
 }
 
 function Au()
 {
     run \
         'Au' \
+        '/Applications/Adobe Audition 2020/Adobe Audition 2020.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI'
+    run \
+        'Au' \
         '/Applications/Adobe Audition 2021/Adobe Audition 2021.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI'
+    run \
+        'Au' \
+        '/Applications/Adobe Audition 2022/Adobe Audition 2022.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI'
 }
 
 function Pr()
@@ -59,6 +89,12 @@ function Pr()
     run \
         'Pr' \
         '/Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration'
+    run \
+        'Pr' \
+        '/Applications/Adobe Premiere Pro 2021/Adobe Premiere Pro 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration'
+    run \
+        'Pr' \
+        '/Applications/Adobe Premiere Pro 2022/Adobe Premiere Pro 2022.app/Contents/Frameworks/Registration.framework/Versions/A/Registration'
 }
 
 function Pl()
@@ -66,6 +102,12 @@ function Pl()
     run \
         'Pl' \
         '/Applications/Adobe Prelude 2020/Adobe Prelude 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration'
+    run \
+        'Pl' \
+        '/Applications/Adobe Prelude 2021/Adobe Prelude 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration'
+    run \
+        'Pl' \
+        '/Applications/Adobe Prelude 2022/Adobe Prelude 2022.app/Contents/Frameworks/Registration.framework/Versions/A/Registration'
 }
 
 function Ch()
@@ -73,6 +115,12 @@ function Ch()
     run \
         'Ch' \
         '/Applications/Adobe Character Animator 2020/Adobe Character Animator 2020.app/Contents/MacOS/Character Animator'
+    run \
+        'Ch' \
+        '/Applications/Adobe Character Animator 2021/Adobe Character Animator 2021.app/Contents/MacOS/Character Animator'
+    run \
+        'Ch' \
+        '/Applications/Adobe Character Animator 2022/Adobe Character Animator 2022.app/Contents/MacOS/Character Animator'
 }
 
 function Ae()
@@ -80,6 +128,12 @@ function Ae()
     run \
         'Ae' \
         '/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib'
+    run \
+        'Ae' \
+        '/Applications/Adobe After Effects 2021/Adobe After Effects 2021.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib'
+    run \
+        'Ae' \
+        '/Applications/Adobe After Effects 2022/Adobe After Effects 2022.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib'
 }
 
 function Me()
@@ -87,6 +141,12 @@ function Me()
     run \
         'Me' \
         '/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder 2020'
+    run \
+        'Me' \
+        '/Applications/Adobe Media Encoder 2021/Adobe Media Encoder 2021.app/Contents/MacOS/Adobe Media Encoder 2021'
+    run \
+        'Me' \
+        '/Applications/Adobe Media Encoder 2022/Adobe Media Encoder 2022.app/Contents/MacOS/Adobe Media Encoder 2022'
 }
 
 function Br()
@@ -94,6 +154,12 @@ function Br()
     run \
         'Br' \
         '/Applications/Adobe Bridge 2020/Adobe Bridge 2020.app/Contents/MacOS/Adobe Bridge 2020'
+    run \
+        'Br' \
+        '/Applications/Adobe Bridge 2021/Adobe Bridge 2021.app/Contents/MacOS/Adobe Bridge'
+    run \
+        'Br' \
+        '/Applications/Adobe Bridge 2022/Adobe Bridge 2022.app/Contents/MacOS/Adobe Bridge 2022'
 }
 
 function An()
@@ -101,6 +167,12 @@ function An()
     run \
         'An' \
         '/Applications/Adobe Animate 2020/Adobe Animate 2020.app/Contents/MacOS/Adobe Animate 2020'
+    run \
+        'An' \
+        '/Applications/Adobe Animate 2021/Adobe Animate 2021.app/Contents/MacOS/Adobe Animate'
+    run \
+        'An' \
+        '/Applications/Adobe Animate 2022/Adobe Animate 2022.app/Contents/MacOS/Adobe Animate 2022'
 }
 
 function Dw()
