@@ -200,6 +200,7 @@ appList = {
         "paths": [
             "/Applications/Adobe Photoshop 2020/Adobe Photoshop 2020.app/Contents/MacOS/Adobe Photoshop 2020",
             "/Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app/Contents/MacOS/Adobe Photoshop 2021",
+            "/Applications/Adobe Photoshop 2022/Adobe Photoshop 2022.app/Contents/MacOS/Adobe Photoshop 2022",
         ]
     },
     "lr": {
@@ -211,66 +212,77 @@ appList = {
         "paths": [
             "/Applications/Adobe Illustrator 2020/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
             "/Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
+            "/Applications/Adobe Illustrator 2022/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
         ]
     },
     "id": {
         "paths": [
             "/Applications/Adobe InDesign 2020/Adobe InDesign 2020.app/Contents/MacOS/PublicLib.dylib",
             "/Applications/Adobe InDesign 2021/Adobe InDesign 2021.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InDesign 2022/Adobe InDesign 2022.app/Contents/MacOS/PublicLib.dylib",
         ]
     },
     "ic": {
         "paths": [
             "/Applications/Adobe InCopy 2020/Adobe InCopy 2020.app/Contents/MacOS/PublicLib.dylib",
             "/Applications/Adobe InCopy 2021/Adobe InCopy 2021.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InCopy 2022/Adobe InCopy 2022.app/Contents/MacOS/PublicLib.dylib",
         ]
     },
     "au": {
         "paths": [
             "/Applications/Adobe Audition 2020/Adobe Audition 2020.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
             "/Applications/Adobe Audition 2021/Adobe Audition 2021.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
+            "/Applications/Adobe Audition 2022/Adobe Audition 2022.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
         ]
     },
     "pr": {
         "paths": [
             "/Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
             "/Applications/Adobe Premiere Pro 2021/Adobe Premiere Pro 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Premiere Pro 2022/Adobe Premiere Pro 2022.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
         ]
     },
     "pl": {
         "paths": [
             "/Applications/Adobe Prelude 2020/Adobe Prelude 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
             "/Applications/Adobe Prelude 2021/Adobe Prelude 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Prelude 2022/Adobe Prelude 2022.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
         ]
     },
     "ch": {
         "paths": [
             "/Applications/Adobe Character Animator 2020/Adobe Character Animator 2020.app/Contents/MacOS/Character Animator",
             "/Applications/Adobe Character Animator 2021/Adobe Character Animator 2021.app/Contents/MacOS/Character Animator",
+            "/Applications/Adobe Character Animator 2022/Adobe Character Animator 2022.app/Contents/MacOS/Character Animator",
         ]
     },
     "ae": {
         "paths": [
             "/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
             "/Applications/Adobe After Effects 2021/Adobe After Effects 2021.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
+            "/Applications/Adobe After Effects 2022/Adobe After Effects 2022.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
         ]
     },
     "me": {
         "paths": [
             "/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder 2020",
             "/Applications/Adobe Media Encoder 2021/Adobe Media Encoder 2021.app/Contents/MacOS/Adobe Media Encoder 2021",
+            "/Applications/Adobe Media Encoder 2022/Adobe Media Encoder 2022.app/Contents/MacOS/Adobe Media Encoder 2022",
         ]
     },
     "br": {
         "paths": [
             "/Applications/Adobe Bridge 2020/Adobe Bridge 2020.app/Contents/MacOS/Adobe Bridge",
             "/Applications/Adobe Bridge 2021/Adobe Bridge 2021.app/Contents/MacOS/Adobe Bridge",
+            "/Applications/Adobe Bridge 2022/Adobe Bridge 2022.app/Contents/MacOS/Adobe Bridge 2022",
         ]
     },
     "an": {
         "paths": [
             "/Applications/Adobe Animate 2020/Adobe Animate 2020.app/Contents/MacOS/Adobe Animate",
             "/Applications/Adobe Animate 2021/Adobe Animate 2021.app/Contents/MacOS/Adobe Animate",
+            "/Applications/Adobe Animate 2022/Adobe Animate 2022.app/Contents/MacOS/Adobe Animate 2022",
         ]
     },
     "dw": {
