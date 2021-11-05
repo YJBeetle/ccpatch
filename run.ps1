@@ -414,13 +414,7 @@ function patchApp($app) {
     }
 }
 
-function restoreApp($app) {
-    if ($appList.ContainsKey($app)) {
-        $path = $appList[$app].path
-    }
-    else {
-        $path = $app
-    }
+function restorePath($path) {
     if (Test-Path "$path.bak" -PathType Leaf) {
         Write-Host "Found and restore $app ..."
         rm "$path"
@@ -430,6 +424,18 @@ function restoreApp($app) {
     }
     else {
         Write-Host "The backup file does not exist, skipped."
+    }
+}
+
+function restoreApp($app) {
+    if ($appList.ContainsKey($app)) {
+        $paths = $appList[$app].paths
+        foreach ($path in $paths) {
+            restorePath $path
+        }
+    }
+    else {
+        restorePath $app
     }
 }
 
@@ -447,7 +453,7 @@ if ($IsWindows) {
     }
 }
 if ($args.length) {
-    if ($args[0] -ieq "restore") {
+    if ($args[0] -ieq "restore" -or $args[0] -ieq "--restore" -or $args[0] -ieq "-r") {
         if ($args.length -gt 1) {
             foreach ($app in $args[1..$args.Length]) {
                 restoreApp $app
