@@ -314,7 +314,7 @@ def verify_patched_hash(path: str):
     return False
 
 
-def patchPath(path: str):
+def patchPath(path: str, app: str):
     if os.path.exists(path):
         print("Found and patching %s" % app)
         if os.path.exists('%s.bak' % path) and verify_patched_hash(path):
@@ -337,12 +337,12 @@ def patchApp(app: str):
     if app in appList:
         paths = appList[app.lower()]["paths"]
         for path in paths:
-            patchPath(path)
+            patchPath(path, app)
     else:
-        patchPath(app)
+        patchPath(app, app)
 
 
-def restorePath(path: str):
+def restorePath(path: str, app: str):
     if os.path.exists('%s.bak' % path):
         print("Found and restore %s" % app)
         shutil.move("%s.bak" % path, path)
@@ -357,12 +357,12 @@ def restoreApp(app: str):
     if app in appList:
         paths = appList[app.lower()]["paths"]
         for path in paths:
-            restorePath(path)
+            restorePath(path, app)
     else:
-        restorePath(app)
+        restorePath(app, app)
 
 
-if __name__ == '__main__':
+def main():
     if os.geteuid():
         print("Privilege is not sufficient, elevating...")
         args = [sys.executable] + sys.argv
@@ -382,3 +382,7 @@ if __name__ == '__main__':
     else:
         for app in appList:
             patchApp(app)
+
+
+if __name__ == '__main__':
+    main()
