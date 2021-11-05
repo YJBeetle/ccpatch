@@ -453,7 +453,7 @@ if ($IsWindows) {
     }
 }
 if ($args.length) {
-    if ($args[0] -ieq "restore") {
+    if ($args[0] -ieq "restore" -or $args[0] -ieq "--restore" -or $args[0] -ieq "-r") {
         if ($args.length -gt 1) {
             foreach ($app in $args[1..$args.Length]) {
                 restoreApp $app
