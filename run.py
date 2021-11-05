@@ -369,7 +369,7 @@ def main():
         os.execlp('sudo', 'sudo', *args)
 
     if len(sys.argv) > 1:
-        if sys.argv[1].lower() == "restore":
+        if sys.argv[1].lower() == "restore" or sys.argv[1].lower() == "--restore" or sys.argv[1].lower() == "-r":
             if len(sys.argv) > 2:
                 for app in sys.argv[2:]:
                     restoreApp(app)
