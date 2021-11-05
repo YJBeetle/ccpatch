@@ -342,11 +342,7 @@ def patchApp(app: str):
         patchPath(app)
 
 
-def restoreApp(app: str):
-    if app in appList:
-        path = appList[app.lower()]["path"]
-    else:
-        path = app
+def restorePath(path: str):
     if os.path.exists('%s.bak' % path):
         print("Found and restore %s" % app)
         shutil.move("%s.bak" % path, path)
@@ -355,6 +351,15 @@ def restoreApp(app: str):
         print("Restore succeeded.")
     else:
         print("The backup file does not exist, skipped.")
+
+
+def restoreApp(app: str):
+    if app in appList:
+        paths = appList[app.lower()]["paths"]
+        for path in paths:
+            restorePath(path)
+    else:
+        restorePath(app)
 
 
 if __name__ == '__main__':
