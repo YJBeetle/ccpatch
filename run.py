@@ -314,6 +314,11 @@ def verify_patched_hash(path: str):
     return False
 
 
+def codesign(path: str):
+    os.system("codesign --force --deep --sign - \"%s\"" % path)
+    print("codesign finish")
+
+
 def patchPath(path: str, app: str):
     if os.path.exists(path):
         print("Found and patching %s" % app)
@@ -325,6 +330,7 @@ def patchPath(path: str, app: str):
         print("Backup succeeded.")
         patched = patch(path)
         if patched:
+            codesign(path)
             with open(path, "rb") as f:
                 with open('%s.patched.sha1' % path, "w") as fp:
                     fp.write(hashlib.sha1(f.read()).hexdigest())
@@ -348,6 +354,7 @@ def restorePath(path: str, app: str):
         shutil.move("%s.bak" % path, path)
         if os.path.exists('%s.patched.sha1' % path):
             os.remove("%s.patched.sha1" % path)
+        codesign(path)
         print("Restore succeeded.")
     else:
         print("The backup file does not exist, skipped.")

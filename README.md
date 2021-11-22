@@ -6,42 +6,32 @@
 
 * Acrobat
 
+## Depend
+
+* macOS
+  * curl
+  * python3
+  * Command Line Tools (Install using: `xcode-select --install`)
+
+* Windows
+  * PowerShell (Administrator)
+
 ## Run
 
-### Mac
+* macOS
 
-* Via curl and python3
+      sudo python3 -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py)"
 
-  ```sudo python3 -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py)"```
+* Windows
 
-### Win
-
-* Via PowerShell (Administrator)
-
-  ```powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.ps1')"```
+      powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.ps1')"
 
 ## Restore
 
-### Mac
+* macOS
 
-* Via curl and python3
+      sudo python3 -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py)" restore
 
-  ```sudo python3 -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.py)" restore```
+* Windows
 
-### Win
-
-* Via PowerShell (Administrator)
-
-  ```powershell -nop -c "icm -ScriptBlock ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.ps1'))) -ArgumentList restore"```
-
-## If macOS user crash
-
-If macOS user crash after patched, you need codesign.
-
-First install `Command Line Tools`
-
-    xcode-select --install
-
-And codesign
-
-    sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/mac-codesign.sh)"
+      powershell -nop -c "icm -ScriptBlock ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.ps1'))) -ArgumentList restore"
