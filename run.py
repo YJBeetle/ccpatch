@@ -257,6 +257,12 @@ def patch(path: str):
                 else:
                     print("Error: Unknow funstion trait type.", file=sys.stderr)
                 for funcIndex, funcOffset in enumerate(funcOffsetList):
+                    # print("func: {funcIndex}/{funcLength}, funcStartAddr: 0x{funcStart:02x}, funcEndAddr: 0x{funcEnd:02x}".format(
+                    #     funcIndex = funcIndex + 1,
+                    #     funcLength = len(funcOffsetList),
+                    #     funcStart = funcOffset['start'] + (textAddress - textOffset),
+                    #     funcEnd = funcOffset['end'] + (textAddress - textOffset),
+                    # ))
                     for patchPoint in patchData['patchPointList']:
                         patchPointOffset = mm.find(patchPoint['find'], funcOffset['start'], funcOffset['end'])
                         if patchPointOffset == -1:
