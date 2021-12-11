@@ -349,6 +349,7 @@ appList = {
             "/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
             "/Applications/Adobe After Effects 2021/Adobe After Effects 2021.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
             "/Applications/Adobe After Effects 2022/Adobe After Effects 2022.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
+            "/Applications/Adobe After Effects (Beta)/Adobe After Effects (Beta).app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
         ]
     },
     "me": {
@@ -356,6 +357,7 @@ appList = {
             "/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder 2020",
             "/Applications/Adobe Media Encoder 2021/Adobe Media Encoder 2021.app/Contents/MacOS/Adobe Media Encoder 2021",
             "/Applications/Adobe Media Encoder 2022/Adobe Media Encoder 2022.app/Contents/MacOS/Adobe Media Encoder 2022",
+            "/Applications/Adobe Media Encoder (Beta)/Adobe Media Encoder (Beta).app/Contents/MacOS/Adobe Media Encoder (Beta)",
         ]
     },
     "br": {
