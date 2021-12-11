@@ -256,12 +256,14 @@ def patch(path: str):
                                 funcOffsetList.append({"start": start, "end": end})
                 else:
                     print("Error: Unknow funstion trait type.", file=sys.stderr)
-                for funcOffset in funcOffsetList:
+                for funcIndex, funcOffset in enumerate(funcOffsetList):
                     for patchPoint in patchData['patchPointList']:
                         patchPointOffset = mm.find(patchPoint['find'], funcOffset['start'], funcOffset['end'])
                         if patchPointOffset == -1:
-                            print("Warn: {find} not found, arch: {arch}, funcStartAddr: 0x{funcStart:02x}, funcEndAddr: 0x{funcEnd:02x}".format(
+                            print("Warn: {find} not found, func {funcIndex}/{funcLength}, arch: {arch}, funcStartAddr: 0x{funcStart:02x}, funcEndAddr: 0x{funcEnd:02x}".format(
                                 find = str(patchPoint['find']),
+                                funcIndex = funcIndex + 1,
+                                funcLength = len(funcOffsetList),
                                 arch = "Intel" if machHeader.cputype == CPU_TYPE_X86_64 else "ARM" if machHeader.cputype == CPU_TYPE_ARM64 else "other",
                                 funcStart = funcOffset['start'] + (textAddress - textOffset),
                                 funcEnd = funcOffset['end'] + (textAddress - textOffset),
