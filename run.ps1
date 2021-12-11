@@ -246,7 +246,7 @@ function patch($path) {
                     foreach ($patchPoint in $patchData.patchPointList) {
                         $p = Search-Binary $b $patchPoint.find $true
                         if ($p.Length -eq 0) {
-                            Write-Host ("Error: (" + $patchPoint.find + ") not found.")
+                            Write-Host ("Warn: (" + $patchPoint.find + ") not found.")
                             continue
                         }
                         $patchPointOffset = $funcOffset.start + $p
