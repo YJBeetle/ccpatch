@@ -141,6 +141,7 @@ def patch(path: str):
                 segment_command_64_struct = segment_command_64_struct_BE
                 section_64_struct = section_64_struct_BE
             # print(machHeader)
+            # print("Intel" if machHeader.cputype == CPU_TYPE_X86_64 else "ARM" if machHeader.cputype == CPU_TYPE_ARM64 else "other")
             if machHeader.magic != MH_MAGIC_64:
                 print("Error: Unknow magic number.", file=sys.stderr)
                 continue
@@ -172,6 +173,7 @@ def patch(path: str):
                         sect = section_64._make(
                             struct.unpack(section_64_struct,
                                         mm[nsectOffset:nsectOffset+struct.calcsize(section_64_struct)]))
+                        # print(sect)
                         if sect.sectname.decode("ascii").startswith("__text"):
                             textAddress = sect.addr
                             textOffset = machOffset['start'] + sect.offset
@@ -258,7 +260,12 @@ def patch(path: str):
                     for patchPoint in patchData['patchPointList']:
                         patchPointOffset = mm.find(patchPoint['find'], funcOffset['start'], funcOffset['end'])
                         if patchPointOffset == -1:
-                            print("Error: %s not found." % str(patchPoint['find']), file=sys.stderr)
+                            print("Warn: {find} not found, arch: {arch}, funcStartAddr: 0x{funcStart:02x}, funcEndAddr: 0x{funcEnd:02x}".format(
+                                find = str(patchPoint['find']),
+                                arch = "Intel" if machHeader.cputype == CPU_TYPE_X86_64 else "ARM" if machHeader.cputype == CPU_TYPE_ARM64 else "other",
+                                funcStart = funcOffset['start'] + (textAddress - textOffset),
+                                funcEnd = funcOffset['end'] + (textAddress - textOffset),
+                            ), file=sys.stderr)
                             continue
                         mm[patchPointOffset:patchPointOffset + len(patchPoint['find'])] = patchPoint['replace']
                         patched+=1
