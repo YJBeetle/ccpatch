@@ -272,6 +272,7 @@ appList = {
         "paths": [
             "/Applications/Adobe Photoshop 2020/Adobe Photoshop 2020.app/Contents/MacOS/Adobe Photoshop 2020",
             "/Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app/Contents/MacOS/Adobe Photoshop 2021",
+            "/Applications/Adobe Photoshop 2022/Adobe Photoshop 2022.app/Contents/MacOS/Adobe Photoshop 2022",
         ]
     },
     "lr": {
@@ -283,66 +284,77 @@ appList = {
         "paths": [
             "/Applications/Adobe Illustrator 2020/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
             "/Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
+            "/Applications/Adobe Illustrator 2022/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
         ]
     },
     "id": {
         "paths": [
             "/Applications/Adobe InDesign 2020/Adobe InDesign 2020.app/Contents/MacOS/PublicLib.dylib",
             "/Applications/Adobe InDesign 2021/Adobe InDesign 2021.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InDesign 2022/Adobe InDesign 2022.app/Contents/MacOS/PublicLib.dylib",
         ]
     },
     "ic": {
         "paths": [
             "/Applications/Adobe InCopy 2020/Adobe InCopy 2020.app/Contents/MacOS/PublicLib.dylib",
             "/Applications/Adobe InCopy 2021/Adobe InCopy 2021.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InCopy 2022/Adobe InCopy 2022.app/Contents/MacOS/PublicLib.dylib",
         ]
     },
     "au": {
         "paths": [
             "/Applications/Adobe Audition 2020/Adobe Audition 2020.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
             "/Applications/Adobe Audition 2021/Adobe Audition 2021.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
+            "/Applications/Adobe Audition 2022/Adobe Audition 2022.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
         ]
     },
     "pr": {
         "paths": [
             "/Applications/Adobe Premiere Pro 2020/Adobe Premiere Pro 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
             "/Applications/Adobe Premiere Pro 2021/Adobe Premiere Pro 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Premiere Pro 2022/Adobe Premiere Pro 2022.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
         ]
     },
     "pl": {
         "paths": [
             "/Applications/Adobe Prelude 2020/Adobe Prelude 2020.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
             "/Applications/Adobe Prelude 2021/Adobe Prelude 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Prelude 2022/Adobe Prelude 2022.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
         ]
     },
     "ch": {
         "paths": [
             "/Applications/Adobe Character Animator 2020/Adobe Character Animator 2020.app/Contents/MacOS/Character Animator",
             "/Applications/Adobe Character Animator 2021/Adobe Character Animator 2021.app/Contents/MacOS/Character Animator",
+            "/Applications/Adobe Character Animator 2022/Adobe Character Animator 2022.app/Contents/MacOS/Character Animator",
         ]
     },
     "ae": {
         "paths": [
             "/Applications/Adobe After Effects 2020/Adobe After Effects 2020.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
             "/Applications/Adobe After Effects 2021/Adobe After Effects 2021.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
+            "/Applications/Adobe After Effects 2022/Adobe After Effects 2022.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
         ]
     },
     "me": {
         "paths": [
             "/Applications/Adobe Media Encoder 2020/Adobe Media Encoder 2020.app/Contents/MacOS/Adobe Media Encoder 2020",
             "/Applications/Adobe Media Encoder 2021/Adobe Media Encoder 2021.app/Contents/MacOS/Adobe Media Encoder 2021",
+            "/Applications/Adobe Media Encoder 2022/Adobe Media Encoder 2022.app/Contents/MacOS/Adobe Media Encoder 2022",
         ]
     },
     "br": {
         "paths": [
             "/Applications/Adobe Bridge 2020/Adobe Bridge 2020.app/Contents/MacOS/Adobe Bridge",
             "/Applications/Adobe Bridge 2021/Adobe Bridge 2021.app/Contents/MacOS/Adobe Bridge",
+            "/Applications/Adobe Bridge 2022/Adobe Bridge 2022.app/Contents/MacOS/Adobe Bridge 2022",
         ]
     },
     "an": {
         "paths": [
             "/Applications/Adobe Animate 2020/Adobe Animate 2020.app/Contents/MacOS/Adobe Animate",
             "/Applications/Adobe Animate 2021/Adobe Animate 2021.app/Contents/MacOS/Adobe Animate",
+            "/Applications/Adobe Animate 2022/Adobe Animate 2022.app/Contents/MacOS/Adobe Animate 2022",
         ]
     },
     "dw": {
@@ -374,7 +386,12 @@ def verify_patched_hash(path: str):
     return False
 
 
-def patchPath(path: str):
+def codesign(path: str):
+    os.system("codesign --force --deep --sign - \"%s\"" % path)
+    print("codesign finish")
+
+
+def patchPath(path: str, app: str):
     if os.path.exists(path):
         print("Found and patching %s" % app)
         if os.path.exists('%s.bak' % path) and verify_patched_hash(path):
@@ -385,6 +402,7 @@ def patchPath(path: str):
         print("Backup succeeded.")
         patched = patch(path)
         if patched:
+            codesign(path)
             with open(path, "rb") as f:
                 with open('%s.patched.sha1' % path, "w") as fp:
                     fp.write(hashlib.sha1(f.read()).hexdigest())
@@ -397,34 +415,40 @@ def patchApp(app: str):
     if app in appList:
         paths = appList[app.lower()]["paths"]
         for path in paths:
-            patchPath(path)
+            patchPath(path, app)
     else:
-        patchPath(app)
+        patchPath(app, app)
 
 
-def restoreApp(app: str):
-    if app in appList:
-        path = appList[app.lower()]["path"]
-    else:
-        path = app
+def restorePath(path: str, app: str):
     if os.path.exists('%s.bak' % path):
         print("Found and restore %s" % app)
         shutil.move("%s.bak" % path, path)
         if os.path.exists('%s.patched.sha1' % path):
             os.remove("%s.patched.sha1" % path)
+        codesign(path)
         print("Restore succeeded.")
     else:
         print("The backup file does not exist, skipped.")
 
 
-if __name__ == '__main__':
+def restoreApp(app: str):
+    if app in appList:
+        paths = appList[app.lower()]["paths"]
+        for path in paths:
+            restorePath(path, app)
+    else:
+        restorePath(app, app)
+
+
+def main():
     if os.geteuid():
         print("Privilege is not sufficient, elevating...")
         args = [sys.executable] + sys.argv
         os.execlp('sudo', 'sudo', *args)
 
     if len(sys.argv) > 1:
-        if sys.argv[1].lower() == "restore":
+        if sys.argv[1].lower() == "restore" or sys.argv[1].lower() == "--restore" or sys.argv[1].lower() == "-r":
             if len(sys.argv) > 2:
                 for app in sys.argv[2:]:
                     restoreApp(app)
@@ -437,3 +461,7 @@ if __name__ == '__main__':
     else:
         for app in appList:
             patchApp(app)
+
+
+if __name__ == '__main__':
+    main()

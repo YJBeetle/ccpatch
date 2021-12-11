@@ -270,52 +270,110 @@ function patch($path) {
 
 $appList = @{
     ps = @{
-        path = 'C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe',
+            'C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe',
+            'C:\Program Files\Adobe\Adobe Photoshop 2022\Photoshop.exe'
+        )
     }
     lr = @{
-        path = 'C:\Program Files\Adobe\Adobe Lightroom Classic\Lightroom.exe'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Lightroom Classic\Lightroom.exe'
+        )
     }
     ai = @{
-        path = 'C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Illustrator 2020\Support Files\Contents\Windows\Illustrator.exe',
+            'C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe',
+            'C:\Program Files\Adobe\Adobe Illustrator 2022\Support Files\Contents\Windows\Illustrator.exe'
+        )
     }
     id = @{
-        path = 'C:\Program Files\Adobe\Adobe InDesign 2020\Public.dll'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe InDesign 2020\Public.dll',
+            'C:\Program Files\Adobe\Adobe InDesign 2021\Public.dll',
+            'C:\Program Files\Adobe\Adobe InDesign 2022\Public.dll'
+        )
     }
     ic = @{
-        path = 'C:\Program Files\Adobe\Adobe InCopy 2020\Public.dll'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe InCopy 2020\Public.dll',
+            'C:\Program Files\Adobe\Adobe InCopy 2021\Public.dll',
+            'C:\Program Files\Adobe\Adobe InCopy 2022\Public.dll'
+        )
     }
     au = @{
-        path = 'C:\Program Files\Adobe\Adobe Audition 2020\AuUI.dll'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Audition 2020\AuUI.dll',
+            'C:\Program Files\Adobe\Adobe Audition 2021\AuUI.dll',
+            'C:\Program Files\Adobe\Adobe Audition 2022\AuUI.dll'
+        )
     }
     pr = @{
-        path = 'C:\Program Files\Adobe\Adobe Premiere Pro 2020\Registration.dll'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Premiere Pro 2020\Registration.dll',
+            'C:\Program Files\Adobe\Adobe Premiere Pro 2021\Registration.dll',
+            'C:\Program Files\Adobe\Adobe Premiere Pro 2022\Registration.dll'
+        )
     }
     pl = @{
-        path = 'C:\Program Files\Adobe\Adobe Prelude 2020\Registration.dll'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Prelude 2020\Registration.dll',
+            'C:\Program Files\Adobe\Adobe Prelude 2021\Registration.dll',
+            'C:\Program Files\Adobe\Adobe Prelude 2022\Registration.dll'
+        )
     }
     ch = @{
-        path = 'C:\Program Files\Adobe\Adobe Character Animator 2020\Support Files\Character Animator.exe'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Character Animator 2020\Support Files\Character Animator.exe',
+            'C:\Program Files\Adobe\Adobe Character Animator 2021\Support Files\Character Animator.exe',
+            'C:\Program Files\Adobe\Adobe Character Animator 2022\Support Files\Character Animator.exe'
+        )
     }
     ae = @{
-        path = 'C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll',
+            'C:\Program Files\Adobe\Adobe After Effects 2021\Support Files\AfterFXLib.dll',
+            'C:\Program Files\Adobe\Adobe After Effects 2022\Support Files\AfterFXLib.dll'
+        )
     }
     me = @{
-        path = 'C:\Program Files\Adobe\Adobe Media Encoder 2020\Adobe Media Encoder.exe'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Media Encoder 2020\Adobe Media Encoder.exe',
+            'C:\Program Files\Adobe\Adobe Media Encoder 2021\Adobe Media Encoder.exe',
+            'C:\Program Files\Adobe\Adobe Media Encoder 2022\Adobe Media Encoder.exe'
+        )
     }
     br = @{
-        path = 'C:\Program Files\Adobe\Adobe Bridge 2020\Bridge.exe'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Bridge 2020\Bridge.exe',
+            'C:\Program Files\Adobe\Adobe Bridge 2021\Bridge.exe',
+            'C:\Program Files\Adobe\Adobe Bridge 2022\Bridge.exe'
+        )
     }
     an = @{
-        path = 'C:\Program Files\Adobe\Adobe Animate 2020\Animate.exe'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Animate 2020\Animate.exe',
+            'C:\Program Files\Adobe\Adobe Animate 2021\Animate.exe',
+            'C:\Program Files\Adobe\Adobe Animate 2022\Animate.exe'
+        )
     }
     dw = @{
-        path = 'C:\Program Files\Adobe\Adobe Dreamweaver 2020\Dreamweaver.exe'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Dreamweaver 2020\Dreamweaver.exe',
+            'C:\Program Files\Adobe\Adobe Dreamweaver 2021\Dreamweaver.exe',
+            'C:\Program Files\Adobe\Adobe Dreamweaver 2022\Dreamweaver.exe'
+        )
     }
     dn = @{
-        path = 'C:\Program Files\Adobe\Adobe Dimension\euclid-core-plugin.pepper'
+        paths = @(
+            'C:\Program Files\Adobe\Adobe Dimension\euclid-core-plugin.pepper'
+        )
     }
     acrobat = @{
-        path = 'C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.dll'
+        paths = @(
+            'C:\Program Files (x86)\Adobe\Acrobat DC\Acrobat\Acrobat.dll'
+        )
     }
 }
 
@@ -326,13 +384,7 @@ function verifyPatchedHash($path) {
     return $false
 }
 
-function patchApp($app) {
-    if ($appList.ContainsKey($app)) {
-        $path = $appList[$app].path
-    }
-    else {
-        $path = $app
-    }
+function patchPath($path) {
     if (Test-Path "$path" -PathType Leaf) {
         Write-Host "Found and patching $app"
         if ((Test-Path "$path.bak" -PathType Leaf) -and (verifyPatchedHash "$path")) {
@@ -356,13 +408,19 @@ function patchApp($app) {
     }
 }
 
-function restoreApp($app) {
+function patchApp($app) {
     if ($appList.ContainsKey($app)) {
-        $path = $appList[$app].path
+        $paths = $appList[$app].paths
+        foreach ($path in $paths) {
+            patchPath $path
+        }
     }
     else {
-        $path = $app
+        patchPath $app
     }
+}
+
+function restorePath($path) {
     if (Test-Path "$path.bak" -PathType Leaf) {
         Write-Host "Found and restore $app ..."
         rm "$path"
@@ -372,6 +430,18 @@ function restoreApp($app) {
     }
     else {
         Write-Host "The backup file does not exist, skipped."
+    }
+}
+
+function restoreApp($app) {
+    if ($appList.ContainsKey($app)) {
+        $paths = $appList[$app].paths
+        foreach ($path in $paths) {
+            restorePath $path
+        }
+    }
+    else {
+        restorePath $app
     }
 }
 
@@ -389,7 +459,7 @@ if ($IsWindows) {
     }
 }
 if ($args.length) {
-    if ($args[0] -ieq "restore") {
+    if ($args[0] -ieq "restore" -or $args[0] -ieq "--restore" -or $args[0] -ieq "-r") {
         if ($args.length -gt 1) {
             foreach ($app in $args[1..$args.Length]) {
                 restoreApp $app
