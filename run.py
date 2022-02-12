@@ -62,7 +62,7 @@ patchsData = [
             'cpuType': CPU_TYPE_X86_64,
             'type': 'callKeyword',
             'keywordString': b"PROFILE_AVAILABLE",
-            'opPrefix': bytes([0x48, 0x8D, 0x35]), # LeaEsi
+            'opPrefix': bytes([0x48, 0x8D, 0x35]), # lea rsi
             'functionSplitUp': bytes([0xC3, 0x55]),
             'functionSplitDown': bytes([0xC3, 0x55]),
         },
