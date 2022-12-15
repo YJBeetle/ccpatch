@@ -275,7 +275,8 @@ $appList = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe',
             'C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe',
-            'C:\Program Files\Adobe\Adobe Photoshop 2022\Photoshop.exe'
+            'C:\Program Files\Adobe\Adobe Photoshop 2022\Photoshop.exe',
+            'C:\Program Files\Adobe\Adobe Photoshop 2023\Photoshop.exe'
         )
     }
     lr = @{
@@ -287,84 +288,96 @@ $appList = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Illustrator 2020\Support Files\Contents\Windows\Illustrator.exe',
             'C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe',
-            'C:\Program Files\Adobe\Adobe Illustrator 2022\Support Files\Contents\Windows\Illustrator.exe'
+            'C:\Program Files\Adobe\Adobe Illustrator 2022\Support Files\Contents\Windows\Illustrator.exe',
+            'C:\Program Files\Adobe\Adobe Illustrator 2023\Support Files\Contents\Windows\Illustrator.exe'
         )
     }
     id = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe InDesign 2020\Public.dll',
             'C:\Program Files\Adobe\Adobe InDesign 2021\Public.dll',
-            'C:\Program Files\Adobe\Adobe InDesign 2022\Public.dll'
+            'C:\Program Files\Adobe\Adobe InDesign 2022\Public.dll',
+            'C:\Program Files\Adobe\Adobe InDesign 2023\Public.dll'
         )
     }
     ic = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe InCopy 2020\Public.dll',
             'C:\Program Files\Adobe\Adobe InCopy 2021\Public.dll',
-            'C:\Program Files\Adobe\Adobe InCopy 2022\Public.dll'
+            'C:\Program Files\Adobe\Adobe InCopy 2022\Public.dll',
+            'C:\Program Files\Adobe\Adobe InCopy 2023\Public.dll'
         )
     }
     au = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Audition 2020\AuUI.dll',
             'C:\Program Files\Adobe\Adobe Audition 2021\AuUI.dll',
-            'C:\Program Files\Adobe\Adobe Audition 2022\AuUI.dll'
+            'C:\Program Files\Adobe\Adobe Audition 2022\AuUI.dll',
+            'C:\Program Files\Adobe\Adobe Audition 2023\AuUI.dll'
         )
     }
     pr = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Premiere Pro 2020\Registration.dll',
             'C:\Program Files\Adobe\Adobe Premiere Pro 2021\Registration.dll',
-            'C:\Program Files\Adobe\Adobe Premiere Pro 2022\Registration.dll'
+            'C:\Program Files\Adobe\Adobe Premiere Pro 2022\Registration.dll',
+            'C:\Program Files\Adobe\Adobe Premiere Pro 2023\Registration.dll'
         )
     }
     pl = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Prelude 2020\Registration.dll',
             'C:\Program Files\Adobe\Adobe Prelude 2021\Registration.dll',
-            'C:\Program Files\Adobe\Adobe Prelude 2022\Registration.dll'
+            'C:\Program Files\Adobe\Adobe Prelude 2022\Registration.dll',
+            'C:\Program Files\Adobe\Adobe Prelude 2023\Registration.dll'
         )
     }
     ch = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Character Animator 2020\Support Files\Character Animator.exe',
             'C:\Program Files\Adobe\Adobe Character Animator 2021\Support Files\Character Animator.exe',
-            'C:\Program Files\Adobe\Adobe Character Animator 2022\Support Files\Character Animator.exe'
+            'C:\Program Files\Adobe\Adobe Character Animator 2022\Support Files\Character Animator.exe',
+            'C:\Program Files\Adobe\Adobe Character Animator 2023\Support Files\Character Animator.exe'
         )
     }
     ae = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe After Effects 2020\Support Files\AfterFXLib.dll',
             'C:\Program Files\Adobe\Adobe After Effects 2021\Support Files\AfterFXLib.dll',
-            'C:\Program Files\Adobe\Adobe After Effects 2022\Support Files\AfterFXLib.dll'
+            'C:\Program Files\Adobe\Adobe After Effects 2022\Support Files\AfterFXLib.dll',
+            'C:\Program Files\Adobe\Adobe After Effects 2023\Support Files\AfterFXLib.dll'
         )
     }
     me = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Media Encoder 2020\Adobe Media Encoder.exe',
             'C:\Program Files\Adobe\Adobe Media Encoder 2021\Adobe Media Encoder.exe',
-            'C:\Program Files\Adobe\Adobe Media Encoder 2022\Adobe Media Encoder.exe'
+            'C:\Program Files\Adobe\Adobe Media Encoder 2022\Adobe Media Encoder.exe',
+            'C:\Program Files\Adobe\Adobe Media Encoder 2023\Adobe Media Encoder.exe'
         )
     }
     br = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Bridge 2020\Bridge.exe',
             'C:\Program Files\Adobe\Adobe Bridge 2021\Bridge.exe',
-            'C:\Program Files\Adobe\Adobe Bridge 2022\Bridge.exe'
+            'C:\Program Files\Adobe\Adobe Bridge 2022\Bridge.exe',
+            'C:\Program Files\Adobe\Adobe Bridge 2023\Bridge.exe'
         )
     }
     an = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Animate 2020\Animate.exe',
             'C:\Program Files\Adobe\Adobe Animate 2021\Animate.exe',
-            'C:\Program Files\Adobe\Adobe Animate 2022\Animate.exe'
+            'C:\Program Files\Adobe\Adobe Animate 2022\Animate.exe',
+            'C:\Program Files\Adobe\Adobe Animate 2023\Animate.exe'
         )
     }
     dw = @{
         paths = @(
             'C:\Program Files\Adobe\Adobe Dreamweaver 2020\Dreamweaver.exe',
             'C:\Program Files\Adobe\Adobe Dreamweaver 2021\Dreamweaver.exe',
-            'C:\Program Files\Adobe\Adobe Dreamweaver 2022\Dreamweaver.exe'
+            'C:\Program Files\Adobe\Adobe Dreamweaver 2022\Dreamweaver.exe',
+            'C:\Program Files\Adobe\Adobe Dreamweaver 2023\Dreamweaver.exe'
         )
     }
     dn = @{
