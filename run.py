@@ -398,6 +398,26 @@ appList = {
             "/Applications/Adobe Dimension/Adobe Dimension.app/Contents/Frameworks/euclid-core-plugin.pepper",
         ]
     },
+    "ds": {
+        "paths": [
+            "/Applications/Adobe Substance 3D Designer/Adobe Substance 3D Designer.app/Contents/MacOS/Adobe Substance 3D Designer",
+        ]
+    },
+    "pt": {
+        "paths": [
+            "/Applications/Adobe Substance 3D Painter/Adobe Substance 3D Painter.app/Contents/MacOS/Adobe Substance 3D Painter",
+        ]
+    },
+    "sa": {
+        "paths": [
+            "/Applications/Adobe Substance 3D Sampler/Adobe Substance 3D Sampler.app/Contents/MacOS/Adobe Substance 3D Sampler",
+        ]
+    },
+    "sg": {
+        "paths": [
+            "/Applications/Adobe Substance 3D Stager/Adobe Substance 3D Stager.app/Contents/Frameworks/euclid-core-plugin.pepper",
+        ]
+    },
     "acrobat": {
         "paths": [
             "/Applications/Adobe Acrobat DC/Adobe Acrobat.app/Contents/Frameworks/Acrobat.framework/Versions/A/Acrobat",
