@@ -291,6 +291,7 @@ appList = {
             "/Applications/Adobe Photoshop 2021/Adobe Photoshop 2021.app/Contents/MacOS/Adobe Photoshop 2021",
             "/Applications/Adobe Photoshop 2022/Adobe Photoshop 2022.app/Contents/MacOS/Adobe Photoshop 2022",
             "/Applications/Adobe Photoshop 2023/Adobe Photoshop 2023.app/Contents/MacOS/Adobe Photoshop 2023",
+            "/Applications/Adobe Photoshop (Beta)/Adobe Photoshop (Beta).app/Contents/MacOS/Adobe Photoshop 2024",
         ]
     },
     "lr": {
