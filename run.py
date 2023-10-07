@@ -338,6 +338,7 @@ appList = {
             "/Applications/Adobe Premiere Pro 2021/Adobe Premiere Pro 2021.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
             "/Applications/Adobe Premiere Pro 2022/Adobe Premiere Pro 2022.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
             "/Applications/Adobe Premiere Pro 2023/Adobe Premiere Pro 2023.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
+            "/Applications/Adobe Premiere Pro 2024/Adobe Premiere Pro 2024.app/Contents/Frameworks/Registration.framework/Versions/A/Registration",
         ]
     },
     "pl": {
@@ -371,6 +372,7 @@ appList = {
             "/Applications/Adobe Media Encoder 2022/Adobe Media Encoder 2022.app/Contents/MacOS/Adobe Media Encoder 2022",
             "/Applications/Adobe Media Encoder (Beta)/Adobe Media Encoder (Beta).app/Contents/MacOS/Adobe Media Encoder (Beta)",
             "/Applications/Adobe Media Encoder 2023/Adobe Media Encoder 2023.app/Contents/MacOS/Adobe Media Encoder 2023",
+            "/Applications/Adobe Media Encoder 2024/Adobe Media Encoder 2024.app/Contents/MacOS/Adobe Media Encoder 2024",
         ]
     },
     "br": {
