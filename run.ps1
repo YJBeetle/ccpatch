@@ -276,7 +276,8 @@ $appList = @{
             'C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe',
             'C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe',
             'C:\Program Files\Adobe\Adobe Photoshop 2022\Photoshop.exe',
-            'C:\Program Files\Adobe\Adobe Photoshop 2023\Photoshop.exe'
+            'C:\Program Files\Adobe\Adobe Photoshop 2023\Photoshop.exe',
+            'C:\Program Files\Adobe\Adobe Photoshop 2024\Photoshop.exe'
         )
     }
     lr = @{
@@ -289,7 +290,8 @@ $appList = @{
             'C:\Program Files\Adobe\Adobe Illustrator 2020\Support Files\Contents\Windows\Illustrator.exe',
             'C:\Program Files\Adobe\Adobe Illustrator 2021\Support Files\Contents\Windows\Illustrator.exe',
             'C:\Program Files\Adobe\Adobe Illustrator 2022\Support Files\Contents\Windows\Illustrator.exe',
-            'C:\Program Files\Adobe\Adobe Illustrator 2023\Support Files\Contents\Windows\Illustrator.exe'
+            'C:\Program Files\Adobe\Adobe Illustrator 2023\Support Files\Contents\Windows\Illustrator.exe',
+            'C:\Program Files\Adobe\Adobe Illustrator 2024\Support Files\Contents\Windows\Illustrator.exe'
         )
     }
     id = @{
