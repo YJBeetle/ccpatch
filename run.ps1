@@ -277,6 +277,7 @@ $appList = @{
             'C:\Program Files\Adobe\Adobe Photoshop 2021\Photoshop.exe',
             'C:\Program Files\Adobe\Adobe Photoshop 2022\Photoshop.exe',
             'C:\Program Files\Adobe\Adobe Photoshop 2023\Photoshop.exe'
+            'C:\Program Files\Adobe\Adobe Photoshop 2024\Photoshop.exe'
         )
     }
     lr = @{
