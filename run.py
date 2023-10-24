@@ -305,6 +305,7 @@ appList = {
             "/Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
             "/Applications/Adobe Illustrator 2022/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
             "/Applications/Adobe Illustrator 2023/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
+            "/Applications/Adobe Illustrator 2024/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
         ]
     },
     "id": {
@@ -378,6 +379,7 @@ appList = {
             "/Applications/Adobe Bridge 2021/Adobe Bridge 2021.app/Contents/MacOS/Adobe Bridge",
             "/Applications/Adobe Bridge 2022/Adobe Bridge 2022.app/Contents/MacOS/Adobe Bridge 2022",
             "/Applications/Adobe Bridge 2023/Adobe Bridge 2023.app/Contents/MacOS/Adobe Bridge 2023",
+            "/Applications/Adobe Bridge 2024/Adobe Bridge 2024.app/Contents/MacOS/Adobe Bridge 2024",
         ]
     },
     "an": {
