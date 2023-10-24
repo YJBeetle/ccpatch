@@ -35,3 +35,15 @@
 * Windows
 
       powershell -nop -c "icm -ScriptBlock ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/YJBeetle/ccpatch/generic/run.ps1'))) -ArgumentList restore"
+
+## Common problem
+
+### MacOS permission issues
+
+Open `System Settings` -> `Privacy & Security` -> `App Management`
+
+![MacOSPermissionIssues1](./.picture/MacOSPermissionIssues1.png)
+
+Find `Terminal` and turn on
+
+![MacOSPermissionIssues2](./.picture/MacOSPermissionIssues2.png)
