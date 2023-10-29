@@ -306,6 +306,7 @@ appList = {
             "/Applications/Adobe Illustrator 2021/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
             "/Applications/Adobe Illustrator 2022/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
             "/Applications/Adobe Illustrator 2023/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
+            "/Applications/Adobe Illustrator 2024/Adobe Illustrator.app/Contents/MacOS/Adobe Illustrator",
         ]
     },
     "id": {
@@ -314,6 +315,7 @@ appList = {
             "/Applications/Adobe InDesign 2021/Adobe InDesign 2021.app/Contents/MacOS/PublicLib.dylib",
             "/Applications/Adobe InDesign 2022/Adobe InDesign 2022.app/Contents/MacOS/PublicLib.dylib",
             "/Applications/Adobe InDesign 2023/Adobe InDesign 2023.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InDesign 2024/Adobe InDesign 2024.app/Contents/MacOS/PublicLib.dylib",
         ]
     },
     "ic": {
@@ -322,6 +324,7 @@ appList = {
             "/Applications/Adobe InCopy 2021/Adobe InCopy 2021.app/Contents/MacOS/PublicLib.dylib",
             "/Applications/Adobe InCopy 2022/Adobe InCopy 2022.app/Contents/MacOS/PublicLib.dylib",
             "/Applications/Adobe InCopy 2023/Adobe InCopy 2023.app/Contents/MacOS/PublicLib.dylib",
+            "/Applications/Adobe InCopy 2024/Adobe InCopy 2024.app/Contents/MacOS/PublicLib.dylib",
         ]
     },
     "au": {
@@ -330,6 +333,7 @@ appList = {
             "/Applications/Adobe Audition 2021/Adobe Audition 2021.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
             "/Applications/Adobe Audition 2022/Adobe Audition 2022.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
             "/Applications/Adobe Audition 2023/Adobe Audition 2023.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
+            "/Applications/Adobe Audition 2024/Adobe Audition 2024.app/Contents/Frameworks/AuUI.framework/Versions/A/AuUI",
         ]
     },
     "pr": {
@@ -354,6 +358,7 @@ appList = {
             "/Applications/Adobe Character Animator 2021/Adobe Character Animator 2021.app/Contents/MacOS/Character Animator",
             "/Applications/Adobe Character Animator 2022/Adobe Character Animator 2022.app/Contents/MacOS/Character Animator",
             "/Applications/Adobe Character Animator 2023/Adobe Character Animator 2023.app/Contents/MacOS/Character Animator",
+            "/Applications/Adobe Character Animator 2024/Adobe Character Animator 2024.app/Contents/MacOS/Character Animator",
         ]
     },
     "ae": {
@@ -363,6 +368,7 @@ appList = {
             "/Applications/Adobe After Effects 2022/Adobe After Effects 2022.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
             "/Applications/Adobe After Effects (Beta)/Adobe After Effects (Beta).app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
             "/Applications/Adobe After Effects 2023/Adobe After Effects 2023.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
+            "/Applications/Adobe After Effects 2024/Adobe After Effects 2024.app/Contents/Frameworks/AfterFXLib.framework/Versions/A/AfterFXLib",
         ]
     },
     "me": {
@@ -381,6 +387,7 @@ appList = {
             "/Applications/Adobe Bridge 2021/Adobe Bridge 2021.app/Contents/MacOS/Adobe Bridge",
             "/Applications/Adobe Bridge 2022/Adobe Bridge 2022.app/Contents/MacOS/Adobe Bridge 2022",
             "/Applications/Adobe Bridge 2023/Adobe Bridge 2023.app/Contents/MacOS/Adobe Bridge 2023",
+            "/Applications/Adobe Bridge 2024/Adobe Bridge 2024.app/Contents/MacOS/Adobe Bridge 2024",
         ]
     },
     "an": {
@@ -389,6 +396,7 @@ appList = {
             "/Applications/Adobe Animate 2021/Adobe Animate 2021.app/Contents/MacOS/Adobe Animate",
             "/Applications/Adobe Animate 2022/Adobe Animate 2022.app/Contents/MacOS/Adobe Animate 2022",
             "/Applications/Adobe Animate 2023/Adobe Animate 2023.app/Contents/MacOS/Adobe Animate 2023",
+            "/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024",
         ]
     },
     "dw": {
